@@ -139,9 +139,10 @@ namespace DataLogger
         // Sampling Test
         private int SAMP_rx_write = 0;
         private int SAMP_rx_counter = 0;
-        private byte[] SAMP_rx_buffer = new byte[2048];
+        //private byte[] SAMP_rx_buffer = new byte[2048];
+        private byte[] SAMP_rx_buffer = null;
 
-        private const int SAMP_PACKET_LENGTH = 86;
+        private const int SAMP_PACKET_LENGTH = 87;
         private byte[] SAMP_receive_buffer = new byte[2048];
         private int SAMP_buffer_counter = 0;
 
@@ -648,6 +649,8 @@ namespace DataLogger
                 int bytes = serialPortSAMP.BytesToRead;
                 byte[] buffer = new byte[bytes];
                 serialPortSAMP.Read(buffer, 0, bytes);
+
+                /*
                 for (int i = 0; i < bytes; i++)
                 {
                     SAMP_rx_buffer[SAMP_rx_write++] = buffer[i];
@@ -655,16 +658,70 @@ namespace DataLogger
                         SAMP_rx_write = 0;
                 }
                 SAMP_rx_counter += bytes;
+                */
+                if (buffer != null && buffer[0] == 0x06)
+                {
+                    MessageBox.Show("Success");
+                    if (SAMP_rx_buffer == null)
+                    {
+                        SAMP_rx_buffer = null;
+                    }
+                    else
+                    {
+                        SAMP_rx_buffer = SAMP_rx_buffer.Concat(buffer).ToArray();
+                    }
+                }
+                else if (buffer != null && buffer[0] == 0x15)
+                {
+                    MessageBox.Show("Error");
+                    if (SAMP_rx_buffer == null)
+                    {
+                        SAMP_rx_buffer = null;
+                    }
+                    else
+                    {
+                        SAMP_rx_buffer = SAMP_rx_buffer.Concat(buffer).ToArray();
+                    }
+                }
+                else if (SAMP_rx_buffer == null)
+                {
+                    SAMP_rx_buffer = buffer;
+                }
+                else
+                {
+                    SAMP_rx_buffer = SAMP_rx_buffer.Concat(buffer).ToArray();
+                }
+                SAMP_rx_counter += bytes;
 
-                string raw_data2 = Encoding.UTF8.GetString(SAMP_rx_buffer);
-                Console.WriteLine("SAMP_rx_counter : " + SAMP_rx_counter);
-                Console.WriteLine("data : " + raw_data2.Length + " : " + raw_data2);
+                //if (TN_rx_buffer[TN_rx_buffer.Length - 1] == 10 && TN_rx_buffer.Length >= SAMP_PACKET_LENGTH)
+                //{
+                //    TN_rx_buffer = TN_rx_buffer.Take(TN_rx_buffer.Count() - 1).ToArray();
+                //}
+                if (SAMP_rx_buffer != null)
+                {
+                    //string raw_data = Encoding.ASCII.GetString(SAMP_rx_buffer);
+                    //Console.WriteLine("data : " + raw_data.Length);
+                    //Console.WriteLine(raw_data.Trim());
+                
+                    if (SAMP_rx_buffer.Length == SAMP_PACKET_LENGTH)
+                    {
+                        //Console.WriteLine("TRUE");
+                        ProcessDataSAMP("");
+                    }
+                }
+                if (SAMP_rx_buffer != null)
+                {
+                    if (SAMP_rx_buffer.Length >= SAMP_PACKET_LENGTH)
+                    {
+                        SAMP_rx_buffer = null;
+                    }
+                }
 
                 //ProcessDataSAMP("");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace);
             }
         }
         private void serialPortADAM_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -1404,12 +1461,9 @@ namespace DataLogger
                 }
                 else
                 {
-                    byte[] temp = new byte[SAMP_rx_counter];
-                    for (int i = 0; i < SAMP_rx_counter; i++)
-                        temp[i] = SAMP_rx_buffer[i];
                     //if (txtData.Lines.Count() > 10)
                     //    txtData.Clear();
-                    string temp1 = SAMPParseData(temp);
+                    string temp1 = SAMPParseData(SAMP_rx_buffer);
                     //if (rbtnSAMP.Checked)
                     //{
                     //    if (!string.IsNullOrEmpty(temp1))
@@ -1420,8 +1474,8 @@ namespace DataLogger
                     //}
 
                     //MessageBox.Show("000:" + txtData.Text);
-                    SAMP_rx_counter = 0;
-                    SAMP_rx_write = 0;
+                    //SAMP_rx_counter = 0;
+                    //SAMP_rx_write = 0;
                 }
             }
             catch
@@ -1438,21 +1492,24 @@ namespace DataLogger
 
             try
             {
-
-                if (SAMP_buffer_counter > 0)
-                    text = Combine(SAMP_receive_buffer, SAMP_buffer_counter, text);
-                if (text.Length >= SAMP_PACKET_LENGTH * 2)
+                int j = 0;
+                if (text.Length >= SAMP_PACKET_LENGTH )
                 {
-                    for (int i = 0; i < text.Length - SAMP_PACKET_LENGTH; i++)
+                    //string raw_data = Encoding.ASCII.GetString(text);
+                    //Console.WriteLine("data : " + raw_data.Length);
+                    //Console.WriteLine(raw_data.Trim());
+                    for (int i = 0; i < text.Length; i++)
                     {
-                        if (text[i] == 0x02 &&   //STX
-                            text[i + 1] == 0x53 &&   //S
-                            text[i + 2] == 0x41 &&   //A
-                            text[i + SAMP_PACKET_LENGTH] == 0x0D &&   //CR
-                            text[i + SAMP_PACKET_LENGTH - 3] == 0x03   //ETX
+                        j = i;
+                        if (text[j] == 0x02 &&   //STX
+                            text[j + 1] == 0x53 &&   //S
+                            text[j + 2] == 0x41 &&   //A
+                            text[j + SAMP_PACKET_LENGTH - 1 ] == 0x0D &&   //CR
+                            text[j + SAMP_PACKET_LENGTH - 1 - 3] == 0x03   //ETX
                             )
                         {
                             // process data
+                            //Console.WriteLine("TRUE2");
                             string equipment_name = "SAMPLER";
                             string response_time = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4, 14));
                             string temp = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14, 4)); //19-28
@@ -1483,21 +1540,30 @@ namespace DataLogger
                 //Reset buffer
                 SAMP_buffer_counter = 0;
                 Array.Clear(SAMP_receive_buffer, 0, SAMP_receive_buffer.Length);
-                if (bufferIndex < text.Length)
-                {
-                    SAMP_buffer_counter = text.Length - bufferIndex;
-                    Array.Copy(text, bufferIndex, SAMP_receive_buffer, 0, SAMP_buffer_counter);
-                }
 
-                if (SAMP_buffer_counter > SAMP_PACKET_LENGTH * 2)
-                {
-                    SAMP_rx_write = 0;
-                    SAMP_rx_counter = 0;
-                    SAMP_rx_buffer = new byte[2048];
+                SAMP_rx_write = 0;
+                SAMP_rx_counter = 0;
+                SAMP_rx_buffer = null;
 
-                    SAMP_receive_buffer = new byte[2048];
-                    SAMP_buffer_counter = 0;
-                }
+                SAMP_receive_buffer = new byte[2048];
+                ////Reset buffer
+                //SAMP_buffer_counter = 0;
+                //Array.Clear(SAMP_receive_buffer, 0, SAMP_receive_buffer.Length);
+                //if (bufferIndex < text.Length)
+                //{
+                //    SAMP_buffer_counter = text.Length - bufferIndex;
+                //    Array.Copy(text, bufferIndex, SAMP_receive_buffer, 0, SAMP_buffer_counter);
+                //}
+
+                //if (SAMP_buffer_counter > SAMP_PACKET_LENGTH * 2)
+                //{
+                //    SAMP_rx_write = 0;
+                //    SAMP_rx_counter = 0;
+                //    SAMP_rx_buffer = new byte[2048];
+
+                //    SAMP_receive_buffer = new byte[2048];
+                //    SAMP_buffer_counter = 0;
+                //}
                 objWaterSamplerGLobal.latest_update_communication = DateTime.Now;
                 updateCellSamplerStatus(objWaterSamplerGLobal);
             }
@@ -2180,7 +2246,7 @@ namespace DataLogger
                 }
             }
             setText(DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
-            indexSelection = (indexSelection + 1) % 4;
+            indexSelection = (indexSelection + 1) % 5;
             switch (indexSelection)
             {
                 case 0: // TOC
@@ -4598,7 +4664,7 @@ namespace DataLogger
                 ToolTip tt = new ToolTip();
                 if (tooltipTOC == "fault")
                 {
-                    //tt.SetToolTip(this.picTOCStatus, lang.getText(tooltipTOC) + ":" + tooltipTOCInfo);
+                    tt.SetToolTip(this.picTOCStatus, lang.getText(tooltipTOC) + ":" + tooltipTOCInfo);
                 }
                 else
                 {

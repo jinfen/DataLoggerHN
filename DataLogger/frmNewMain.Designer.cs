@@ -341,7 +341,7 @@
             this.panel23.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel23.Location = new System.Drawing.Point(74, 494);
             this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(787, 161);
+            this.panel23.Size = new System.Drawing.Size(788, 161);
             this.panel23.TabIndex = 70;
             // 
             // panel25
@@ -446,151 +446,6 @@
             this.lblMainMenuTitle.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.lblMainMenuTitle.Visible = false;
             // 
-<<<<<<< HEAD
-            // btnLanguage
-            // 
-            this.btnLanguage.BackColor = System.Drawing.Color.Transparent;
-            this.btnLanguage.BackgroundImage = global::DataLogger.Properties.Resources.Flag_of_Vietnam_43x32;
-            this.btnLanguage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnLanguage.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
-            this.btnLanguage.FlatAppearance.BorderSize = 0;
-            this.btnLanguage.Location = new System.Drawing.Point(-365, 29);
-            this.btnLanguage.Name = "btnLanguage";
-            this.btnLanguage.Size = new System.Drawing.Size(43, 16);
-            this.btnLanguage.TabIndex = 50;
-            this.btnLanguage.UseVisualStyleBackColor = false;
-            this.btnLanguage.Visible = false;
-            this.btnLanguage.Click += new System.EventHandler(this.btnLanguage_Click);
-            // 
-            // lblHeaderNationName
-            // 
-            this.lblHeaderNationName.AutoSize = true;
-            this.lblHeaderNationName.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHeaderNationName.ForeColor = System.Drawing.Color.White;
-            this.lblHeaderNationName.Location = new System.Drawing.Point(-316, 34);
-            this.lblHeaderNationName.Name = "lblHeaderNationName";
-            this.lblHeaderNationName.Size = new System.Drawing.Size(84, 17);
-            this.lblHeaderNationName.TabIndex = 1;
-            this.lblHeaderNationName.Text = "Vietnamese";
-            this.lblHeaderNationName.Visible = false;
-            // 
-            // pnLeftSide
-            // 
-            this.pnLeftSide.AutoSize = true;
-            this.pnLeftSide.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.pnLeftSide.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnLeftSide.Controls.Add(this.vprgMonthlyReport);
-            this.pnLeftSide.Controls.Add(this.btnMaintenance);
-            this.pnLeftSide.Controls.Add(this.btnMonthlyReport);
-            this.pnLeftSide.Controls.Add(this.btnSetting);
-            this.pnLeftSide.Controls.Add(this.btnUsers);
-            this.pnLeftSide.Controls.Add(this.btnAllHistory);
-            this.pnLeftSide.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnLeftSide.Location = new System.Drawing.Point(0, 47);
-            this.pnLeftSide.Margin = new System.Windows.Forms.Padding(0);
-            this.pnLeftSide.Name = "pnLeftSide";
-            this.tableLayoutPanel1.SetRowSpan(this.pnLeftSide, 3);
-            this.pnLeftSide.Size = new System.Drawing.Size(71, 677);
-            this.pnLeftSide.TabIndex = 1;
-            // 
-            // vprgMonthlyReport
-            // 
-            this.vprgMonthlyReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.vprgMonthlyReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.vprgMonthlyReport.BorderStyle = VerticalProgressBar.BorderStyles.None;
-            this.vprgMonthlyReport.Color = System.Drawing.Color.Maroon;
-            this.vprgMonthlyReport.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vprgMonthlyReport.Location = new System.Drawing.Point(0, 70);
-            this.vprgMonthlyReport.Maximum = 100;
-            this.vprgMonthlyReport.Minimum = 0;
-            this.vprgMonthlyReport.Name = "vprgMonthlyReport";
-            this.vprgMonthlyReport.Size = new System.Drawing.Size(71, 218);
-            this.vprgMonthlyReport.Step = 1;
-            this.vprgMonthlyReport.Style = VerticalProgressBar.Styles.Solid;
-            this.vprgMonthlyReport.TabIndex = 67;
-            this.vprgMonthlyReport.Value = 90;
-            this.vprgMonthlyReport.Visible = false;
-            this.vprgMonthlyReport.Load += new System.EventHandler(this.vprgMonthlyReport_Load);
-            // 
-            // btnMaintenance
-            // 
-            this.btnMaintenance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.btnMaintenance.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMaintenance.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnMaintenance.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.btnMaintenance.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMaintenance.Image = global::DataLogger.Properties.Resources.world_clock;
-            this.btnMaintenance.Location = new System.Drawing.Point(0, 421);
-            this.btnMaintenance.Name = "btnMaintenance";
-            this.btnMaintenance.Size = new System.Drawing.Size(71, 64);
-            this.btnMaintenance.TabIndex = 50;
-            this.btnMaintenance.UseVisualStyleBackColor = false;
-            this.btnMaintenance.Click += new System.EventHandler(this.btnMaintenance_Click);
-            // 
-            // btnMonthlyReport
-            // 
-            this.btnMonthlyReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(67)))), ((int)(((byte)(96)))));
-            this.btnMonthlyReport.BackgroundImage = global::DataLogger.Properties.Resources.MonthlyReportButton;
-            this.btnMonthlyReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMonthlyReport.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnMonthlyReport.FlatAppearance.BorderSize = 0;
-            this.btnMonthlyReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.btnMonthlyReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMonthlyReport.Location = new System.Drawing.Point(0, 0);
-            this.btnMonthlyReport.Name = "btnMonthlyReport";
-            this.btnMonthlyReport.Size = new System.Drawing.Size(71, 70);
-            this.btnMonthlyReport.TabIndex = 49;
-            this.btnMonthlyReport.UseVisualStyleBackColor = false;
-            this.btnMonthlyReport.Click += new System.EventHandler(this.btnMonthlyReport_Click);
-            // 
-            // btnSetting
-            // 
-            this.btnSetting.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.btnSetting.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSetting.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnSetting.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.btnSetting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSetting.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnSetting.Image = global::DataLogger.Properties.Resources.applications_system_60x60;
-            this.btnSetting.Location = new System.Drawing.Point(0, 485);
-            this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(71, 64);
-            this.btnSetting.TabIndex = 5;
-            this.btnSetting.UseVisualStyleBackColor = false;
-            this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
-            // 
-            // btnUsers
-            // 
-            this.btnUsers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.btnUsers.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnUsers.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnUsers.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.btnUsers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUsers.Image = global::DataLogger.Properties.Resources.user;
-            this.btnUsers.Location = new System.Drawing.Point(0, 549);
-            this.btnUsers.Name = "btnUsers";
-            this.btnUsers.Size = new System.Drawing.Size(71, 64);
-            this.btnUsers.TabIndex = 4;
-            this.btnUsers.UseVisualStyleBackColor = false;
-            this.btnUsers.Click += new System.EventHandler(this.btnUsers_Click);
-            // 
-            // btnAllHistory
-            // 
-            this.btnAllHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.btnAllHistory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAllHistory.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnAllHistory.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(95)))), ((int)(((byte)(133)))));
-            this.btnAllHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAllHistory.Image = global::DataLogger.Properties.Resources.maintenance;
-            this.btnAllHistory.Location = new System.Drawing.Point(0, 613);
-            this.btnAllHistory.Name = "btnAllHistory";
-            this.btnAllHistory.Size = new System.Drawing.Size(71, 64);
-            this.btnAllHistory.TabIndex = 3;
-            this.btnAllHistory.UseVisualStyleBackColor = false;
-            this.btnAllHistory.Click += new System.EventHandler(this.btnAllHistory_Click);
-            // 
-=======
->>>>>>> 7dc7bb52d9fa0b330fc27e04f7b925afff255f10
             // pnSoftwareInfo
             // 
             this.pnSoftwareInfo.BackColor = System.Drawing.Color.White;
@@ -950,7 +805,7 @@
             this.panel30.Location = new System.Drawing.Point(81, 57);
             this.panel30.Margin = new System.Windows.Forms.Padding(10);
             this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(773, 424);
+            this.panel30.Size = new System.Drawing.Size(774, 424);
             this.panel30.TabIndex = 65;
             this.panel30.Paint += new System.Windows.Forms.PaintEventHandler(this.panel30_Paint);
             // 
@@ -1050,7 +905,7 @@
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(113)))), ((int)(((byte)(170)))));
             this.panel5.Controls.Add(this.lblAutorSampler);
-            this.panel5.Location = new System.Drawing.Point(275, 89);
+            this.panel5.Location = new System.Drawing.Point(276, 89);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(154, 37);
             this.panel5.TabIndex = 68;
@@ -1081,227 +936,11 @@
             this.panel3.Controls.Add(this.picAutoSamplerStatus);
             this.panel3.Controls.Add(this.pnbottlePosition);
             this.panel3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panel3.Location = new System.Drawing.Point(271, 119);
+            this.panel3.Location = new System.Drawing.Point(272, 119);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(190, 275);
             this.panel3.TabIndex = 0;
             // 
-<<<<<<< HEAD
-            // picDO8Status
-            // 
-            this.picDO8Status.Image = ((System.Drawing.Image)(resources.GetObject("picDO8Status.Image")));
-            this.picDO8Status.Location = new System.Drawing.Point(185, 157);
-            this.picDO8Status.Name = "picDO8Status";
-            this.picDO8Status.Size = new System.Drawing.Size(30, 30);
-            this.picDO8Status.TabIndex = 55;
-            this.picDO8Status.TabStop = false;
-            // 
-            // btnDO8
-            // 
-            this.btnDO8.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnDO8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDO8.Image = global::DataLogger.Properties.Resources.OFF_switch_96x25;
-            this.btnDO8.Location = new System.Drawing.Point(73, 154);
-            this.btnDO8.Name = "btnDO8";
-            this.btnDO8.Size = new System.Drawing.Size(90, 39);
-            this.btnDO8.TabIndex = 56;
-            this.btnDO8.UseVisualStyleBackColor = true;
-            this.btnDO8.Click += new System.EventHandler(this.btnDO8_Click);
-            // 
-            // picDO7Status
-            // 
-            this.picDO7Status.Image = global::DataLogger.Properties.Resources.Run_2_28x28;
-            this.picDO7Status.Location = new System.Drawing.Point(185, 113);
-            this.picDO7Status.Name = "picDO7Status";
-            this.picDO7Status.Size = new System.Drawing.Size(30, 30);
-            this.picDO7Status.TabIndex = 54;
-            this.picDO7Status.TabStop = false;
-            // 
-            // btnDO5
-            // 
-            this.btnDO5.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnDO5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDO5.Image = global::DataLogger.Properties.Resources.OFF_switch_96x25;
-            this.btnDO5.Location = new System.Drawing.Point(73, 19);
-            this.btnDO5.Name = "btnDO5";
-            this.btnDO5.Size = new System.Drawing.Size(90, 39);
-            this.btnDO5.TabIndex = 49;
-            this.btnDO5.UseVisualStyleBackColor = true;
-            this.btnDO5.Click += new System.EventHandler(this.btnDO5_Click);
-            // 
-            // picDO6Status
-            // 
-            this.picDO6Status.Image = ((System.Drawing.Image)(resources.GetObject("picDO6Status.Image")));
-            this.picDO6Status.Location = new System.Drawing.Point(185, 69);
-            this.picDO6Status.Name = "picDO6Status";
-            this.picDO6Status.Size = new System.Drawing.Size(30, 30);
-            this.picDO6Status.TabIndex = 53;
-            this.picDO6Status.TabStop = false;
-            // 
-            // btnDO7
-            // 
-            this.btnDO7.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnDO7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDO7.Image = global::DataLogger.Properties.Resources.OFF_switch_96x25;
-            this.btnDO7.Location = new System.Drawing.Point(73, 109);
-            this.btnDO7.Name = "btnDO7";
-            this.btnDO7.Size = new System.Drawing.Size(90, 39);
-            this.btnDO7.TabIndex = 55;
-            this.btnDO7.UseVisualStyleBackColor = true;
-            this.btnDO7.Click += new System.EventHandler(this.btnDO7_Click);
-            // 
-            // picDO5Status
-            // 
-            this.picDO5Status.Image = global::DataLogger.Properties.Resources.Run_2_28x28;
-            this.picDO5Status.Location = new System.Drawing.Point(185, 23);
-            this.picDO5Status.Name = "picDO5Status";
-            this.picDO5Status.Size = new System.Drawing.Size(30, 30);
-            this.picDO5Status.TabIndex = 52;
-            this.picDO5Status.TabStop = false;
-            // 
-            // lblDO5
-            // 
-            this.lblDO5.AutoSize = true;
-            this.lblDO5.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDO5.Location = new System.Drawing.Point(18, 32);
-            this.lblDO5.Name = "lblDO5";
-            this.lblDO5.Size = new System.Drawing.Size(47, 15);
-            this.lblDO5.TabIndex = 50;
-            this.lblDO5.Text = "D/O #5";
-            // 
-            // btnDO6
-            // 
-            this.btnDO6.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnDO6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDO6.Image = global::DataLogger.Properties.Resources.OFF_switch_96x25;
-            this.btnDO6.Location = new System.Drawing.Point(73, 64);
-            this.btnDO6.Name = "btnDO6";
-            this.btnDO6.Size = new System.Drawing.Size(90, 39);
-            this.btnDO6.TabIndex = 54;
-            this.btnDO6.UseVisualStyleBackColor = true;
-            this.btnDO6.Click += new System.EventHandler(this.btnDO6_Click);
-            // 
-            // lblDO6
-            // 
-            this.lblDO6.AutoSize = true;
-            this.lblDO6.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDO6.Location = new System.Drawing.Point(18, 77);
-            this.lblDO6.Name = "lblDO6";
-            this.lblDO6.Size = new System.Drawing.Size(47, 15);
-            this.lblDO6.TabIndex = 51;
-            this.lblDO6.Text = "D/O #6";
-            // 
-            // lblDO7
-            // 
-            this.lblDO7.AutoSize = true;
-            this.lblDO7.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDO7.Location = new System.Drawing.Point(18, 122);
-            this.lblDO7.Name = "lblDO7";
-            this.lblDO7.Size = new System.Drawing.Size(47, 15);
-            this.lblDO7.TabIndex = 52;
-            this.lblDO7.Text = "D/O #7";
-            // 
-            // lblDO8
-            // 
-            this.lblDO8.AutoSize = true;
-            this.lblDO8.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDO8.Location = new System.Drawing.Point(18, 166);
-            this.lblDO8.Name = "lblDO8";
-            this.lblDO8.Size = new System.Drawing.Size(47, 15);
-            this.lblDO8.TabIndex = 53;
-            this.lblDO8.Text = "D/O #8";
-            // 
-            // lblControlPanel
-            // 
-            this.lblControlPanel.AutoSize = true;
-            this.lblControlPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(113)))), ((int)(((byte)(170)))));
-            this.lblControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblControlPanel.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblControlPanel.ForeColor = System.Drawing.Color.White;
-            this.lblControlPanel.Location = new System.Drawing.Point(0, 0);
-            this.lblControlPanel.Margin = new System.Windows.Forms.Padding(5);
-            this.lblControlPanel.Name = "lblControlPanel";
-            this.lblControlPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.lblControlPanel.Size = new System.Drawing.Size(134, 32);
-            this.lblControlPanel.TabIndex = 44;
-            this.lblControlPanel.Text = "Control Panel";
-            this.lblControlPanel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // serialPortTN
-            // 
-            this.serialPortTN.PortName = "COM100";
-            this.serialPortTN.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPortTN_DataReceived);
-            // 
-            // serialPortTP
-            // 
-            this.serialPortTP.PortName = "COM100";
-            this.serialPortTP.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPortTP_DataReceived);
-            // 
-            // serialPortTOC
-            // 
-            this.serialPortTOC.PortName = "COM100";
-            this.serialPortTOC.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPortTOC_DataReceived);
-            // 
-            // serialPortSAMP
-            // 
-            this.serialPortSAMP.PortName = "COM100";
-            this.serialPortSAMP.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPortSAMP_DataReceived);
-            // 
-            // serialPortADAM
-            // 
-            this.serialPortADAM.PortName = "COM100";
-            this.serialPortADAM.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPortADAM_DataReceived);
-            // 
-            // bgwMonthlyReport
-            // 
-            this.bgwMonthlyReport.WorkerReportsProgress = true;
-            this.bgwMonthlyReport.WorkerSupportsCancellation = true;
-            this.bgwMonthlyReport.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerMonthlyReport_DoWork);
-            this.bgwMonthlyReport.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerMonthlyReport_ProgressChanged);
-            this.bgwMonthlyReport.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerMonthlyReport_RunWorkerCompleted);
-            // 
-            // panel29
-            // 
-            this.panel29.BackColor = System.Drawing.Color.Transparent;
-            this.panel29.BackgroundImage = global::DataLogger.Properties.Resources.Control;
-            this.panel29.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel29.Controls.Add(this.panel2);
-            this.panel29.Controls.Add(this.panel4);
-            this.panel29.Location = new System.Drawing.Point(3, 15);
-            this.panel29.Name = "panel29";
-            this.panel29.Size = new System.Drawing.Size(460, 209);
-            this.panel29.TabIndex = 64;
-            // 
-            // picDrainValue
-            // 
-            this.picDrainValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(228)))), ((int)(((byte)(255)))));
-            this.picDrainValue.BackgroundImage = global::DataLogger.Properties.Resources.Valve_Close;
-            this.picDrainValue.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.picDrainValue.Location = new System.Drawing.Point(615, 354);
-            this.picDrainValue.Name = "picDrainValue";
-            this.picDrainValue.Size = new System.Drawing.Size(30, 63);
-            this.picDrainValue.TabIndex = 60;
-            this.picDrainValue.TabStop = false;
-            // 
-            // panel3
-            // 
-            this.panel3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel3.BackColor = System.Drawing.Color.Transparent;
-            this.panel3.BackgroundImage = global::DataLogger.Properties.Resources.Auto_Samper;
-            this.panel3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel3.Controls.Add(this.btnAutoSamplerTesting);
-            this.panel3.Controls.Add(this.btnAutoSamplerHistoryData);
-            this.panel3.Controls.Add(this.picAutoSamplerStatus);
-            this.panel3.Controls.Add(this.pnbottlePosition);
-            this.panel3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panel3.Location = new System.Drawing.Point(274, 119);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(190, 275);
-            this.panel3.TabIndex = 0;
-            // 
-=======
->>>>>>> 7dc7bb52d9fa0b330fc27e04f7b925afff255f10
             // btnAutoSamplerTesting
             // 
             this.btnAutoSamplerTesting.BackColor = System.Drawing.Color.Transparent;
@@ -1975,7 +1614,7 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(81, 668);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(10);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(773, 46);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(774, 46);
             this.flowLayoutPanel1.TabIndex = 62;
             // 
             // pnLeftSide
@@ -2098,10 +1737,10 @@
             this.panel21.Controls.Add(this.panel16);
             this.panel21.Controls.Add(this.panel29);
             this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel21.Location = new System.Drawing.Point(867, 494);
+            this.panel21.Location = new System.Drawing.Point(868, 494);
             this.panel21.Name = "panel21";
             this.tableLayoutPanel1.SetRowSpan(this.panel21, 2);
-            this.panel21.Size = new System.Drawing.Size(477, 227);
+            this.panel21.Size = new System.Drawing.Size(476, 227);
             this.panel21.TabIndex = 71;
             // 
             // panel16
@@ -2425,34 +2064,6 @@
             // 
             // lblDO8
             // 
-<<<<<<< HEAD
-            this.panel30.AutoSize = true;
-            this.panel30.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel30.BackColor = System.Drawing.Color.Transparent;
-            this.panel30.BackgroundImage = global::DataLogger.Properties.Resources.main;
-            this.panel30.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel30.Controls.Add(this.panel19);
-            this.panel30.Controls.Add(this.panel17);
-            this.panel30.Controls.Add(this.panel15);
-            this.panel30.Controls.Add(this.panel14);
-            this.panel30.Controls.Add(this.panel13);
-            this.panel30.Controls.Add(this.panel9);
-            this.panel30.Controls.Add(this.panel5);
-            this.panel30.Controls.Add(this.panel3);
-            this.panel30.Controls.Add(this.panel1);
-            this.panel30.Controls.Add(this.panel6);
-            this.panel30.Controls.Add(this.panel22);
-            this.panel30.Controls.Add(this.panel26);
-            this.panel30.Controls.Add(this.lblDrainValve);
-            this.panel30.Controls.Add(this.picDrainValue);
-            this.panel30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel30.Location = new System.Drawing.Point(81, 57);
-            this.panel30.Margin = new System.Windows.Forms.Padding(10);
-            this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(779, 424);
-            this.panel30.TabIndex = 65;
-            this.panel30.Paint += new System.Windows.Forms.PaintEventHandler(this.panel30_Paint);
-=======
             this.lblDO8.AutoSize = true;
             this.lblDO8.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDO8.Location = new System.Drawing.Point(18, 166);
@@ -2460,7 +2071,6 @@
             this.lblDO8.Size = new System.Drawing.Size(47, 15);
             this.lblDO8.TabIndex = 53;
             this.lblDO8.Text = "D/O #8";
->>>>>>> 7dc7bb52d9fa0b330fc27e04f7b925afff255f10
             // 
             // pnHeader
             // 
@@ -2544,14 +2154,6 @@
             // 
             // lblHeadingTime
             // 
-<<<<<<< HEAD
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(113)))), ((int)(((byte)(170)))));
-            this.panel5.Controls.Add(this.lblAutorSampler);
-            this.panel5.Location = new System.Drawing.Point(276, 89);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(154, 37);
-            this.panel5.TabIndex = 68;
-=======
             this.lblHeadingTime.AutoSize = true;
             this.lblHeadingTime.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHeadingTime.ForeColor = System.Drawing.Color.White;
@@ -2560,16 +2162,15 @@
             this.lblHeadingTime.Size = new System.Drawing.Size(143, 17);
             this.lblHeadingTime.TabIndex = 2;
             this.lblHeadingTime.Text = "25-09-2015 12:11:19";
->>>>>>> 7dc7bb52d9fa0b330fc27e04f7b925afff255f10
             // 
             // panel24
             // 
             this.panel24.Controls.Add(this.panel12);
             this.panel24.Controls.Add(this.panel8);
             this.panel24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel24.Location = new System.Drawing.Point(867, 50);
+            this.panel24.Location = new System.Drawing.Point(868, 50);
             this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(477, 438);
+            this.panel24.Size = new System.Drawing.Size(476, 438);
             this.panel24.TabIndex = 72;
             // 
             // panel12
@@ -2593,83 +2194,6 @@
             this.label1.Text = "Analyzer";
             this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
-<<<<<<< HEAD
-            // panel16
-            // 
-            this.panel16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(113)))), ((int)(((byte)(170)))));
-            this.panel16.Controls.Add(this.lblControlPanel);
-            this.panel16.Location = new System.Drawing.Point(5, 2);
-            this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(135, 37);
-            this.panel16.TabIndex = 67;
-            // 
-            // lblStationStatus
-            // 
-            this.lblStationStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(113)))), ((int)(((byte)(170)))));
-            this.lblStationStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblStationStatus.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStationStatus.ForeColor = System.Drawing.SystemColors.Window;
-            this.lblStationStatus.Location = new System.Drawing.Point(0, 0);
-            this.lblStationStatus.Margin = new System.Windows.Forms.Padding(3);
-            this.lblStationStatus.Name = "lblStationStatus";
-            this.lblStationStatus.Padding = new System.Windows.Forms.Padding(3);
-            this.lblStationStatus.Size = new System.Drawing.Size(152, 35);
-            this.lblStationStatus.TabIndex = 7;
-            this.lblStationStatus.Text = "Station status";
-            this.lblStationStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblStationStatus.Click += new System.EventHandler(this.lblStationStatus_Click);
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.BackgroundImage = global::DataLogger.Properties.Resources.footer;
-            this.flowLayoutPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(81, 668);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(10);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(779, 46);
-            this.flowLayoutPanel1.TabIndex = 62;
-            // 
-            // backgroundWorkerMain
-            // 
-            this.backgroundWorkerMain.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerMain_DoWork);
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.26636F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 91.73364F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 476F));
-            this.tableLayoutPanel1.Controls.Add(this.panel24, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.panel23, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.pnHeader, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.panel21, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.pnLeftSide, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.panel30, 1, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(1, 2);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.619239F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90.38076F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 167F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1347, 724);
-            this.tableLayoutPanel1.TabIndex = 69;
-            // 
-            // panel24
-            // 
-            this.panel24.Controls.Add(this.panel12);
-            this.panel24.Controls.Add(this.panel8);
-            this.panel24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel24.Location = new System.Drawing.Point(873, 50);
-            this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(471, 438);
-            this.panel24.TabIndex = 72;
-            // 
-=======
->>>>>>> 7dc7bb52d9fa0b330fc27e04f7b925afff255f10
             // panel8
             // 
             this.panel8.BackColor = System.Drawing.Color.Transparent;
@@ -3149,39 +2673,12 @@
             this.btnTOC1Hour.UseVisualStyleBackColor = false;
             this.btnTOC1Hour.Click += new System.EventHandler(this.btnTOC1Hour_Click);
             // 
-<<<<<<< HEAD
-            // panel23
-            // 
-            this.panel23.Controls.Add(this.panel25);
-            this.panel23.Controls.Add(this.pnStationStatus);
-            this.panel23.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel23.Location = new System.Drawing.Point(74, 494);
-            this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(793, 161);
-            this.panel23.TabIndex = 70;
-            // 
-            // panel25
-            // 
-            this.panel25.Controls.Add(this.lblStationStatus);
-            this.panel25.Location = new System.Drawing.Point(318, -2);
-            this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(152, 35);
-            this.panel25.TabIndex = 8;
-            // 
-            // panel21
-            // 
-            this.panel21.Controls.Add(this.panel16);
-            this.panel21.Controls.Add(this.panel29);
-            this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel21.Location = new System.Drawing.Point(873, 494);
-            this.panel21.Name = "panel21";
-            this.tableLayoutPanel1.SetRowSpan(this.panel21, 2);
-            this.panel21.Size = new System.Drawing.Size(471, 227);
-            this.panel21.TabIndex = 71;
-=======
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.26636F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 91.73364F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 481F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.26636F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 91.73364F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 482F));
@@ -3200,9 +2697,13 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 167F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.619239F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90.38076F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 167F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1347, 724);
             this.tableLayoutPanel1.TabIndex = 69;
->>>>>>> 7dc7bb52d9fa0b330fc27e04f7b925afff255f10
             // 
             // frmNewMain
             // 
