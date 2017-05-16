@@ -1245,7 +1245,9 @@ namespace WinformProtocol
                 byte[] _Analyze = new byte[7];
                 _encoder.GetBytes(data.Substring(j + 19, 7)).CopyTo(_Analyze, 0);
                 byte[] _header = _STX.Concat(_Command).Concat(_StationCode).Concat(_Datetime).Concat(_Analyze).ToArray();
+
                 byte[] _item = new byte[65];
+
                 byte[] _ETX = new byte[1];
                 (new byte[] { 0x03 }).CopyTo(_ETX, 0);
                 string checksum = CalculateChecksum(_encoder.GetString(_header) + _encoder.GetString(_item) + _encoder.GetString(_ETX));

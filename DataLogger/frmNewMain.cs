@@ -167,10 +167,12 @@ namespace DataLogger
         public string tooltipTOCInfo = "";
         public string tooltipTPInfo = "";
         public string tooltipTNInfo = "";
+        public string tooltipSAMPInfo = "";
 
         public string tooltipTOC = "";
         public string tooltipTP = "";
         public string tooltipTN = "";
+        public string tooltipSAMP = "";
 
         public static Form1 protocol;
 
@@ -661,7 +663,7 @@ namespace DataLogger
                 */
                 if (buffer != null && buffer[0] == 0x06)
                 {
-                    MessageBox.Show("Success");
+                    //MessageBox.Show("Success");
                     if (SAMP_rx_buffer == null)
                     {
                         SAMP_rx_buffer = null;
@@ -673,7 +675,7 @@ namespace DataLogger
                 }
                 else if (buffer != null && buffer[0] == 0x15)
                 {
-                    MessageBox.Show("Error");
+                    //MessageBox.Show("Error");
                     if (SAMP_rx_buffer == null)
                     {
                         SAMP_rx_buffer = null;
@@ -1516,9 +1518,13 @@ namespace DataLogger
                             string bottle_position = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10 + 2, 2));
                             string equipment_status = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10, 2));
                             //string door_status = Encoding.UTF8.GetString(SubArray(text, i + 33, 2));
+                            string ml = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10 + 2 + 2, 6));
+                            string sample = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10 + 2 + 2 + 6, 1));
+                            string E00 = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10 + 2 + 2 + 6 + 1, 5));
                             string door_status = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10 + 2 + 12, 1));
-                            result = string.Format("equipment_name: {0}; response_time: {1}; temp: {2}; bottle_position: {3}; door_status: {4}; equipment_status: {5}", equipment_name, response_time, temp, bottle_position, door_status, equipment_status);
-
+                            result = string.Format("equipment_name: {0}; response_time: {1}; temp: {2}; bottle_position: {3}; door_status: {4}; equipment_status: {5}; ml : {6} ; sample : {7} ; E00 : {8}"
+                                    , equipment_name, response_time, temp, bottle_position, door_status, equipment_status, ml, sample, E00);
+                            Console.WriteLine(result);
                             //water_sampler obj = new water_sampler();
                             objWaterSamplerGLobal.equipment_name = equipment_name;
                             objWaterSamplerGLobal.comm_port = SAMPComname;
@@ -1527,6 +1533,8 @@ namespace DataLogger
                             objWaterSamplerGLobal.bottle_position = Convert.ToInt32(bottle_position);
                             objWaterSamplerGLobal.refrigeration_Temperature = Convert.ToDouble(temp);
                             objWaterSamplerGLobal.created = DateTime.Now;
+
+                            tooltipSAMPInfo = "";
                             CultureInfo enUS = new CultureInfo("en-US");
                             DateTime datetimeValue = new DateTime();
 
@@ -3316,7 +3324,7 @@ namespace DataLogger
 
                 if (obj.refrigeration_Temperature > -1)
                 {
-                    txtAutoSamplerTemp.Text = obj.refrigeration_Temperature.ToString("##.##");
+                    txtAutoSamplerTemp.Text = obj.refrigeration_Temperature.ToString("##0.00");
                 }
                 else
                 {
@@ -3412,7 +3420,7 @@ namespace DataLogger
                 else if (obj.equipment_status == INT_STATUS_COMMUNICATION_ERROR)
                 {
                     this.picAutoSamplerStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_fail_status;
-                    txtAutoSamplerTemp.Text = "---";
+                    //txtAutoSamplerTemp.Text = "---";
                 }
                 else if (obj.equipment_status == INT_STATUS_MEASURING_STOP)
                 {
@@ -4866,6 +4874,21 @@ namespace DataLogger
 
         }
 
+        private void picAutoSamplerStatus_MouseHover(object sender, EventArgs e)
+        {
+            if (tooltipSAMP == "fault" || tooltipSAMP == "stop")
+            {
+                ToolTip tt = new ToolTip();
+                if (tooltipSAMP == "fault")
+                {
+                    tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + ":" + tooltipSAMPInfo);
+                }
+                else
+                {
+                    tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP));
+                }
+            }
+        }
     }
 
     public class CalculationDataValue
