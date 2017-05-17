@@ -30,8 +30,8 @@ namespace DataLogger
         // 1: KECO_STD; 2: ANALYZER; 3: MODBUS
         public string[] PROTOCOL_LIST = { "KECO_STD", "ANALYZER", "MODBUS" };
 
-
-
+        SerialPort SAMPPort;
+        frmNewMain newMain;
         // module configuration list
         public string[] MODULE_CONFIG_LIST = {"Power", "UPS", "Door", "Fire", "Flow", "Pump (L) A/M",
                                              "Pump (L) R/S", "Pump (L) FLT", "Pump (R) A/M",
@@ -50,11 +50,13 @@ namespace DataLogger
             InitializeComponent();
         }
 
-        public frmConfiguration(LanguageService _lang)
+        public frmConfiguration(LanguageService _lang,frmNewMain newmain)
         {
             InitializeComponent();
             lang = _lang;
             switch_language();
+            //SAMPPort = SAMP;
+            newMain = newmain;
         }
         private void switch_language()
         {
@@ -1098,7 +1100,8 @@ namespace DataLogger
                                 Application.OpenForms.OfType<Form1>().First().Close();
                             }
 
-                            protocol = new Form1();
+                            protocol = new Form1(newMain);
+                            //protocol = new Form1(this.SAMPPort);
                             protocol.Show();
                             btnShow.Enabled = true;
                         }

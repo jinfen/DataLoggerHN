@@ -13,7 +13,9 @@ namespace DataLogger.Entities
         public Double refrigeration_Temperature { get; set; }
         public int bottle_position { get; set; }
         public int door_status { get; set; }
+        public int status_info { get; set; }
         public int equipment_status { get; set; }
+        public string addInfo { get; set; }
         public string comm_port { get; set; }
         public DateTime created { get; set; }
         public DateTime latest_update_communication { get; set; }
@@ -25,6 +27,8 @@ namespace DataLogger.Entities
             refrigeration_Temperature = -1000;
             bottle_position = -1000;
             equipment_status = -1;
+            addInfo = "";
+            status_info = -1;
             door_status = -1;
             comm_port = "";
             created = new DateTime();

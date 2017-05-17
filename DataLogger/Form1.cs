@@ -1,4 +1,5 @@
-﻿using DataLogger.Data;
+﻿using DataLogger;
+using DataLogger.Data;
 using DataLogger.Entities;
 using Microsoft.Win32;
 using Npgsql;
@@ -27,17 +28,22 @@ namespace WinformProtocol
 {
     public partial class Form1 : Form
     {
+        public static SerialPort SAMPPort;
+        public static frmNewMain newMain;
         TcpListener tcpListener = null;
         IPAddress localAddr;
         Int32 port;
         public static bool isStop;
+        public static Boolean isSamp;
         // The path to the key where Windows looks for startup applications
         RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-        public Form1()
+        public Form1(frmNewMain newmain)
         {
-
-            InitializeComponent();
             
+            InitializeComponent();
+            newMain = newmain;
+            SAMPPort = newmain.serialPortSAMP;
+            newMain.DataReceived += myDataReceived;
             notifyIcon.Visible = true;
             this.Show();
             // Check to see the current state (running at startup or not)
@@ -83,6 +89,8 @@ namespace WinformProtocol
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            
+            //SAMPPort.DataReceived += mySerialThing_DataReceived;
             station existedStationsSetting = new station_repository().get_info();
             port = 3001;
             textPort.Text = existedStationsSetting.socket_port.ToString();
@@ -98,7 +106,26 @@ namespace WinformProtocol
             //textLog2.Text = "test2";
             //textLog.Text = "test1";
         }
-
+        private void myDataReceived(object sender, ReceivedEventArgs e)
+        {
+            /////////////////////////////////////////////////////////////////////
+            // Do something with <data> 
+            Console.WriteLine("FORM 1 lenght " + e.Data.Length);
+            foreach (var a in e.Data) {
+                //Console.WriteLine("FORM 1 " + a);
+                if (a == 0x06) {
+                    Console.WriteLine("FORM 1 ACK");
+                }
+                if (a == 0x15)
+                {
+                    Console.WriteLine("FORM 1 NAK");
+                }
+                if (a == 0x0D)
+                {
+                    Console.WriteLine("FORM 1 CR");
+                }
+            }
+        }
         async void btnListen_Click(object sender, EventArgs e)
         {
             isStop = false;
@@ -146,7 +173,6 @@ namespace WinformProtocol
             //textLog.Text = textLog.Text + "\n" + "End";
             control.StartListening(Convert.ToInt32(textPort.Text), localAddr);
         }
-
         private void btnRefesh_Click(object sender, EventArgs e)
         {
 
@@ -213,7 +239,7 @@ namespace WinformProtocol
 
         public static relay_io_control objRelayIOControlGlobal = new relay_io_control();
         public static station_status objStationStatusGlobal = new station_status();
-        public static water_sampler objWaterSamplerGLobal = new water_sampler();
+        //public static water_sampler objWaterSamplerGLobal = new water_sampler();
         public static measured_data objMeasuredDataGlobal = new measured_data();
 
         internal delegate void StringDelegate(string data, Form1 form);
@@ -1220,16 +1246,24 @@ namespace WinformProtocol
         {
 
         }
-        public void SAMP(SerialPort serialPortSAMP, byte[] buffer, String data, int j, NetworkStream nwStream, TcpClient client)
+        public void SAMP(SerialPort serialPortSAMP, byte[] buffer, String data, int j, NetworkStream nwStream, TcpClient client,water_sampler objWaterSamplerGLobal)
         {
             if (_encoder.GetString(SubArray(buffer, j + 26, 2)).Equals("00"))
             {
                 requestAutoSAMPLER(serialPortSAMP);
                 //Thread.Sleep(300);
                 //requestInforSAMPLER(serialPortSAMP);
-                byte[] _EOT = new byte[1];
-                new byte[] { 0x04 }.CopyTo(_EOT, 0);
-                sendByte(nwStream, _EOT, form1);
+                if (Form1.isSamp)
+                {
+                    byte[] _EOT = new byte[1];
+                    new byte[] { 0x04 }.CopyTo(_EOT, 0);
+                    sendByte(nwStream, _EOT, form1);
+                }
+                else {
+                    byte[] _NAK = new byte[1];
+                    new byte[] { 0x15 }.CopyTo(_NAK, 0);
+                    sendByte(nwStream, _NAK, form1);
+                }
             }
             else if (_encoder.GetString(SubArray(buffer, j + 26, 2)).Equals("10"))
             {
@@ -1238,28 +1272,96 @@ namespace WinformProtocol
                 //String header = STX + "SAMP" + data.Substring(1, j) + new user_repository().DateFormat(DateTime.Now.ToString()) + data.Substring(j + 19, 7);
                 byte[] _Command = new byte[4];
                 _encoder.GetBytes("SAMP").CopyTo(_Command, 0);
+
                 byte[] _StationCode = new byte[11];
                 _encoder.GetBytes(data.Substring(1, j)).CopyTo(_StationCode, 0);
+
                 byte[] _Datetime = new byte[14];
                 _encoder.GetBytes(DateFormat(DateTime.Now.ToString())).CopyTo(_Datetime, 0);
+
                 byte[] _Analyze = new byte[7];
                 _encoder.GetBytes(data.Substring(j + 19, 7)).CopyTo(_Analyze, 0);
+
                 byte[] _header = _STX.Concat(_Command).Concat(_StationCode).Concat(_Datetime).Concat(_Analyze).ToArray();
 
-                byte[] _item = new byte[65];
+                byte[] _Temp = new byte[10];
+                _encoder.GetBytes(objWaterSamplerGLobal.refrigeration_Temperature.ToString("00.00")).CopyTo(_Temp, 0);
+
+                byte[] _Type = new byte[1];
+                _encoder.GetBytes("1").CopyTo(_Type, 0);
+
+                byte[] _StatusInfo = new byte[2];
+                _encoder.GetBytes(objWaterSamplerGLobal.status_info.ToString("00")).CopyTo(_StatusInfo, 0);
+
+                byte[] _BottlePo = new byte[2];
+                if (objWaterSamplerGLobal.bottle_position == -1000)
+                {
+                    objWaterSamplerGLobal.bottle_position = -1;
+                    _encoder.GetBytes(objWaterSamplerGLobal.bottle_position.ToString()).CopyTo(_BottlePo, 0);
+                }
+                else
+                {
+                    _encoder.GetBytes(objWaterSamplerGLobal.bottle_position.ToString("00")).CopyTo(_BottlePo, 0);
+                }
+                byte[] _AddInfo = new byte[50];
+                _encoder.GetBytes(objWaterSamplerGLobal.addInfo).CopyTo(_AddInfo, 0);
+
+                byte[] _item = _Temp.Concat(_Type).Concat(_StatusInfo).Concat(_BottlePo).Concat(_AddInfo).ToArray();
 
                 byte[] _ETX = new byte[1];
                 (new byte[] { 0x03 }).CopyTo(_ETX, 0);
+
                 string checksum = CalculateChecksum(_encoder.GetString(_header) + _encoder.GetString(_item) + _encoder.GetString(_ETX));
                 byte[] _checksum = new byte[2];
                 _encoder.GetBytes(checksum).CopyTo(_checksum, 0);
+
                 byte[] _CR = new byte[1];
                 (new byte[] { 0x0D }).CopyTo(_CR, 0);
+
                 byte[] _tailer = _ETX.Concat(_checksum).Concat(_CR).ToArray();
+
                 byte[] _EOT = new byte[1];
                 (new byte[] { 0x04 }).CopyTo(_EOT, 0);
+
                 byte[] _sender = _header.Concat(_item).Concat(_tailer).ToArray();
                 sendByte(nwStream, _sender, form1);
+
+                buffer = new byte[BUFFER_SIZE];
+                int a = 0;
+                do
+                {
+                    if (a == 3)
+                    {
+                        sendByte(nwStream, _EOT, form1);
+                        break;
+                    }
+                    if (nwStream.Read(buffer, 0, buffer.Length) != 0)
+                    {
+                        if (buffer[0] == 6 )
+                        {
+                            sendByte(nwStream, _EOT, form1);
+                            a = 0;
+                            break;
+                        }
+                        else if (buffer[0] == 15)  //NAK
+                        {
+                            a++;
+                            sendByte(nwStream, _sender, form1);
+                        }
+                        else
+                        {
+                            Console.WriteLine(System.Text.Encoding.ASCII.GetString(buffer, 0, nwStream.Read(buffer, 0, buffer.Length)));
+                            sendByte(nwStream, _encoder.GetBytes("ERROR FORMAT 1"), form1);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(System.Text.Encoding.ASCII.GetString(buffer, 0, nwStream.Read(buffer, 0, buffer.Length)));
+                        sendByte(nwStream, _encoder.GetBytes("ERROR RESPONSE"), form1);
+                        break;
+                    }
+                } while (true);
             }
             else
             {
@@ -1523,7 +1625,7 @@ namespace WinformProtocol
             tcpListener.Start();
             counter = 0;
             //Protocol_v2(serialPortTN, serialPortTP, serialPortTOC, serialPortSAMP, tcpListener, objRelayIOControlGlobal, objStationStatusGlobal, objWaterSamplerGLobal, objMeasuredDataGlobal);
-            Protocol(serialPortTN, serialPortTP, serialPortTOC, serialPortSAMP, tcpListener, objRelayIOControlGlobal, objStationStatusGlobal, objWaterSamplerGLobal, objMeasuredDataGlobal);
+            //Protocol(serialPortTN, serialPortTP, serialPortTOC, serialPortSAMP, tcpListener, objRelayIOControlGlobal, objStationStatusGlobal, objWaterSamplerGLobal, objMeasuredDataGlobal);
         }
         public void Protocol(SerialPort serialPortTN, SerialPort serialPortTP, SerialPort serialPortTOC, SerialPort serialPortSAMP, TcpListener tcpListener, relay_io_control objRelayIOControlGlobal, station_status objStationStatusGlobal, water_sampler objWaterSamplerGLobal, measured_data objMeasuredDataGlobal)
         {
@@ -1797,7 +1899,7 @@ namespace WinformProtocol
                         }
                         else if (_encoder.GetString(SubArray(buffer, j + 15, 4)).Equals("SAMP"))
                         {
-                            SAMP(serialPortSAMP, buffer, data, j, nwStream, client);
+                            SAMP(serialPortSAMP, buffer, data, j, nwStream, client, objWaterSamplerGLobal);
                             break;
                         }
                         else if (_encoder.GetString(SubArray(buffer, j + 15, 4)).Equals("INFO"))
@@ -1823,7 +1925,7 @@ namespace WinformProtocol
                             break;
                         }
                     }
-                    catch
+                    catch(Exception e)
                     {
                         sendByte(nwStream, _encoder.GetBytes("ERROR : FORMAT MESSAGE INTI"), form1);
                         //sendMsg(nwStream, "ERROR : FORMAT MESSAGE");
@@ -1972,7 +2074,7 @@ namespace WinformProtocol
                                                 byte[] msg1 = new byte[] { 0x06 };
                                                 control.sendByte(nwStream, msg1, form1);
                                                 //control.passingParamInit(form1,Control.serialPortTN, Control.serialPortTP, Control.serialPortTOC, Control.serialPortSAMP, nwStream, buffer, data, ClientSocket, username, Control.objRelayIOControlGlobal, Control.objStationStatusGlobal, Control.objWaterSamplerGLobal, Control.objMeasuredDataGlobal);
-                                                control.init(null, Control.serialPortTN, Control.serialPortTP, Control.serialPortTOC, Control.serialPortSAMP, nwStream, buffer, data, ClientSocket, username, Control.objRelayIOControlGlobal, Control.objStationStatusGlobal, Control.objWaterSamplerGLobal, Control.objMeasuredDataGlobal);
+                                                control.init(null, Control.serialPortTN, Control.serialPortTP, Control.serialPortTOC, Form1.SAMPPort, nwStream, buffer, data, ClientSocket, username, Control.objRelayIOControlGlobal, Control.objStationStatusGlobal, frmNewMain.objWaterSamplerGLobal, Control.objMeasuredDataGlobal);
                                                 break;
                                             }
                                             else
@@ -1996,7 +2098,7 @@ namespace WinformProtocol
                                 }
                                 else
                                 {
-                                    int j = nwStream.Read(buffer, 0, buffer.Length);
+                                    //int j = nwStream.Read(buffer, 0, buffer.Length);
                                     string error = System.Text.Encoding.ASCII.GetString(buffer, 0, BytesRead);
                                     control.AppendTextBox(Environment.NewLine + "Received : " + data, form1);
                                     control.sendByte(nwStream, Control._encoder.GetBytes("ERROR : FORMAT MESSAGE"), form1);

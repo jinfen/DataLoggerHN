@@ -175,7 +175,7 @@ namespace DataLogger
         public string tooltipSAMP = "";
 
         public static Form1 protocol;
-
+        public static Boolean isSamp;
         #region Form event
         public frmNewMain()
         {
@@ -184,7 +184,8 @@ namespace DataLogger
 
         private void frmNewMain_Load(object sender, EventArgs e)
         {
-            frmConfiguration.protocol = new Form1();
+            //frmConfiguration.protocol = new Form1(this.serialPortSAMP);
+            frmConfiguration.protocol = new Form1(this);
             //frmConfiguration.protocol.Show();          
 
             GlobalVar.maintenanceLog = new maintenance_log();
@@ -641,8 +642,16 @@ namespace DataLogger
         //        //MessageBox.Show(ex.Message);
         //    }
         //}
-        private void serialPortSAMP_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        public delegate void DataReceivedEventHandler(object sender, ReceivedEventArgs e);
+        public event DataReceivedEventHandler DataReceived;
+        public void serialPortSAMP_DataReceived(object sender, SerialDataReceivedEventArgs args)
         {
+            //byte[] inputData = new byte[serialPortSAMP.BytesToRead];
+            //if (DataReceived != null)
+            //{
+            //    DataReceived(inputData);
+            //}
+            
             try
             {
                 //MessageBox.Show("testeset");
@@ -651,7 +660,13 @@ namespace DataLogger
                 int bytes = serialPortSAMP.BytesToRead;
                 byte[] buffer = new byte[bytes];
                 serialPortSAMP.Read(buffer, 0, bytes);
-
+                if (DataReceived != null)
+                {
+                    ReceivedEventArgs rea = new ReceivedEventArgs { Data = buffer };
+                    DataReceived(this, rea);
+                }
+                //foreach (var a in buffer)
+                //{ Console.WriteLine("newmain1 " + a); }
                 /*
                 for (int i = 0; i < bytes; i++)
                 {
@@ -661,9 +676,12 @@ namespace DataLogger
                 }
                 SAMP_rx_counter += bytes;
                 */
+                string raw_data = Encoding.ASCII.GetString(buffer);
+                //Console.WriteLine("MAIN " + raw_data);
                 if (buffer != null && buffer[0] == 0x06)
                 {
                     //MessageBox.Show("Success");
+                    isSamp = true;
                     if (SAMP_rx_buffer == null)
                     {
                         SAMP_rx_buffer = null;
@@ -672,9 +690,11 @@ namespace DataLogger
                     {
                         SAMP_rx_buffer = SAMP_rx_buffer.Concat(buffer).ToArray();
                     }
+                    Console.WriteLine("ACK");
                 }
                 else if (buffer != null && buffer[0] == 0x15)
                 {
+                    isSamp = false;
                     //MessageBox.Show("Error");
                     if (SAMP_rx_buffer == null)
                     {
@@ -684,6 +704,7 @@ namespace DataLogger
                     {
                         SAMP_rx_buffer = SAMP_rx_buffer.Concat(buffer).ToArray();
                     }
+                    Console.WriteLine("NAK");
                 }
                 else if (SAMP_rx_buffer == null)
                 {
@@ -704,13 +725,15 @@ namespace DataLogger
                     //string raw_data = Encoding.ASCII.GetString(SAMP_rx_buffer);
                     //Console.WriteLine("data : " + raw_data.Length);
                     //Console.WriteLine(raw_data.Trim());
-                
+
                     if (SAMP_rx_buffer.Length == SAMP_PACKET_LENGTH)
                     {
                         //Console.WriteLine("TRUE");
                         ProcessDataSAMP("");
                     }
                 }
+                //foreach (var a in buffer)
+                //{ Console.WriteLine("newmain2 " + a); }
                 if (SAMP_rx_buffer != null)
                 {
                     if (SAMP_rx_buffer.Length >= SAMP_PACKET_LENGTH)
@@ -1522,16 +1545,19 @@ namespace DataLogger
                             string sample = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10 + 2 + 2 + 6, 1));
                             string E00 = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10 + 2 + 2 + 6 + 1, 5));
                             string door_status = Encoding.UTF8.GetString(SubArray(text, i + 1 + 4 + 14 + 10 + 2 + 12, 1));
+                            string addInfo = ml + sample + E00 + door_status;
                             result = string.Format("equipment_name: {0}; response_time: {1}; temp: {2}; bottle_position: {3}; door_status: {4}; equipment_status: {5}; ml : {6} ; sample : {7} ; E00 : {8}"
                                     , equipment_name, response_time, temp, bottle_position, door_status, equipment_status, ml, sample, E00);
-                            Console.WriteLine(result);
+                            //Console.WriteLine(result);
                             //water_sampler obj = new water_sampler();
                             objWaterSamplerGLobal.equipment_name = equipment_name;
                             objWaterSamplerGLobal.comm_port = SAMPComname;
                             objWaterSamplerGLobal.equipment_status = Convert.ToInt32(equipment_status);
+                            objWaterSamplerGLobal.status_info = Convert.ToInt32(equipment_status);
                             objWaterSamplerGLobal.door_status = Convert.ToInt32(door_status);
                             objWaterSamplerGLobal.bottle_position = Convert.ToInt32(bottle_position);
                             objWaterSamplerGLobal.refrigeration_Temperature = Convert.ToDouble(temp);
+                            objWaterSamplerGLobal.addInfo = addInfo;
                             objWaterSamplerGLobal.created = DateTime.Now;
 
                             tooltipSAMPInfo = "";
@@ -2318,7 +2344,7 @@ namespace DataLogger
                     //requestInforMPS(serialPortMPS);
                     break;
                 case 4: // SAMPLER
-                    Console.WriteLine("request sampler");
+                    //Console.WriteLine("request sampler");
                     requestInforSAMPLER(serialPortSAMP);
                     break;
                 default:
@@ -4044,7 +4070,7 @@ namespace DataLogger
                     return;
                 }
             }
-            frmConfiguration frmConfig = new frmConfiguration(lang);
+            frmConfiguration frmConfig = new frmConfiguration(lang,this);
             frmConfig.ShowDialog();
             initConfig(true);
         }
@@ -4890,7 +4916,6 @@ namespace DataLogger
             }
         }
     }
-
     public class CalculationDataValue
     {
         public List<data_value> listDataValue = new List<data_value>();
@@ -5809,5 +5834,9 @@ namespace DataLogger
                 return objDataValue;
             }
         }
+    }
+    public class ReceivedEventArgs : EventArgs
+    {
+        public byte[] Data { get; set; }
     }
 }
