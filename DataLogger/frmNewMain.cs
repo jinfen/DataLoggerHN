@@ -722,9 +722,9 @@ namespace DataLogger
                 //}
                 if (SAMP_rx_buffer != null)
                 {
-                    //string raw_data = Encoding.ASCII.GetString(SAMP_rx_buffer);
-                    //Console.WriteLine("data : " + raw_data.Length);
-                    //Console.WriteLine(raw_data.Trim());
+                    string raw_data1 = Encoding.ASCII.GetString(SAMP_rx_buffer);
+                    Console.WriteLine("data : " + raw_data1.Length);
+                    Console.WriteLine(raw_data1.Trim());
 
                     if (SAMP_rx_buffer.Length == SAMP_PACKET_LENGTH)
                     {

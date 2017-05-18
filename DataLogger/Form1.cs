@@ -34,7 +34,7 @@ namespace WinformProtocol
         IPAddress localAddr;
         Int32 port;
         public static bool isStop;
-        public static Boolean isSamp;
+        public static int isSamp;
         // The path to the key where Windows looks for startup applications
         RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         public Form1(frmNewMain newmain)
@@ -110,20 +110,23 @@ namespace WinformProtocol
         {
             /////////////////////////////////////////////////////////////////////
             // Do something with <data> 
-            Console.WriteLine("FORM 1 lenght " + e.Data.Length);
+            //Console.WriteLine("FORM 1 lenght " + e.Data.Length);
+            isSamp = 2;
             foreach (var a in e.Data) {
                 //Console.WriteLine("FORM 1 " + a);
                 if (a == 0x06) {
-                    Console.WriteLine("FORM 1 ACK");
+                    //Console.WriteLine("FORM 1 ACK");
+                    isSamp = 1;
                 }
                 if (a == 0x15)
                 {
-                    Console.WriteLine("FORM 1 NAK");
+                    //Console.WriteLine("FORM 1 NAK");
+                    isSamp = 0;
                 }
-                if (a == 0x0D)
-                {
-                    Console.WriteLine("FORM 1 CR");
-                }
+                //if (a == 0x0D)
+                //{
+                //    Console.WriteLine("FORM 1 CR");
+                //}
             }
         }
         async void btnListen_Click(object sender, EventArgs e)
@@ -740,7 +743,7 @@ namespace WinformProtocol
                 _encoder.GetBytes(_param).CopyTo(_Param, 0);
                 byte[] _dcd = new byte[1];
                 _encoder.GetBytes("1").CopyTo(_dcd, 0);
-                byte[] _streamCode = new byte[11];
+                byte[] _streamCode = new byte[j];
                 _encoder.GetBytes(data.Substring(1, j)).CopyTo(_streamCode, 0);
                 byte[] _header = _STX.Concat(_Command).Concat(_Param).Concat(_streamCode).Concat(_dcd).Concat(_measuretime).ToArray();
                 byte[] _item = DataSQL("data_5minute_values", "databinding");
@@ -795,7 +798,7 @@ namespace WinformProtocol
                 _encoder.GetBytes(_param).CopyTo(_Param, 0);
                 byte[] _dcd = new byte[1];
                 _encoder.GetBytes("1").CopyTo(_dcd, 0);
-                byte[] _streamCode = new byte[11];
+                byte[] _streamCode = new byte[j];
                 _encoder.GetBytes(data.Substring(1, j)).CopyTo(_streamCode, 0);
                 byte[] _header = _STX.Concat(_Command).Concat(_Param).Concat(_streamCode).Concat(_dcd).Concat(_measuretime).ToArray();
                 byte[] _item = DataSQL("data_60minute_values", "databinding");
@@ -849,7 +852,7 @@ namespace WinformProtocol
             _encoder.GetBytes(date).CopyTo(_date, 0);
             byte[] _Command = new byte[4];
             _encoder.GetBytes("RDAT").CopyTo(_Command, 0);
-            byte[] _streamCode = new byte[11];
+            byte[] _streamCode = new byte[j];
             _encoder.GetBytes(data.Substring(1, j)).CopyTo(_streamCode, 0);
             byte[] _dcd = new byte[1];
             _encoder.GetBytes("1").CopyTo(_dcd, 0);
@@ -1140,7 +1143,7 @@ namespace WinformProtocol
                     _encoder.GetBytes("DUMP").CopyTo(_Command, 0);
                     byte[] _Param = new byte[1];
                     _encoder.GetBytes(_param).CopyTo(_Param, 0);
-                    byte[] _streamCode = new byte[11];
+                    byte[] _streamCode = new byte[j];
                     _encoder.GetBytes(data.Substring(1, j)).CopyTo(_streamCode, 0);
                     byte[] _dcd = new byte[1];
                     _encoder.GetBytes("1").CopyTo(_dcd, 0);
@@ -1246,23 +1249,27 @@ namespace WinformProtocol
         {
 
         }
-        public void SAMP(SerialPort serialPortSAMP, byte[] buffer, String data, int j, NetworkStream nwStream, TcpClient client,water_sampler objWaterSamplerGLobal)
+        public void SAMP(string newstationid,SerialPort serialPortSAMP, byte[] buffer, String data, int j, NetworkStream nwStream, TcpClient client,water_sampler objWaterSamplerGLobal)
         {
             if (_encoder.GetString(SubArray(buffer, j + 26, 2)).Equals("00"))
             {
                 requestAutoSAMPLER(serialPortSAMP);
-                //Thread.Sleep(300);
+                Thread.Sleep(300);
                 //requestInforSAMPLER(serialPortSAMP);
-                if (Form1.isSamp)
+                Console.WriteLine(Form1.isSamp);
+                if (Form1.isSamp == 1)
                 {
                     byte[] _EOT = new byte[1];
                     new byte[] { 0x04 }.CopyTo(_EOT, 0);
                     sendByte(nwStream, _EOT, form1);
+                    Form1.isSamp = 2;
                 }
-                else {
+                else if(Form1.isSamp == 0)
+                {
                     byte[] _NAK = new byte[1];
                     new byte[] { 0x15 }.CopyTo(_NAK, 0);
                     sendByte(nwStream, _NAK, form1);
+                    Form1.isSamp = 2;
                 }
             }
             else if (_encoder.GetString(SubArray(buffer, j + 26, 2)).Equals("10"))
@@ -1273,7 +1280,7 @@ namespace WinformProtocol
                 byte[] _Command = new byte[4];
                 _encoder.GetBytes("SAMP").CopyTo(_Command, 0);
 
-                byte[] _StationCode = new byte[11];
+                byte[] _StationCode = new byte[j];
                 _encoder.GetBytes(data.Substring(1, j)).CopyTo(_StationCode, 0);
 
                 byte[] _Datetime = new byte[14];
@@ -1291,7 +1298,14 @@ namespace WinformProtocol
                 _encoder.GetBytes("1").CopyTo(_Type, 0);
 
                 byte[] _StatusInfo = new byte[2];
-                _encoder.GetBytes(objWaterSamplerGLobal.status_info.ToString("00")).CopyTo(_StatusInfo, 0);
+                if (objWaterSamplerGLobal.status_info == -1)
+                {
+                    _encoder.GetBytes(objWaterSamplerGLobal.status_info.ToString()).CopyTo(_StatusInfo, 0);
+                }
+                else
+                {
+                    _encoder.GetBytes(objWaterSamplerGLobal.status_info.ToString("00")).CopyTo(_StatusInfo, 0);
+                }
 
                 byte[] _BottlePo = new byte[2];
                 if (objWaterSamplerGLobal.bottle_position == -1000)
@@ -1840,13 +1854,13 @@ namespace WinformProtocol
         }
         public void passingParamInit(Form1 form, SerialPort serialPortTN, SerialPort serialPortTP, SerialPort serialPortTOC, SerialPort serialPortSAMP, NetworkStream nwStream, byte[] buffer, String data, TcpClient client, String username, relay_io_control objRelayIOControlGlobal, station_status objStationStatusGlobal, water_sampler objWaterSamplerGLobal, measured_data objMeasuredDataGlobal)
         {
-            init(form, serialPortTN, serialPortTP, serialPortTOC, serialPortSAMP, nwStream, buffer, data, client, username, objRelayIOControlGlobal, objStationStatusGlobal, objWaterSamplerGLobal, objMeasuredDataGlobal);
+            //init(form, serialPortTN, serialPortTP, serialPortTOC, serialPortSAMP, nwStream, buffer, data, client, username, objRelayIOControlGlobal, objStationStatusGlobal, objWaterSamplerGLobal, objMeasuredDataGlobal);
         }
         public void passingParamInit(SerialPort serialPortTN, SerialPort serialPortTP, SerialPort serialPortTOC, SerialPort serialPortSAMP, NetworkStream nwStream, byte[] buffer, String data, TcpClient client, String username, relay_io_control objRelayIOControlGlobal, station_status objStationStatusGlobal, water_sampler objWaterSamplerGLobal, measured_data objMeasuredDataGlobal)
         {
-            init(null, serialPortTN, serialPortTP, serialPortTOC, serialPortSAMP, nwStream, buffer, data, client, username, objRelayIOControlGlobal, objStationStatusGlobal, objWaterSamplerGLobal, objMeasuredDataGlobal);
+            //init(null, serialPortTN, serialPortTP, serialPortTOC, serialPortSAMP, nwStream, buffer, data, client, username, objRelayIOControlGlobal, objStationStatusGlobal, objWaterSamplerGLobal, objMeasuredDataGlobal);
         }
-        public void init(Form1 form, SerialPort serialPortTN, SerialPort serialPortTP, SerialPort serialPortTOC, SerialPort serialPortSAMP, NetworkStream nwStream, byte[] buffer, String data, TcpClient client, String username, relay_io_control objRelayIOControlGlobal, station_status objStationStatusGlobal, water_sampler objWaterSamplerGLobal, measured_data objMeasuredDataGlobal)
+        public void init(string newstationid,Form1 form, SerialPort serialPortTN, SerialPort serialPortTP, SerialPort serialPortTOC, SerialPort serialPortSAMP, NetworkStream nwStream, byte[] buffer, String data, TcpClient client, String username, relay_io_control objRelayIOControlGlobal, station_status objStationStatusGlobal, water_sampler objWaterSamplerGLobal, measured_data objMeasuredDataGlobal)
         {
             //Control control = new
             int i;
@@ -1859,7 +1873,7 @@ namespace WinformProtocol
                     AppendTextBox(Environment.NewLine + " Listening COMMAND ...", form1);
                     try
                     {
-                        int j = 10;
+                        int j = newstationid.Length;
                         data = System.Text.Encoding.ASCII.GetString(buffer, 0, i);
                         AppendTextBox(Environment.NewLine + " Received: " + data, form1);
                         int count = 1;
@@ -1899,7 +1913,7 @@ namespace WinformProtocol
                         }
                         else if (_encoder.GetString(SubArray(buffer, j + 15, 4)).Equals("SAMP"))
                         {
-                            SAMP(serialPortSAMP, buffer, data, j, nwStream, client, objWaterSamplerGLobal);
+                            SAMP(newstationid,serialPortSAMP, buffer, data, j, nwStream, client, objWaterSamplerGLobal);
                             break;
                         }
                         else if (_encoder.GetString(SubArray(buffer, j + 15, 4)).Equals("INFO"))
@@ -1952,6 +1966,8 @@ namespace WinformProtocol
         volatile bool ContinueProcess = false;
         Thread ClientThread;
         public Form1 form1;
+        public static String newstationid;
+        //newstationid = GlobalVar.stationSettings.station_id;
         public ClientHandler()
         {
             //this.form1 = form1;
@@ -2016,7 +2032,9 @@ namespace WinformProtocol
                                 break;
                             #region process
                             int flag = 0;
-                            String stationid = "BLVTRS0001";
+                            GlobalVar.stationSettings = new station_repository().get_info();
+                            String stationid = "";
+                            newstationid = GlobalVar.stationSettings.station_id;
                             string[] separators = { "\\" };
                             try
                             {
@@ -2028,7 +2046,9 @@ namespace WinformProtocol
 
                                 control.AppendTextBox(Environment.NewLine + "Received: " + data, form1);
                                 //buffer.SubArray();
-                                if ((buffer[0] == 5 && datas[2].Remove(datas[2].Length - 1, 1).Equals(stationid)) || (buffer[0] == 5 && datas[2].Remove(datas[2].Length - 2, 2).Equals(stationid)) || (buffer[0] == 5 && datas[2].Equals(stationid)))
+                                if (((buffer[0] == 5 && datas[2].Remove(datas[2].Length - 1, 1).Equals(stationid)) || (buffer[0] == 5 && datas[2].Remove(datas[2].Length - 2, 2).Equals(stationid)) || (buffer[0] == 5 && datas[2].Equals(stationid)))
+                                    || ((buffer[0] == 5 && datas[2].Remove(datas[2].Length - 1, 1).Equals(newstationid)) || (buffer[0] == 5 && datas[2].Remove(datas[2].Length - 2, 2).Equals(newstationid)) || (buffer[0] == 5 && datas[2].Equals(newstationid)))
+                                    )
                                 //if (buffer[0] == 2)
                                 {
                                     //String msg = "\x06";
@@ -2074,7 +2094,7 @@ namespace WinformProtocol
                                                 byte[] msg1 = new byte[] { 0x06 };
                                                 control.sendByte(nwStream, msg1, form1);
                                                 //control.passingParamInit(form1,Control.serialPortTN, Control.serialPortTP, Control.serialPortTOC, Control.serialPortSAMP, nwStream, buffer, data, ClientSocket, username, Control.objRelayIOControlGlobal, Control.objStationStatusGlobal, Control.objWaterSamplerGLobal, Control.objMeasuredDataGlobal);
-                                                control.init(null, Control.serialPortTN, Control.serialPortTP, Control.serialPortTOC, Form1.SAMPPort, nwStream, buffer, data, ClientSocket, username, Control.objRelayIOControlGlobal, Control.objStationStatusGlobal, frmNewMain.objWaterSamplerGLobal, Control.objMeasuredDataGlobal);
+                                                control.init(newstationid, null, Control.serialPortTN, Control.serialPortTP, Control.serialPortTOC, Form1.SAMPPort, nwStream, buffer, data, ClientSocket, username, Control.objRelayIOControlGlobal, Control.objStationStatusGlobal, frmNewMain.objWaterSamplerGLobal, Control.objMeasuredDataGlobal);
                                                 break;
                                             }
                                             else

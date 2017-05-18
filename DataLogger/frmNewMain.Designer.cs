@@ -315,7 +315,6 @@
             // serialPortSAMP
             // 
             this.serialPortSAMP.PortName = "COM100";
-            this.serialPortSAMP.DataReceived += serialPortSAMP_DataReceived;
             // 
             // serialPortADAM
             // 
@@ -341,7 +340,7 @@
             this.panel23.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel23.Location = new System.Drawing.Point(73, 494);
             this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(781, 161);
+            this.panel23.Size = new System.Drawing.Size(779, 161);
             this.panel23.TabIndex = 70;
             // 
             // panel25
@@ -805,7 +804,7 @@
             this.panel30.Location = new System.Drawing.Point(80, 57);
             this.panel30.Margin = new System.Windows.Forms.Padding(10);
             this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(767, 424);
+            this.panel30.Size = new System.Drawing.Size(765, 424);
             this.panel30.TabIndex = 65;
             this.panel30.Paint += new System.Windows.Forms.PaintEventHandler(this.panel30_Paint);
             // 
@@ -936,7 +935,7 @@
             this.panel3.Controls.Add(this.picAutoSamplerStatus);
             this.panel3.Controls.Add(this.pnbottlePosition);
             this.panel3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panel3.Location = new System.Drawing.Point(268, 119);
+            this.panel3.Location = new System.Drawing.Point(267, 119);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(190, 275);
             this.panel3.TabIndex = 0;
@@ -1615,7 +1614,7 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(80, 668);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(10);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(767, 46);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(765, 46);
             this.flowLayoutPanel1.TabIndex = 62;
             // 
             // pnLeftSide
@@ -1738,10 +1737,10 @@
             this.panel21.Controls.Add(this.panel16);
             this.panel21.Controls.Add(this.panel29);
             this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel21.Location = new System.Drawing.Point(860, 494);
+            this.panel21.Location = new System.Drawing.Point(858, 494);
             this.panel21.Name = "panel21";
             this.tableLayoutPanel1.SetRowSpan(this.panel21, 2);
-            this.panel21.Size = new System.Drawing.Size(484, 227);
+            this.panel21.Size = new System.Drawing.Size(486, 227);
             this.panel21.TabIndex = 71;
             // 
             // panel16
@@ -2169,9 +2168,9 @@
             this.panel24.Controls.Add(this.panel12);
             this.panel24.Controls.Add(this.panel8);
             this.panel24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel24.Location = new System.Drawing.Point(860, 50);
+            this.panel24.Location = new System.Drawing.Point(858, 50);
             this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(484, 438);
+            this.panel24.Size = new System.Drawing.Size(486, 438);
             this.panel24.TabIndex = 72;
             // 
             // panel12
@@ -2679,7 +2678,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.26636F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 91.73364F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 489F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 491F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.26636F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 91.73364F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 482F));

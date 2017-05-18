@@ -13,7 +13,7 @@ class TcpClientTest
         TcpClient tcpClient = new TcpClient();
         try
         {
-            tcpClient.Connect("113.167.96.29", portNum);
+            tcpClient.Connect("192.168.1.43", portNum);
             NetworkStream networkStream = tcpClient.GetStream();
 
             if (networkStream.CanWrite && networkStream.CanRead)
@@ -30,8 +30,8 @@ class TcpClientTest
                     (new byte[] { 0x05 }).CopyTo(_ENQ, 0);
                     byte[] _ACK = new byte[1];
                     (new byte[] { 0x06 }).CopyTo(_ACK, 0);
-                    byte[] _Command = new byte[17];
-                    _encoder.GetBytes("\\" + "admin"+ "\\" + "BLVTRS0001").CopyTo(_Command, 0);
+                    byte[] _Command = new byte[18];
+                    _encoder.GetBytes("\\" + "admin"+ "\\" + "BLVTRS00001").CopyTo(_Command, 0);
                     //byte[] _Param = new byte[1];
                     //_encoder.GetBytes(_param).CopyTo(_Param, 0);
                     //byte[] _streamCode = new byte[11];
@@ -50,6 +50,7 @@ class TcpClientTest
                     byte[] _sender = _ENQ.Concat(_Command).ToArray();
 
                     Byte[] sendBytes = Encoding.ASCII.GetBytes(DataToSend);
+
                     networkStream.Write(_sender, 0, _sender.Length);
                     ///////////////////////////////////////////////////////////////////////////////
 
@@ -74,7 +75,7 @@ class TcpClientTest
 
 
                     byte[] _CommandSAMP = new byte[38];
-                    _encoder.GetBytes("BLVTRS0001" + "20170517121212" + "SAMP" + "1234567" + "00").CopyTo(_CommandSAMP, 0);
+                    _encoder.GetBytes("BLVTRS00001" + "20170517121212" + "SAMP" + "1234567" + "10").CopyTo(_CommandSAMP, 0);
 
                     byte[] _ETX = new byte[1];
                     (new byte[] { 0x03 }).CopyTo(_ETX, 0);
