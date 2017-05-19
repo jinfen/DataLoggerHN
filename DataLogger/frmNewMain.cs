@@ -654,30 +654,20 @@ namespace DataLogger
             
             try
             {
-                //MessageBox.Show("testeset");
+                //MessageBox.Show("testSAMP");
                 if (!serialPortSAMP.IsOpen)
                     return;
                 int bytes = serialPortSAMP.BytesToRead;
                 byte[] buffer = new byte[bytes];
                 serialPortSAMP.Read(buffer, 0, bytes);
+                //foreach (var a in buffer)
+                //{ Console.WriteLine("newmain1 " + a); }
                 if (DataReceived != null)
                 {
                     ReceivedEventArgs rea = new ReceivedEventArgs { Data = buffer };
                     DataReceived(this, rea);
                 }
-                //foreach (var a in buffer)
-                //{ Console.WriteLine("newmain1 " + a); }
-                /*
-                for (int i = 0; i < bytes; i++)
-                {
-                    SAMP_rx_buffer[SAMP_rx_write++] = buffer[i];
-                    if (SAMP_rx_write == 2048)
-                        SAMP_rx_write = 0;
-                }
-                SAMP_rx_counter += bytes;
-                */
-                string raw_data = Encoding.ASCII.GetString(buffer);
-                //Console.WriteLine("MAIN " + raw_data);
+
                 if (buffer != null && buffer[0] == 0x06)
                 {
                     //MessageBox.Show("Success");
@@ -690,7 +680,7 @@ namespace DataLogger
                     {
                         SAMP_rx_buffer = SAMP_rx_buffer.Concat(buffer).ToArray();
                     }
-                    Console.WriteLine("ACK");
+                    //Console.WriteLine("NEW MAIN ACK");
                 }
                 else if (buffer != null && buffer[0] == 0x15)
                 {
@@ -704,9 +694,10 @@ namespace DataLogger
                     {
                         SAMP_rx_buffer = SAMP_rx_buffer.Concat(buffer).ToArray();
                     }
-                    Console.WriteLine("NAK");
+                    //Console.WriteLine("NEW MAIN NAK");
                 }
-                else if (SAMP_rx_buffer == null)
+                else
+                if (SAMP_rx_buffer == null)
                 {
                     SAMP_rx_buffer = buffer;
                 }
@@ -715,25 +706,22 @@ namespace DataLogger
                     SAMP_rx_buffer = SAMP_rx_buffer.Concat(buffer).ToArray();
                 }
                 SAMP_rx_counter += bytes;
-
                 //if (TN_rx_buffer[TN_rx_buffer.Length - 1] == 10 && TN_rx_buffer.Length >= SAMP_PACKET_LENGTH)
                 //{
                 //    TN_rx_buffer = TN_rx_buffer.Take(TN_rx_buffer.Count() - 1).ToArray();
                 //}
                 if (SAMP_rx_buffer != null)
                 {
-                    string raw_data1 = Encoding.ASCII.GetString(SAMP_rx_buffer);
-                    Console.WriteLine("data : " + raw_data1.Length);
-                    Console.WriteLine(raw_data1.Trim());
+                    //string raw_data1 = Encoding.ASCII.GetString(SAMP_rx_buffer);
+                    //Console.WriteLine("data : " + raw_data1.Length);
+                    //Console.WriteLine(raw_data1.Trim());
 
                     if (SAMP_rx_buffer.Length == SAMP_PACKET_LENGTH)
                     {
-                        //Console.WriteLine("TRUE");
+
                         ProcessDataSAMP("");
                     }
                 }
-                //foreach (var a in buffer)
-                //{ Console.WriteLine("newmain2 " + a); }
                 if (SAMP_rx_buffer != null)
                 {
                     if (SAMP_rx_buffer.Length >= SAMP_PACKET_LENGTH)
@@ -741,8 +729,6 @@ namespace DataLogger
                         SAMP_rx_buffer = null;
                     }
                 }
-
-                //ProcessDataSAMP("");
             }
             catch (Exception ex)
             {
@@ -1560,7 +1546,7 @@ namespace DataLogger
                             objWaterSamplerGLobal.addInfo = addInfo;
                             objWaterSamplerGLobal.created = DateTime.Now;
 
-                            tooltipSAMPInfo = "";
+                            tooltipSAMPInfo = addInfo;
                             CultureInfo enUS = new CultureInfo("en-US");
                             DateTime datetimeValue = new DateTime();
 
@@ -3441,6 +3427,7 @@ namespace DataLogger
 
                 if (obj.equipment_status == INT_STATUS_NORMAL)
                 {
+                    tooltipSAMP = "normal";
                     this.picAutoSamplerStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal;
                 }
                 else if (obj.equipment_status == INT_STATUS_COMMUNICATION_ERROR)
@@ -3448,8 +3435,15 @@ namespace DataLogger
                     this.picAutoSamplerStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_fail_status;
                     //txtAutoSamplerTemp.Text = "---";
                 }
+                else if (obj.equipment_status == 2)
+                {
+                    this.picAutoSamplerStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault_status;
+                    //txtAutoSamplerTemp.Text = "---";
+                    tooltipSAMP = "fault";
+                }
                 else if (obj.equipment_status == INT_STATUS_MEASURING_STOP)
                 {
+                    tooltipSAMP = "run";
                     this.picAutoSamplerStatus.BackgroundImage = global::DataLogger.Properties.Resources.Sampling_water_status;
                 }
                 else if (obj.equipment_status == INT_STATUS_MAINTENANCE)
@@ -3459,7 +3453,7 @@ namespace DataLogger
                 else
                 {
                     this.picAutoSamplerStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault_status;
-                    txtAutoSamplerTemp.Text = "---";
+                    //txtAutoSamplerTemp.Text = "---";
                 }
             }
             catch (Exception ex)
@@ -4049,9 +4043,25 @@ namespace DataLogger
 
         private void btnAutoSamplerTesting_Click(object sender, EventArgs e)
         {
-            Protocol.MyTcpListener.requestAutoSAMPLER(serialPortSAMP);
-            Thread.Sleep(300);
-            Protocol.MyTcpListener.requestInforSAMPLER(serialPortSAMP);
+            DialogResult result1 = MessageBox.Show("Send SAMP command ?", "Important Question", MessageBoxButtons.YesNo);
+            if (result1 == DialogResult.Yes)
+            {
+                Protocol.MyTcpListener.requestAutoSAMPLER(serialPortSAMP);
+                Thread.Sleep(300);
+                if (Form1.isSamp == 10 || Form1.isSamp == 11) //ACK
+                {
+                    //btnAutoSamplerTesting.
+                    tooltipSAMP = "runACK";
+                }
+                if (Form1.isSamp == 00 || Form1.isSamp == 01) //NAK
+                {
+                    //
+                    tooltipSAMP = "runNAK";
+                }
+            }
+            //Protocol.MyTcpListener.requestAutoSAMPLER(serialPortSAMP);
+            //Thread.Sleep(300);
+            //Protocol.MyTcpListener.requestInforSAMPLER(serialPortSAMP);
         }
 
         private void btnSetting_Click(object sender, EventArgs e)
@@ -4902,16 +4912,38 @@ namespace DataLogger
 
         private void picAutoSamplerStatus_MouseHover(object sender, EventArgs e)
         {
-            if (tooltipSAMP == "fault" || tooltipSAMP == "stop")
+            if (tooltipSAMP == "fault" || tooltipSAMP == "runACK" || tooltipSAMP == "runNAK" ||
+                tooltipSAMP == "run" || tooltipSAMP == "normal"
+                )
             {
                 ToolTip tt = new ToolTip();
                 if (tooltipSAMP == "fault")
                 {
                     tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + ":" + tooltipSAMPInfo);
                 }
-                else
+                else if (tooltipSAMP == "runACK")
                 {
-                    tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP));
+                    //tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + ":" + "SUCCESS");
+                }
+                else if (tooltipSAMP == "runNAK")
+                {
+                    //tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + ":" + "FAIL");
+                }
+            }
+        }
+
+        private void btnAutoSamplerTesting_MouseHover(object sender, EventArgs e)
+        {
+            if ( tooltipSAMP == "runACK" || tooltipSAMP == "runNAK" || tooltipSAMP == "run" )
+            {
+                ToolTip tt = new ToolTip();
+                if (tooltipSAMP == "runACK")
+                {
+                    tt.SetToolTip(this.btnAutoSamplerTesting, lang.getText(tooltipSAMP) + ":" + "SUCCESS" + DateTime.Now);
+                }
+                else if (tooltipSAMP == "runNAK")
+                {
+                    tt.SetToolTip(this.btnAutoSamplerTesting, lang.getText(tooltipSAMP) + ":" + "FAIL" + DateTime.Now);
                 }
             }
         }

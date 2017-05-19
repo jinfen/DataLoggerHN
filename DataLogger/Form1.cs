@@ -109,19 +109,18 @@ namespace WinformProtocol
         private void myDataReceived(object sender, ReceivedEventArgs e)
         {
             /////////////////////////////////////////////////////////////////////
-            // Do something with <data> 
             //Console.WriteLine("FORM 1 lenght " + e.Data.Length);
-            isSamp = 2;
+            //isSamp = 2;
             foreach (var a in e.Data) {
                 //Console.WriteLine("FORM 1 " + a);
                 if (a == 0x06) {
                     //Console.WriteLine("FORM 1 ACK");
-                    isSamp = 1;
+                    isSamp = 10;
                 }
                 if (a == 0x15)
                 {
                     //Console.WriteLine("FORM 1 NAK");
-                    isSamp = 0;
+                    isSamp = 00;
                 }
                 //if (a == 0x0D)
                 //{
@@ -1256,20 +1255,20 @@ namespace WinformProtocol
                 requestAutoSAMPLER(serialPortSAMP);
                 Thread.Sleep(300);
                 //requestInforSAMPLER(serialPortSAMP);
-                Console.WriteLine(Form1.isSamp);
-                if (Form1.isSamp == 1)
+                //Console.WriteLine(Form1.isSamp);
+                if (Form1.isSamp == 10)
                 {
                     byte[] _EOT = new byte[1];
                     new byte[] { 0x04 }.CopyTo(_EOT, 0);
                     sendByte(nwStream, _EOT, form1);
-                    Form1.isSamp = 2;
+                    Form1.isSamp = 11;
                 }
-                else if(Form1.isSamp == 0)
+                else if(Form1.isSamp == 00)
                 {
                     byte[] _NAK = new byte[1];
                     new byte[] { 0x15 }.CopyTo(_NAK, 0);
                     sendByte(nwStream, _NAK, form1);
-                    Form1.isSamp = 2;
+                    Form1.isSamp = 01;
                 }
             }
             else if (_encoder.GetString(SubArray(buffer, j + 26, 2)).Equals("10"))
