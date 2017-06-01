@@ -93,8 +93,12 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.txtAutoSamplerTemp = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblRRS = new System.Windows.Forms.Label();
             this.lblPumpRRS = new System.Windows.Forms.Label();
+            this.lblLRS = new System.Windows.Forms.Label();
+            this.lblPumpRFLTName = new System.Windows.Forms.Label();
             this.lblPumpRFLT = new System.Windows.Forms.Label();
+            this.lblPumpLFLTName = new System.Windows.Forms.Label();
             this.lblPumpRAM = new System.Windows.Forms.Label();
             this.lblPumpLAM = new System.Windows.Forms.Label();
             this.lblPumpLRS = new System.Windows.Forms.Label();
@@ -339,9 +343,9 @@
             this.panel23.Controls.Add(this.panel25);
             this.panel23.Controls.Add(this.pnStationStatus);
             this.panel23.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel23.Location = new System.Drawing.Point(73, 494);
+            this.panel23.Location = new System.Drawing.Point(74, 494);
             this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(775, 161);
+            this.panel23.Size = new System.Drawing.Size(785, 161);
             this.panel23.TabIndex = 70;
             // 
             // panel25
@@ -802,17 +806,17 @@
             this.panel30.Controls.Add(this.lblDrainValve);
             this.panel30.Controls.Add(this.picDrainValue);
             this.panel30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel30.Location = new System.Drawing.Point(80, 57);
+            this.panel30.Location = new System.Drawing.Point(81, 57);
             this.panel30.Margin = new System.Windows.Forms.Padding(10);
             this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(761, 424);
+            this.panel30.Size = new System.Drawing.Size(771, 424);
             this.panel30.TabIndex = 65;
             this.panel30.Paint += new System.Windows.Forms.PaintEventHandler(this.panel30_Paint);
             // 
             // panel19
             // 
             this.panel19.BackColor = System.Drawing.Color.Transparent;
-            this.panel19.Location = new System.Drawing.Point(244, 5);
+            this.panel19.Location = new System.Drawing.Point(205, 3);
             this.panel19.Name = "panel19";
             this.panel19.Size = new System.Drawing.Size(40, 10);
             this.panel19.TabIndex = 74;
@@ -820,7 +824,7 @@
             // panel17
             // 
             this.panel17.BackColor = System.Drawing.Color.Transparent;
-            this.panel17.Location = new System.Drawing.Point(423, 411);
+            this.panel17.Location = new System.Drawing.Point(457, 411);
             this.panel17.Name = "panel17";
             this.panel17.Size = new System.Drawing.Size(40, 10);
             this.panel17.TabIndex = 73;
@@ -837,7 +841,7 @@
             // 
             this.panel14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(113)))), ((int)(((byte)(170)))));
             this.panel14.Controls.Add(this.lblFilteringSystem);
-            this.panel14.Location = new System.Drawing.Point(18, 297);
+            this.panel14.Location = new System.Drawing.Point(19, 298);
             this.panel14.Name = "panel14";
             this.panel14.Size = new System.Drawing.Size(160, 32);
             this.panel14.TabIndex = 71;
@@ -905,7 +909,7 @@
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(113)))), ((int)(((byte)(170)))));
             this.panel5.Controls.Add(this.lblAutorSampler);
-            this.panel5.Location = new System.Drawing.Point(276, 89);
+            this.panel5.Location = new System.Drawing.Point(272, 54);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(154, 37);
             this.panel5.TabIndex = 68;
@@ -936,9 +940,9 @@
             this.panel3.Controls.Add(this.picAutoSamplerStatus);
             this.panel3.Controls.Add(this.pnbottlePosition);
             this.panel3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panel3.Location = new System.Drawing.Point(265, 119);
+            this.panel3.Location = new System.Drawing.Point(269, 75);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(190, 275);
+            this.panel3.Size = new System.Drawing.Size(190, 270);
             this.panel3.TabIndex = 0;
             // 
             // btnAutoSamplerTesting
@@ -949,7 +953,7 @@
             this.btnAutoSamplerTesting.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
             this.btnAutoSamplerTesting.FlatAppearance.BorderSize = 0;
             this.btnAutoSamplerTesting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAutoSamplerTesting.Location = new System.Drawing.Point(132, 218);
+            this.btnAutoSamplerTesting.Location = new System.Drawing.Point(134, 213);
             this.btnAutoSamplerTesting.Name = "btnAutoSamplerTesting";
             this.btnAutoSamplerTesting.Size = new System.Drawing.Size(48, 48);
             this.btnAutoSamplerTesting.TabIndex = 50;
@@ -965,7 +969,7 @@
             this.btnAutoSamplerHistoryData.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
             this.btnAutoSamplerHistoryData.FlatAppearance.BorderSize = 0;
             this.btnAutoSamplerHistoryData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAutoSamplerHistoryData.Location = new System.Drawing.Point(76, 218);
+            this.btnAutoSamplerHistoryData.Location = new System.Drawing.Point(78, 214);
             this.btnAutoSamplerHistoryData.Name = "btnAutoSamplerHistoryData";
             this.btnAutoSamplerHistoryData.Size = new System.Drawing.Size(48, 48);
             this.btnAutoSamplerHistoryData.TabIndex = 50;
@@ -977,7 +981,7 @@
             this.picAutoSamplerStatus.BackColor = System.Drawing.Color.Transparent;
             this.picAutoSamplerStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal;
             this.picAutoSamplerStatus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.picAutoSamplerStatus.Location = new System.Drawing.Point(11, 217);
+            this.picAutoSamplerStatus.Location = new System.Drawing.Point(11, 213);
             this.picAutoSamplerStatus.Name = "picAutoSamplerStatus";
             this.picAutoSamplerStatus.Size = new System.Drawing.Size(48, 48);
             this.picAutoSamplerStatus.TabIndex = 7;
@@ -1027,8 +1031,12 @@
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BackgroundImage = global::DataLogger.Properties.Resources.Pumpling_System;
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel1.Controls.Add(this.lblRRS);
             this.panel1.Controls.Add(this.lblPumpRRS);
+            this.panel1.Controls.Add(this.lblLRS);
+            this.panel1.Controls.Add(this.lblPumpRFLTName);
             this.panel1.Controls.Add(this.lblPumpRFLT);
+            this.panel1.Controls.Add(this.lblPumpLFLTName);
             this.panel1.Controls.Add(this.lblPumpRAM);
             this.panel1.Controls.Add(this.lblPumpLAM);
             this.panel1.Controls.Add(this.lblPumpLRS);
@@ -1045,35 +1053,80 @@
             this.panel1.Controls.Add(this.picPump1);
             this.panel1.Location = new System.Drawing.Point(17, 25);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(189, 266);
+            this.panel1.Size = new System.Drawing.Size(189, 260);
             this.panel1.TabIndex = 0;
+            // 
+            // lblRRS
+            // 
+            this.lblRRS.AutoSize = true;
+            this.lblRRS.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRRS.Location = new System.Drawing.Point(102, 345);
+            this.lblRRS.Name = "lblRRS";
+            this.lblRRS.Size = new System.Drawing.Size(68, 13);
+            this.lblRRS.TabIndex = 78;
+            this.lblRRS.Text = "Pump(R)RS";
+            this.lblRRS.Visible = false;
             // 
             // lblPumpRRS
             // 
             this.lblPumpRRS.AutoSize = true;
-            this.lblPumpRRS.Location = new System.Drawing.Point(104, 316);
+            this.lblPumpRRS.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPumpRRS.Location = new System.Drawing.Point(114, 330);
             this.lblPumpRRS.Name = "lblPumpRRS";
-            this.lblPumpRRS.Size = new System.Drawing.Size(29, 13);
+            this.lblPumpRRS.Size = new System.Drawing.Size(33, 13);
             this.lblPumpRRS.TabIndex = 29;
             this.lblPumpRRS.Text = "Stop";
             this.lblPumpRRS.Visible = false;
+            // 
+            // lblLRS
+            // 
+            this.lblLRS.AutoSize = true;
+            this.lblLRS.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLRS.Location = new System.Drawing.Point(13, 345);
+            this.lblLRS.Name = "lblLRS";
+            this.lblLRS.Size = new System.Drawing.Size(67, 13);
+            this.lblLRS.TabIndex = 77;
+            this.lblLRS.Text = "Pump(L)RS";
+            this.lblLRS.Visible = false;
+            // 
+            // lblPumpRFLTName
+            // 
+            this.lblPumpRFLTName.AutoSize = true;
+            this.lblPumpRFLTName.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPumpRFLTName.Location = new System.Drawing.Point(102, 256);
+            this.lblPumpRFLTName.Name = "lblPumpRFLTName";
+            this.lblPumpRFLTName.Size = new System.Drawing.Size(71, 13);
+            this.lblPumpRFLTName.TabIndex = 76;
+            this.lblPumpRFLTName.Text = "Pump(R)FLT";
+            this.lblPumpRFLTName.Visible = false;
             // 
             // lblPumpRFLT
             // 
             this.lblPumpRFLT.AutoSize = true;
             this.lblPumpRFLT.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPumpRFLT.Location = new System.Drawing.Point(115, 243);
+            this.lblPumpRFLT.Location = new System.Drawing.Point(113, 242);
             this.lblPumpRFLT.Name = "lblPumpRFLT";
             this.lblPumpRFLT.Size = new System.Drawing.Size(34, 13);
             this.lblPumpRFLT.TabIndex = 28;
             this.lblPumpRFLT.Text = "Fault";
             this.lblPumpRFLT.Click += new System.EventHandler(this.lblPumpRFLT_Click);
             // 
+            // lblPumpLFLTName
+            // 
+            this.lblPumpLFLTName.AutoSize = true;
+            this.lblPumpLFLTName.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPumpLFLTName.Location = new System.Drawing.Point(13, 256);
+            this.lblPumpLFLTName.Name = "lblPumpLFLTName";
+            this.lblPumpLFLTName.Size = new System.Drawing.Size(70, 13);
+            this.lblPumpLFLTName.TabIndex = 75;
+            this.lblPumpLFLTName.Text = "Pump(L)FLT";
+            this.lblPumpLFLTName.Visible = false;
+            // 
             // lblPumpRAM
             // 
             this.lblPumpRAM.AutoSize = true;
             this.lblPumpRAM.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPumpRAM.Location = new System.Drawing.Point(104, 171);
+            this.lblPumpRAM.Location = new System.Drawing.Point(102, 171);
             this.lblPumpRAM.Name = "lblPumpRAM";
             this.lblPumpRAM.Size = new System.Drawing.Size(74, 13);
             this.lblPumpRAM.TabIndex = 27;
@@ -1083,7 +1136,7 @@
             // 
             this.lblPumpLAM.AutoSize = true;
             this.lblPumpLAM.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPumpLAM.Location = new System.Drawing.Point(21, 171);
+            this.lblPumpLAM.Location = new System.Drawing.Point(13, 171);
             this.lblPumpLAM.Name = "lblPumpLAM";
             this.lblPumpLAM.Size = new System.Drawing.Size(73, 13);
             this.lblPumpLAM.TabIndex = 26;
@@ -1093,9 +1146,10 @@
             // lblPumpLRS
             // 
             this.lblPumpLRS.AutoSize = true;
-            this.lblPumpLRS.Location = new System.Drawing.Point(24, 316);
+            this.lblPumpLRS.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPumpLRS.Location = new System.Drawing.Point(32, 330);
             this.lblPumpLRS.Name = "lblPumpLRS";
-            this.lblPumpLRS.Size = new System.Drawing.Size(29, 13);
+            this.lblPumpLRS.Size = new System.Drawing.Size(33, 13);
             this.lblPumpLRS.TabIndex = 22;
             this.lblPumpLRS.Text = "Stop";
             this.lblPumpLRS.Visible = false;
@@ -1104,7 +1158,7 @@
             // 
             this.lblPumpLFLT.AutoSize = true;
             this.lblPumpLFLT.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPumpLFLT.Location = new System.Drawing.Point(31, 243);
+            this.lblPumpLFLT.Location = new System.Drawing.Point(27, 242);
             this.lblPumpLFLT.Name = "lblPumpLFLT";
             this.lblPumpLFLT.Size = new System.Drawing.Size(34, 13);
             this.lblPumpLFLT.TabIndex = 20;
@@ -1113,7 +1167,7 @@
             // picPumpingSystemRRS
             // 
             this.picPumpingSystemRRS.Image = global::DataLogger.Properties.Resources.Stop_42x42;
-            this.picPumpingSystemRRS.Location = new System.Drawing.Point(97, 270);
+            this.picPumpingSystemRRS.Location = new System.Drawing.Point(109, 278);
             this.picPumpingSystemRRS.Name = "picPumpingSystemRRS";
             this.picPumpingSystemRRS.Size = new System.Drawing.Size(42, 42);
             this.picPumpingSystemRRS.TabIndex = 18;
@@ -1141,7 +1195,7 @@
             // picPumpingSystemLRS
             // 
             this.picPumpingSystemLRS.Image = global::DataLogger.Properties.Resources.Stop_42x42;
-            this.picPumpingSystemLRS.Location = new System.Drawing.Point(18, 270);
+            this.picPumpingSystemLRS.Location = new System.Drawing.Point(27, 278);
             this.picPumpingSystemLRS.Name = "picPumpingSystemLRS";
             this.picPumpingSystemLRS.Size = new System.Drawing.Size(42, 42);
             this.picPumpingSystemLRS.TabIndex = 14;
@@ -1539,7 +1593,7 @@
             this.panel26.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel26.Controls.Add(this.panel27);
             this.panel26.Controls.Add(this.panel28);
-            this.panel26.Location = new System.Drawing.Point(17, 310);
+            this.panel26.Location = new System.Drawing.Point(18, 311);
             this.panel26.Name = "panel26";
             this.panel26.Size = new System.Drawing.Size(179, 99);
             this.panel26.TabIndex = 63;
@@ -1613,10 +1667,10 @@
             this.flowLayoutPanel1.BackgroundImage = global::DataLogger.Properties.Resources.footer;
             this.flowLayoutPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(80, 668);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(81, 668);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(10);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(761, 46);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(771, 46);
             this.flowLayoutPanel1.TabIndex = 62;
             // 
             // pnLeftSide
@@ -1635,7 +1689,7 @@
             this.pnLeftSide.Margin = new System.Windows.Forms.Padding(0);
             this.pnLeftSide.Name = "pnLeftSide";
             this.tableLayoutPanel1.SetRowSpan(this.pnLeftSide, 3);
-            this.pnLeftSide.Size = new System.Drawing.Size(70, 677);
+            this.pnLeftSide.Size = new System.Drawing.Size(71, 677);
             this.pnLeftSide.TabIndex = 1;
             // 
             // vprgMonthlyReport
@@ -1649,7 +1703,7 @@
             this.vprgMonthlyReport.Maximum = 100;
             this.vprgMonthlyReport.Minimum = 0;
             this.vprgMonthlyReport.Name = "vprgMonthlyReport";
-            this.vprgMonthlyReport.Size = new System.Drawing.Size(70, 218);
+            this.vprgMonthlyReport.Size = new System.Drawing.Size(71, 218);
             this.vprgMonthlyReport.Step = 1;
             this.vprgMonthlyReport.Style = VerticalProgressBar.Styles.Solid;
             this.vprgMonthlyReport.TabIndex = 67;
@@ -1667,7 +1721,7 @@
             this.btnMaintenance.Image = global::DataLogger.Properties.Resources.world_clock;
             this.btnMaintenance.Location = new System.Drawing.Point(0, 421);
             this.btnMaintenance.Name = "btnMaintenance";
-            this.btnMaintenance.Size = new System.Drawing.Size(70, 64);
+            this.btnMaintenance.Size = new System.Drawing.Size(71, 64);
             this.btnMaintenance.TabIndex = 50;
             this.btnMaintenance.UseVisualStyleBackColor = false;
             this.btnMaintenance.Click += new System.EventHandler(this.btnMaintenance_Click);
@@ -1683,7 +1737,7 @@
             this.btnMonthlyReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMonthlyReport.Location = new System.Drawing.Point(0, 0);
             this.btnMonthlyReport.Name = "btnMonthlyReport";
-            this.btnMonthlyReport.Size = new System.Drawing.Size(70, 70);
+            this.btnMonthlyReport.Size = new System.Drawing.Size(71, 70);
             this.btnMonthlyReport.TabIndex = 49;
             this.btnMonthlyReport.UseVisualStyleBackColor = false;
             this.btnMonthlyReport.Click += new System.EventHandler(this.btnMonthlyReport_Click);
@@ -1699,7 +1753,7 @@
             this.btnSetting.Image = global::DataLogger.Properties.Resources.applications_system_60x60;
             this.btnSetting.Location = new System.Drawing.Point(0, 485);
             this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(70, 64);
+            this.btnSetting.Size = new System.Drawing.Size(71, 64);
             this.btnSetting.TabIndex = 5;
             this.btnSetting.UseVisualStyleBackColor = false;
             this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
@@ -1714,7 +1768,7 @@
             this.btnUsers.Image = global::DataLogger.Properties.Resources.user;
             this.btnUsers.Location = new System.Drawing.Point(0, 549);
             this.btnUsers.Name = "btnUsers";
-            this.btnUsers.Size = new System.Drawing.Size(70, 64);
+            this.btnUsers.Size = new System.Drawing.Size(71, 64);
             this.btnUsers.TabIndex = 4;
             this.btnUsers.UseVisualStyleBackColor = false;
             this.btnUsers.Click += new System.EventHandler(this.btnUsers_Click);
@@ -1729,7 +1783,7 @@
             this.btnAllHistory.Image = global::DataLogger.Properties.Resources.maintenance;
             this.btnAllHistory.Location = new System.Drawing.Point(0, 613);
             this.btnAllHistory.Name = "btnAllHistory";
-            this.btnAllHistory.Size = new System.Drawing.Size(70, 64);
+            this.btnAllHistory.Size = new System.Drawing.Size(71, 64);
             this.btnAllHistory.TabIndex = 3;
             this.btnAllHistory.UseVisualStyleBackColor = false;
             this.btnAllHistory.Click += new System.EventHandler(this.btnAllHistory_Click);
@@ -1739,10 +1793,10 @@
             this.panel21.Controls.Add(this.panel16);
             this.panel21.Controls.Add(this.panel29);
             this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel21.Location = new System.Drawing.Point(854, 494);
+            this.panel21.Location = new System.Drawing.Point(865, 494);
             this.panel21.Name = "panel21";
             this.tableLayoutPanel1.SetRowSpan(this.panel21, 2);
-            this.panel21.Size = new System.Drawing.Size(490, 227);
+            this.panel21.Size = new System.Drawing.Size(479, 227);
             this.panel21.TabIndex = 71;
             // 
             // panel16
@@ -2170,9 +2224,9 @@
             this.panel24.Controls.Add(this.panel12);
             this.panel24.Controls.Add(this.panel8);
             this.panel24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel24.Location = new System.Drawing.Point(854, 50);
+            this.panel24.Location = new System.Drawing.Point(865, 50);
             this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(490, 438);
+            this.panel24.Size = new System.Drawing.Size(479, 438);
             this.panel24.TabIndex = 72;
             // 
             // panel12
@@ -2501,7 +2555,7 @@
             this.btnTPHistoryData.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
             this.btnTPHistoryData.FlatAppearance.BorderSize = 0;
             this.btnTPHistoryData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTPHistoryData.Location = new System.Drawing.Point(315, 59);
+            this.btnTPHistoryData.Location = new System.Drawing.Point(315, 61);
             this.btnTPHistoryData.Name = "btnTPHistoryData";
             this.btnTPHistoryData.Size = new System.Drawing.Size(40, 40);
             this.btnTPHistoryData.TabIndex = 50;
@@ -2653,7 +2707,7 @@
             this.btnTOCHistoryData.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
             this.btnTOCHistoryData.FlatAppearance.BorderSize = 0;
             this.btnTOCHistoryData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTOCHistoryData.Location = new System.Drawing.Point(315, 61);
+            this.btnTOCHistoryData.Location = new System.Drawing.Point(315, 65);
             this.btnTOCHistoryData.Name = "btnTOCHistoryData";
             this.btnTOCHistoryData.Size = new System.Drawing.Size(40, 40);
             this.btnTOCHistoryData.TabIndex = 50;
@@ -2680,7 +2734,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.26636F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 91.73364F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 495F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 484F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.26636F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 91.73364F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 482F));
@@ -3016,5 +3070,9 @@
         public System.Windows.Forms.Label lblDO6;
         public System.Windows.Forms.Label lblDO7;
         public System.Windows.Forms.Label lblDO8;
+        public System.Windows.Forms.Label lblRRS;
+        public System.Windows.Forms.Label lblLRS;
+        public System.Windows.Forms.Label lblPumpRFLTName;
+        public System.Windows.Forms.Label lblPumpLFLTName;
     }
 }

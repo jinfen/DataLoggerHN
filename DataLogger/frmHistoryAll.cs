@@ -706,8 +706,8 @@ namespace DataLogger
                 {
                     // kiểm tra status, chỉ lấy chững status normal
                     int _status = (int)row["mps_status"];
-                    if (_status == 0)
-                    {
+                    //if (_status == 0)
+                    //{
                         viewrow = dt_view.NewRow();
                         DateTime _date = (DateTime)row["stored_date"];
                         int _hour = (int)row["stored_hour"];
@@ -723,7 +723,7 @@ namespace DataLogger
                         viewrow["MPS_Temp"] = row["mps_temp"];
 
                         dt_view.Rows.Add(viewrow);
-                    }
+                    //}
                 }
 
                 // tạo biểu đồ mới
@@ -974,8 +974,8 @@ namespace DataLogger
                 {
                     // kiểm tra status, chỉ lấy chững status normal
                     int _status = (int)row["TN_status"];
-                    if (_status == 0)
-                    {
+                    //if (_status == 0)
+                    //{
                         viewrow = dt_view.NewRow();
                         DateTime _date = (DateTime)row["stored_date"];
                         int _hour = (int)row["stored_hour"];
@@ -992,7 +992,7 @@ namespace DataLogger
                         viewrow["TOC_Status"] = row["TOC_Status"];
 
                         dt_view.Rows.Add(viewrow);
-                    }
+                    //}
                 }
 
                 // tạo biểu đồ mới
@@ -1946,28 +1946,36 @@ namespace DataLogger
                 foreach (DataRow row in dt_source.Rows)
                 {
                     bool allowAdd = true;
+                    viewrow = dt_view.NewRow();
+                    DateTime _date = (DateTime)row["stored_date"];
+                    int _hour = (int)row["stored_hour"];
+                    int _minute = (int)row["stored_minute"];
+                    DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
+
+                    viewrow["StoredDate"] = _rdate;
                     foreach (ParamInfo item in DataLoggerParam.PARAMETER_LIST.Where(p => p.Selected))
                     {
                         if (item.HasStatus)
                         {
                             // kiểm tra status, chỉ lấy chững status normal
                             int _status = (int)row[item.StatusNameDB];
-                            if (_status == 0)
-                            {
-                                viewrow = dt_view.NewRow();
-                                DateTime _date = (DateTime)row["stored_date"];
-                                int _hour = (int)row["stored_hour"];
-                                int _minute = (int)row["stored_minute"];
-                                DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
+                            //if (_status == 0)
+                            //{
+                                
+                                //DateTime _date = (DateTime)row["stored_date"];
+                                //int _hour = (int)row["stored_hour"];
+                                //int _minute = (int)row["stored_minute"];
+                                //DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
 
-                                viewrow["StoredDate"] = _rdate;
+                                //viewrow["StoredDate"] = _rdate;
                                 viewrow[item.NameDisplay] = row[item.NameDB];
-                            }
-                            else
-                            {
-                                allowAdd = false;
-                                break;
-                            }
+                            //}
+                            //else
+                            //{
+                            //    allowAdd = false;
+                            //    break;
+                            //}
+
                         }
                     }
                     if (allowAdd)

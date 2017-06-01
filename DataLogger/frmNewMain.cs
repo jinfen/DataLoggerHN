@@ -34,7 +34,7 @@ namespace DataLogger
         public bool is_close_form = false;
 
         public static TcpListener tcpListener = null;
-
+        public static DateTime datetime00;
         private System.Threading.Timer tmrThreadingTimer;
         private System.Threading.Timer tmrThreadingTimer_HeadingTime;
         private System.Threading.Timer tmrThreadingTimerStationStatus;
@@ -1546,6 +1546,7 @@ namespace DataLogger
                             objWaterSamplerGLobal.addInfo = addInfo;
                             objWaterSamplerGLobal.created = DateTime.Now;
 
+                            datetime00 = DateTime.Now;
                             tooltipSAMPInfo = addInfo;
                             CultureInfo enUS = new CultureInfo("en-US");
                             DateTime datetimeValue = new DateTime();
@@ -2154,6 +2155,7 @@ namespace DataLogger
                         packet[5] = 0x0D; //
                         com.Write(packet, 0, packet.Length);
                         break;
+                    //02243033360D
                     case ADAM_4051:
                         // Module 03
                         packet = new byte[6];
@@ -2270,6 +2272,7 @@ namespace DataLogger
             switch (indexSelection)
             {
                 case 0: // TOC
+                    //Console.WriteLine("request TOC");
                     if (GlobalVar.calibrateTOCStatus == CommonInfo.CALIBRATION_STATUS_DONE
                         || GlobalVar.calibrateTOCStatus == CommonInfo.CALIBRATION_STATUS_STOP)
                     {
@@ -2279,11 +2282,12 @@ namespace DataLogger
                             {
                                 this.serialPortTOC.Open();
                             }
+
                             requestInfor(serialPortTOC);
                         }
-                        catch
+                        catch(Exception e)
                         {
-
+                            Console.WriteLine(e.StackTrace);
                         }
                     }
                     break;
@@ -2299,9 +2303,9 @@ namespace DataLogger
                             }
                             requestInfor(serialPortTP);
                         }
-                        catch
+                        catch (Exception e)
                         {
-
+                            Console.WriteLine(e.StackTrace);
                         }
                     }
                     //requestInfor(serialPortTP);
@@ -2319,9 +2323,9 @@ namespace DataLogger
 
                             requestInfor(serialPortTN);
                         }
-                        catch
+                        catch (Exception e)
                         {
-
+                            Console.WriteLine(e.StackTrace);
                         }
                     }
                     //requestInfor(serialPortTN);
@@ -2330,8 +2334,20 @@ namespace DataLogger
                     //requestInforMPS(serialPortMPS);
                     break;
                 case 4: // SAMPLER
-                    //Console.WriteLine("request sampler");
-                    requestInforSAMPLER(serialPortSAMP);
+                        //Console.WriteLine("request sampler");
+                    try
+                    {
+                        if (!this.serialPortSAMP.IsOpen)
+                        {
+                            this.serialPortSAMP.Open();
+                        }
+
+                        requestInforSAMPLER(serialPortSAMP);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.StackTrace);
+                    }                 
                     break;
                 default:
                     break;
@@ -2983,18 +2999,124 @@ namespace DataLogger
                         this.picDrainValue.BackgroundImage = global::DataLogger.Properties.Resources.Valve_Close;
                     }
                 }
+                //if (obj.module_PumpLAM > -1)
+                //{
+                //    //dgvDoControl["CurrentData", 5].Value = (obj.module_PumpLAM == 1) ? "MANUAL" : "AUTO";
+                //    if (obj.module_PumpLAM == 1)
+                //    {
+                //        this.picPump1_RunningType.Image = global::DataLogger.Properties.Resources.Auto_56x56;
+                //    }
+                //    else
+                //    {
+                //        this.picPump1_RunningType.Image = global::DataLogger.Properties.Resources.Manual_56x56;
+                //    }
+                //}
+                //if (obj.module_PumpLRS > -1)
+                //{
+                //    //dgvDoControl["CurrentData", 6].Value = (obj.module_PumpLRS == 1) ? "STOP" : "RUN";
+                //    if (obj.module_PumpLRS != 1)
+                //    {
+                //        this.picPumpingSystemLRS.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                //        this.lblPumpLRS.Text = lang.getText("pumping_system_left_stop");//"Stop";
+                //        //this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                //        //this.lblPumpLFLT.Text = lang.getText("pumping_system_left_stop");
+                //    }
+                //    else
+                //    {
+                //        this.picPumpingSystemLRS.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                //        this.lblPumpLRS.Text = lang.getText("pumping_system_left_run");
+                //        //this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                //        //this.lblPumpLFLT.Text = lang.getText("pumping_system_left_run");
+                //    }
+                //}
+                //if (obj.module_PumpLFLT > -1)
+                //{
+                //    //dgvDoControl["CurrentData", 7].Value = (obj.module_PumpLFLT == 1) ? "FAULT" : "NORMAL";
+                //    if (obj.module_PumpLFLT == 1)
+                //    {
+                //        this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                //        this.lblPumpLFLT.Text = lang.getText("pumping_system_left_run");
+                //    }
+                //    else if(obj.module_PumpLFLT == 0)
+                //    {
+                //        this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                //        this.lblPumpLFLT.Text = lang.getText("pumping_system_left_stop");
+                //        //this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                //        //this.lblPumpLFLT.Text = "Normal";
+                //    }
+                //}
+                //if (obj.module_PumpRAM > -1)
+                //{
+                //    //dgvDoControl["CurrentData", 8].Value = (obj.module_PumpRAM == 1) ? "AUTO" : "RUN";
+                //    if (obj.module_PumpRAM == 1)
+                //    {
+                //        this.picPump2_RunningType.Image = global::DataLogger.Properties.Resources.Auto_56x56;
+                //    }
+                //    else
+                //    {
+                //        this.picPump2_RunningType.Image = global::DataLogger.Properties.Resources.Manual_56x56;
+                //    }
+                //}
+                //if (obj.module_PumpRRS > -1)
+                //{
+                //    //dgvDoControl["CurrentData", 9].Value = (obj.module_PumpRRS == 1) ? "STOP" : "RUN";
+                //    if (obj.module_PumpRRS != 1)
+                //    {
+                //        this.picPumpingSystemRRS.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                //        this.lblPumpRRS.Text = lang.getText("pumping_system_right_stop"); //"Stop";
+                //        //this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                //        //this.lblPumpRFLT.Text = lang.getText("pumping_system_right_stop"); //"Stop";
+                //    }
+                //    else
+                //    {
+                //        this.picPumpingSystemRRS.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                //        this.lblPumpRRS.Text = lang.getText("pumping_system_right_run"); //"Run";
+                //        //this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                //        //this.lblPumpRFLT.Text = lang.getText("pumping_system_right_run"); //"Run";
+                //    }
+                //}
+                //if (obj.module_PumpRFLT > -1)
+                //{
+                //    //dgvDoControl["CurrentData", 10].Value = (obj.module_PumpRFLT == 1) ? "FAULT" : "NORMAL";
+                //    if (obj.module_PumpRFLT == 1)
+                //    {
+                //        this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                //        this.lblPumpRFLT.Text = lang.getText("pumping_system_right_run"); 
+                //    }
+                //    else if (obj.module_PumpRFLT == 0)
+                //    {
+                //        this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                //        this.lblPumpRFLT.Text = lang.getText("pumping_system_right_stop"); //"Stop";
+                //        //this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                //        //this.lblPumpRFLT.Text = "Normal";
+                //    }
+                //}
+                ///
                 if (obj.module_PumpLAM > -1)
                 {
                     //dgvDoControl["CurrentData", 5].Value = (obj.module_PumpLAM == 1) ? "MANUAL" : "AUTO";
                     if (obj.module_PumpLAM == 1)
                     {
-                        this.picPump1_RunningType.Image = global::DataLogger.Properties.Resources.Auto_56x56;
+                        this.picPump1_RunningType.Image = global::DataLogger.Properties.Resources.Manual_56x56;
                     }
                     else
                     {
-                        this.picPump1_RunningType.Image = global::DataLogger.Properties.Resources.Manual_56x56;
+                        this.picPump1_RunningType.Image = global::DataLogger.Properties.Resources.Auto_56x56;
                     }
                 }
+                if (obj.module_PumpRAM > -1)
+                {
+                    //dgvDoControl["CurrentData", 8].Value = (obj.module_PumpRAM == 1) ? "AUTO" : "RUN";
+                    if (obj.module_PumpRAM == 1)
+                    {
+                        this.picPump2_RunningType.Image = global::DataLogger.Properties.Resources.Manual_56x56;
+                    }
+                    else
+                    {
+                        this.picPump2_RunningType.Image = global::DataLogger.Properties.Resources.Auto_56x56;
+                    }
+                }
+                ///
                 if (obj.module_PumpLRS > -1)
                 {
                     //dgvDoControl["CurrentData", 6].Value = (obj.module_PumpLRS == 1) ? "STOP" : "RUN";
@@ -3002,42 +3124,15 @@ namespace DataLogger
                     {
                         this.picPumpingSystemLRS.Image = global::DataLogger.Properties.Resources.Stop_42x42;
                         this.lblPumpLRS.Text = lang.getText("pumping_system_left_stop");//"Stop";
-                        this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
-                        this.lblPumpLFLT.Text = lang.getText("pumping_system_left_stop");
+                        //this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                        //this.lblPumpLFLT.Text = lang.getText("pumping_system_left_stop");
                     }
                     else
                     {
                         this.picPumpingSystemLRS.Image = global::DataLogger.Properties.Resources.Run_42x42;
                         this.lblPumpLRS.Text = lang.getText("pumping_system_left_run");
-                        this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
-                        this.lblPumpLFLT.Text = lang.getText("pumping_system_left_run");
-                    }
-                }
-                if (obj.module_PumpLFLT > -1)
-                {
-                    //dgvDoControl["CurrentData", 7].Value = (obj.module_PumpLFLT == 1) ? "FAULT" : "NORMAL";
-                    if (obj.module_PumpLFLT == 1)
-                    {
-                        this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Fault_42x42;
-                        this.lblPumpLFLT.Text = lang.getText("pumping_system_left_fault");//"Fault";
-                    }
-                    else
-                    {
                         //this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
-                        //this.lblPumpLFLT.Text = "Normal";
-                    }
-                }
-
-                if (obj.module_PumpRAM > -1)
-                {
-                    //dgvDoControl["CurrentData", 8].Value = (obj.module_PumpRAM == 1) ? "AUTO" : "RUN";
-                    if (obj.module_PumpRAM == 1)
-                    {
-                        this.picPump2_RunningType.Image = global::DataLogger.Properties.Resources.Auto_56x56;
-                    }
-                    else
-                    {
-                        this.picPump2_RunningType.Image = global::DataLogger.Properties.Resources.Manual_56x56;
+                        //this.lblPumpLFLT.Text = lang.getText("pumping_system_left_run");
                     }
                 }
                 if (obj.module_PumpRRS > -1)
@@ -3047,15 +3142,40 @@ namespace DataLogger
                     {
                         this.picPumpingSystemRRS.Image = global::DataLogger.Properties.Resources.Stop_42x42;
                         this.lblPumpRRS.Text = lang.getText("pumping_system_right_stop"); //"Stop";
-                        this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
-                        this.lblPumpRFLT.Text = lang.getText("pumping_system_right_stop"); //"Stop";
+                        //this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                        //this.lblPumpRFLT.Text = lang.getText("pumping_system_right_stop"); //"Stop";
                     }
                     else
                     {
                         this.picPumpingSystemRRS.Image = global::DataLogger.Properties.Resources.Run_42x42;
                         this.lblPumpRRS.Text = lang.getText("pumping_system_right_run"); //"Run";
-                        this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
-                        this.lblPumpRFLT.Text = lang.getText("pumping_system_right_run"); //"Run";
+                        //this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                        //this.lblPumpRFLT.Text = lang.getText("pumping_system_right_run"); //"Run";
+                    }
+                }
+                /////////////////////////
+                if (obj.module_PumpLFLT > -1)
+                {
+                    //dgvDoControl["CurrentData", 7].Value = (obj.module_PumpLFLT == 1) ? "FAULT" : "NORMAL";
+                    if (obj.module_PumpLFLT == 1)
+                    {
+                        this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Fault_42x42;
+                        this.lblPumpLFLT.Text = "Fault";
+                    }
+                    else if (obj.module_PumpLFLT == 0)
+                    {
+                        //this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                        //this.lblPumpLFLT.Text = lang.getText("pumping_system_left_stop");
+                        if (obj.module_PumpLRS == 1)
+                        {
+                            this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                            this.lblPumpLFLT.Text = "Normal";
+                        }
+                        else
+                        {
+                            this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                            this.lblPumpLFLT.Text = "Stop";
+                        }
                     }
                 }
                 if (obj.module_PumpRFLT > -1)
@@ -3064,14 +3184,25 @@ namespace DataLogger
                     if (obj.module_PumpRFLT == 1)
                     {
                         this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Fault_42x42;
-                        this.lblPumpRFLT.Text = lang.getText("pumping_system_right_fault"); //"Fault";
+                        this.lblPumpRFLT.Text = "Fault";
                     }
-                    else
+                    else if (obj.module_PumpRFLT == 0)
                     {
-                        //this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
-                        //this.lblPumpRFLT.Text = "Normal";
+                        //this.picPumpingSystemLFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                        //this.lblPumpLFLT.Text = lang.getText("pumping_system_left_stop");
+                        if (obj.module_PumpRRS == 1)
+                        {
+                            this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Run_42x42;
+                            this.lblPumpRFLT.Text = "Normal";
+                        }
+                        else
+                        {
+                            this.picPumpingSystemRFLT.Image = global::DataLogger.Properties.Resources.Stop_42x42;
+                            this.lblPumpRFLT.Text = "Stop";
+                        }
                     }
                 }
+                /////////////////////////////////////
                 if (obj.module_air1 > -1)
                 {
                     //dgvDoControl["CurrentData", 0].Value = (obj.module_Power == 1) ? "NORMAL" : "NOT NORMAL";
@@ -4048,6 +4179,7 @@ namespace DataLogger
             {
                 Protocol.MyTcpListener.requestAutoSAMPLER(serialPortSAMP);
                 Thread.Sleep(300);
+                Form1.datetime10 = DateTime.Now;
                 if (Form1.isSamp == 10 || Form1.isSamp == 11) //ACK
                 {
                     //btnAutoSamplerTesting.
@@ -4247,18 +4379,20 @@ namespace DataLogger
                 frmTOCCalibrate frm = new frmTOCCalibrate(lang);
                 frm.ShowDialog();
                 GlobalVar.calibrateTOCStatus = CommonInfo.CALIBRATION_STATUS_STOP;
-                if (this.serialPortTOC.IsOpen)
-                {
+                //initConfig(true);
+                //if (this.serialPortTOC.IsOpen)
+                //{
 
-                }
-                else
-                {
-                    this.serialPortTOC.Open();
-                }
+                //}
+                //else
+                //{
+                //    this.serialPortTOC.Open();
+                //}
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.StackTrace);
+                Console.WriteLine(ex.StackTrace);
             }
 
 
@@ -4273,18 +4407,20 @@ namespace DataLogger
                 frmTPCalibrate frm = new frmTPCalibrate(lang);
                 frm.ShowDialog();
                 GlobalVar.calibrateTPStatus = CommonInfo.CALIBRATION_STATUS_STOP;
-                if (this.serialPortTP.IsOpen)
-                {
+                //initConfig(true);
+                //if (this.serialPortTP.IsOpen)
+                //{
 
-                }
-                else
-                {
-                    this.serialPortTP.Open();
-                }
+                //}
+                //else
+                //{
+                //    this.serialPortTP.Open();
+                //}
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.StackTrace);
+                Console.WriteLine(ex.StackTrace);
             }
 
 
@@ -4301,26 +4437,28 @@ namespace DataLogger
                 frmTNCalibrate frm = new frmTNCalibrate(lang);
                 frm.ShowDialog();
                 GlobalVar.calibrateTNStatus = CommonInfo.CALIBRATION_STATUS_STOP;
-                if (!serialPortTN.PortName.Equals("COM100"))
-                {
-                    if (serialPortTN.IsOpen)
-                    {
+                //initConfig(true);
+                //if (!serialPortTN.PortName.Equals("COM100"))
+                //{
+                //    if (serialPortTN.IsOpen)
+                //    {
 
-                    }
-                    else
-                    {
-                        serialPortTN.Open();
-                    }
-                }
-                else
-                {
-                    //MessageBox.Show("Please config TN comport before calibrate !");
-                }
+                //    }
+                //    else
+                //    {
+                //        serialPortTN.Open();
+                //    }
+                //}
+                //else
+                //{
+                //    //MessageBox.Show("Please config TN comport before calibrate !");
+                //}
             }
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.StackTrace);
                 //MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
 
         }
@@ -4919,31 +5057,35 @@ namespace DataLogger
                 ToolTip tt = new ToolTip();
                 if (tooltipSAMP == "fault")
                 {
-                    tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + ":" + tooltipSAMPInfo);
+                    tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + " : " + tooltipSAMPInfo + " " + datetime00);
                 }
-                else if (tooltipSAMP == "runACK")
+                else if (tooltipSAMP == "run")
                 {
-                    //tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + ":" + "SUCCESS");
+                    tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + " : " + tooltipSAMPInfo + " " + Form1.datetime10);
                 }
-                else if (tooltipSAMP == "runNAK")
-                {
-                    //tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + ":" + "FAIL");
-                }
+                //else if (tooltipSAMP == "runACK")
+                //{
+                //    tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + " : " + tooltipSAMPInfo + " " + Form1.datetime10);
+                //}
+                //else if (tooltipSAMP == "runNAK")
+                //{
+                //    tt.SetToolTip(this.picAutoSamplerStatus, lang.getText(tooltipSAMP) + " : " + tooltipSAMPInfo + " " + Form1.datetime10);
+                //}
             }
         }
 
         private void btnAutoSamplerTesting_MouseHover(object sender, EventArgs e)
         {
-            if ( tooltipSAMP == "runACK" || tooltipSAMP == "runNAK" || tooltipSAMP == "run" )
+            if (tooltipSAMP == "runACK" || tooltipSAMP == "runNAK" || tooltipSAMP == "run")
             {
                 ToolTip tt = new ToolTip();
                 if (tooltipSAMP == "runACK")
                 {
-                    tt.SetToolTip(this.btnAutoSamplerTesting, lang.getText(tooltipSAMP) + ":" + "SUCCESS" + DateTime.Now);
+                    tt.SetToolTip(this.btnAutoSamplerTesting, lang.getText(tooltipSAMP) + " : " + "SUCCESS " + Form1.datetime10);
                 }
                 else if (tooltipSAMP == "runNAK")
                 {
-                    tt.SetToolTip(this.btnAutoSamplerTesting, lang.getText(tooltipSAMP) + ":" + "FAIL" + DateTime.Now);
+                    tt.SetToolTip(this.btnAutoSamplerTesting, lang.getText(tooltipSAMP) + " : " + "FAIL " + Form1.datetime10);
                 }
             }
         }

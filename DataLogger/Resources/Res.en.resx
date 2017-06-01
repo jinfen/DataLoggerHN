@@ -546,4 +546,16 @@
   <data name="station_status_air2" xml:space="preserve">
     <value>Cooling 2</value>
   </data>
+  <data name="normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="run" xml:space="preserve">
+    <value>Standby</value>
+  </data>
+  <data name="runACK" xml:space="preserve">
+    <value>ACK</value>
+  </data>
+  <data name="runNAK" xml:space="preserve">
+    <value>NAK</value>
+  </data>
 </root>

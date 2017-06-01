@@ -101,8 +101,8 @@ namespace DataLogger
                     TOC_rx_buffer = buffer;
                 }
                 else TOC_rx_buffer = TOC_rx_buffer.Concat(buffer).ToArray();
-                //Console.WriteLine("TOC " + TOC_rx_buffer.Length);
-                //Console.WriteLine("TOC "+ Encoding.ASCII.GetString(TOC_rx_buffer));
+                Console.WriteLine("TOC " + TOC_rx_buffer.Length);
+                Console.WriteLine("TOC " + Encoding.ASCII.GetString(TOC_rx_buffer));
                 TOC_rx_counter += bytes;              
                 //Console.WriteLine(Encoding.UTF8.GetString(TOC_rx_buffer));
                 if (TOC_rx_buffer[TOC_rx_buffer.Length - 1] == 10 && TOC_rx_buffer.Length >= PACKET_LENGTH)
@@ -339,11 +339,11 @@ namespace DataLogger
             {
                 try
                 {
-                    //serialPortTOC.Close();
+                    serialPortTOC.Close();
                 }
-                catch
+                catch(Exception ex)
                 {
-
+                    Console.WriteLine(ex.StackTrace);
                 }
                 //this.Close();
             }

@@ -34,7 +34,8 @@ namespace WinformProtocol
         IPAddress localAddr;
         Int32 port;
         public static bool isStop;
-        public static int isSamp;
+        public static int isSamp = -1;
+        public static DateTime datetime10;
         // The path to the key where Windows looks for startup applications
         RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         public Form1(frmNewMain newmain)
@@ -360,15 +361,16 @@ namespace WinformProtocol
         }
         public void sendByte(NetworkStream nwStream, byte[] msg, Form1 form)
         {
+            var new_msg = msg.TakeWhile((v, index) => msg.Skip(index).Any(w => w != 0x00)).ToArray();
             try
             {
                 nwStream.Write(msg, 0, msg.Length);
                 nwStream.Flush();
-                AppendTextBox(Environment.NewLine + " Sended : " + _encoder.GetString(msg), form);
+                AppendTextBox(Environment.NewLine + " Sended : " + _encoder.GetString(new_msg).Replace("\0", " "), form);
             }
             catch
             {
-                AppendTextBox(Environment.NewLine + "SENDING: " + "\"" + _encoder.GetString(msg) + "\"" + " BUT", form);
+                AppendTextBox(Environment.NewLine + "SENDING: " + "\"" + _encoder.GetString(new_msg).Replace("\0", " ") + "\"" + " BUT", form);
                 AppendTextBox(Environment.NewLine + "ERROR : CAN NOT LISTEN ANY CONNECT, CHECK CONNECT IN CENTER.", form);
             }
         }
@@ -742,7 +744,8 @@ namespace WinformProtocol
                 _encoder.GetBytes(_param).CopyTo(_Param, 0);
                 byte[] _dcd = new byte[1];
                 _encoder.GetBytes("1").CopyTo(_dcd, 0);
-                byte[] _streamCode = new byte[j];
+                int k = 11;
+                byte[] _streamCode = new byte[k];
                 _encoder.GetBytes(data.Substring(1, j)).CopyTo(_streamCode, 0);
                 byte[] _header = _STX.Concat(_Command).Concat(_Param).Concat(_streamCode).Concat(_dcd).Concat(_measuretime).ToArray();
                 byte[] _item = DataSQL("data_5minute_values", "databinding");
@@ -797,7 +800,8 @@ namespace WinformProtocol
                 _encoder.GetBytes(_param).CopyTo(_Param, 0);
                 byte[] _dcd = new byte[1];
                 _encoder.GetBytes("1").CopyTo(_dcd, 0);
-                byte[] _streamCode = new byte[j];
+                int k = 11;
+                byte[] _streamCode = new byte[k];
                 _encoder.GetBytes(data.Substring(1, j)).CopyTo(_streamCode, 0);
                 byte[] _header = _STX.Concat(_Command).Concat(_Param).Concat(_streamCode).Concat(_dcd).Concat(_measuretime).ToArray();
                 byte[] _item = DataSQL("data_60minute_values", "databinding");
@@ -1142,7 +1146,8 @@ namespace WinformProtocol
                     _encoder.GetBytes("DUMP").CopyTo(_Command, 0);
                     byte[] _Param = new byte[1];
                     _encoder.GetBytes(_param).CopyTo(_Param, 0);
-                    byte[] _streamCode = new byte[j];
+                    int k = 11;
+                    byte[] _streamCode = new byte[k];
                     _encoder.GetBytes(data.Substring(1, j)).CopyTo(_streamCode, 0);
                     byte[] _dcd = new byte[1];
                     _encoder.GetBytes("1").CopyTo(_dcd, 0);
@@ -1256,6 +1261,7 @@ namespace WinformProtocol
                 Thread.Sleep(300);
                 //requestInforSAMPLER(serialPortSAMP);
                 //Console.WriteLine(Form1.isSamp);
+                Form1.datetime10 = DateTime.Now;
                 if (Form1.isSamp == 10)
                 {
                     byte[] _EOT = new byte[1];
@@ -1270,6 +1276,13 @@ namespace WinformProtocol
                     sendByte(nwStream, _NAK, form1);
                     Form1.isSamp = 01;
                 }
+                else
+                {
+                    byte[] _NAK = new byte[1];
+                    new byte[] { 0x15 }.CopyTo(_NAK, 0);
+                    sendByte(nwStream, _NAK, form1);
+                    Form1.isSamp = -1;
+                }
             }
             else if (_encoder.GetString(SubArray(buffer, j + 26, 2)).Equals("10"))
             {
@@ -1278,8 +1291,8 @@ namespace WinformProtocol
                 //String header = STX + "SAMP" + data.Substring(1, j) + new user_repository().DateFormat(DateTime.Now.ToString()) + data.Substring(j + 19, 7);
                 byte[] _Command = new byte[4];
                 _encoder.GetBytes("SAMP").CopyTo(_Command, 0);
-
-                byte[] _StationCode = new byte[j];
+                int k = 11;
+                byte[] _StationCode = new byte[k];
                 _encoder.GetBytes(data.Substring(1, j)).CopyTo(_StationCode, 0);
 
                 byte[] _Datetime = new byte[14];
@@ -1722,7 +1735,7 @@ namespace WinformProtocol
                         data = null;
                         data = Encoding.ASCII.GetString(buffer, 0, i);
                         int flag = 0;
-                        String stationid = "BLVTRS0001";
+                        //String stationid = "BLVTRS0001";
                         string[] separators = { "\\" };
                         try
                         {

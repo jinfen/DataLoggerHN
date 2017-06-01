@@ -333,15 +333,27 @@ namespace WinformProtocol
         }
         public void sendByte(NetworkStream nwStream, byte[] msg, Form1 form)
         {
+            //try
+            //{
+            //    nwStream.Write(msg, 0, msg.Length);
+            //    nwStream.Flush();
+            //    AppendTextBox(Environment.NewLine + " Sended : " + _encoder.GetString(msg), form);
+            //}
+            //catch
+            //{
+            //    AppendTextBox(Environment.NewLine + "SENDING: " + "\"" + _encoder.GetString(msg) + "\"" + " BUT", form);
+            //    AppendTextBox(Environment.NewLine + "ERROR : CAN NOT LISTEN ANY CONNECT, CHECK CONNECT IN CENTER.", form);
+            //}
+            var new_msg = msg.TakeWhile((v, index) => msg.Skip(index).Any(w => w != 0x00)).ToArray();
             try
             {
                 nwStream.Write(msg, 0, msg.Length);
                 nwStream.Flush();
-                AppendTextBox(Environment.NewLine + " Sended : " + _encoder.GetString(msg), form);
+                AppendTextBox(Environment.NewLine + " Sended : " + _encoder.GetString(new_msg).Replace("\0", " "), form);
             }
             catch
             {
-                AppendTextBox(Environment.NewLine + "SENDING: " + "\"" + _encoder.GetString(msg) + "\"" + " BUT", form);
+                AppendTextBox(Environment.NewLine + "SENDING: " + "\"" + _encoder.GetString(new_msg).Replace("\0", " ") + "\"" + " BUT", form);
                 AppendTextBox(Environment.NewLine + "ERROR : CAN NOT LISTEN ANY CONNECT, CHECK CONNECT IN CENTER.", form);
             }
         }

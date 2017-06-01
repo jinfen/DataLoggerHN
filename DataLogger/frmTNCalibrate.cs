@@ -333,11 +333,11 @@ namespace DataLogger
             {
                 try
                 {
-                    //serialPortTN.Close();
+                    serialPortTN.Close();
                 }
-                catch
+                catch(Exception ex)
                 {
-
+                    Console.WriteLine(ex.StackTrace);
                 }
                 //this.Close();
             }
