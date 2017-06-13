@@ -314,7 +314,9 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = "SELECT * FROM data_60minute_values";
+                        string sql_command = @"SELECT * FROM data_60minute_values
+                                               ORDER BY created ASC
+                                                ";
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
                             cmd.CommandText = sql_command;
@@ -359,7 +361,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, toc, toc_status
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, toc, toc_status
                                                FROM data_60minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR
@@ -367,8 +369,9 @@ namespace DataLogger.Data
                                                      OR
                                                      (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
                                                      OR
-                                                     (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
-                                                     ";
+                                                     (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))                                                   
+                                               ORDER BY created ASC
+                                                ";
 
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
@@ -419,7 +422,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, tn, tn_status
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tn, tn_status
                                                FROM data_60minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR
@@ -428,7 +431,9 @@ namespace DataLogger.Data
                                                      (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
                                                      OR
                                                      (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
-                                                     ";
+                                                     
+                                               ORDER BY created ASC
+                                                ";
 
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
@@ -479,7 +484,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, tp, tp_status
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tp, tp_status
                                                FROM data_60minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR
@@ -488,7 +493,9 @@ namespace DataLogger.Data
                                                      (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
                                                      OR
                                                      (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
-                                                     ";
+                                                   
+                                               ORDER BY created ASC
+                                                ";
 
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
@@ -533,6 +540,64 @@ namespace DataLogger.Data
 
         public DataTable get_all_mps(DateTime datetime_from, DateTime datetime_to)
         {
+            //DataTable dt = new DataTable();
+            //using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            //{
+            //    try
+            //    {
+            //        if (db.open_connection())
+            //        {
+            //            string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, mps_ph,
+            //                                          mps_ec, mps_do, mps_turbidity,mps_orp, mps_temp, mps_status
+            //                                   FROM data_60minute_values
+            //                                   WHERE (:d_from < stored_date AND stored_date < :d_to)
+            //                                         OR
+            //                                         (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
+            //                                         OR
+            //                                         (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
+            //                                         OR
+            //                                         (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
+            //                                         ";
+
+            //            DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
+            //            DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+            //            using (NpgsqlCommand cmd = db._conn.CreateCommand())
+            //            {
+            //                cmd.CommandText = sql_command;
+
+            //                cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
+            //                cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
+
+            //                cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
+            //                cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+
+            //                NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            //                dt.Load(reader);
+
+            //                reader.Close();
+            //                db.close_connection();
+            //                return dt;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            db.close_connection();
+            //            return null;
+            //        }
+            //    }
+            //    catch
+            //    {
+            //        if (db != null)
+            //        {
+            //            db.close_connection();
+            //        }
+            //        return null;
+            //    }
+            //    finally
+            //    { db.close_connection(); }
+            //}
             DataTable dt = new DataTable();
             using (NpgsqlDBConnection db = new NpgsqlDBConnection())
             {
@@ -540,30 +605,26 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, mps_ph,
+
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, mps_ph,
                                                       mps_ec, mps_do, mps_turbidity,mps_orp, mps_temp, mps_status
                                                FROM data_60minute_values
-                                               WHERE (:d_from < stored_date AND stored_date < :d_to)
-                                                     OR
-                                                     (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
-                                                     ";
+                                               WHERE created BETWEEN :date_from AND :date_to
+                                               ORDER BY created ASC
+                                                ";
 
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+                        DateTime date_from = datetime_from;
+                        DateTime date_to = datetime_to;
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
                             cmd.CommandText = sql_command;
 
-                            cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
-                            cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
-
-                            cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
-                            cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+                            cmd.Parameters.Add(":date_from", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_from;
+                            cmd.Parameters.Add(":date_to", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_to;
 
                             NpgsqlDataReader reader = cmd.ExecuteReader();
 
@@ -580,7 +641,7 @@ namespace DataLogger.Data
                         return null;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
                     if (db != null)
                     {
@@ -596,6 +657,82 @@ namespace DataLogger.Data
 
         public DataTable get_all_station(DateTime datetime_from, DateTime datetime_to)
         {
+            //DataTable dt = new DataTable();
+            //using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            //{
+            //    try
+            //    {
+            //        if (db.open_connection())
+            //        {
+            //            string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute,
+            //                                            module_power,
+            //                                            module_ups,
+            //                                            module_door,
+            //                                            module_fire,
+            //                                            module_flow,
+            //                                            module_pumplam,
+            //                                            module_pumplrs,
+            //                                            module_pumplflt,
+            //                                            module_pumpram,
+            //                                            module_pumprrs,
+            //                                            module_pumprflt,
+            //                                            module_air1,
+            //                                            module_air2,
+            //                                            module_cleaning,
+            //                                            module_temperature,
+            //                                            module_humidity,
+            //                                            mps_status,
+            //                                            station_status,
+            //                                            pumping_system_status
+            //                                   FROM data_60minute_values
+            //                                   WHERE (:d_from < stored_date AND stored_date < :d_to)
+            //                                         OR
+            //                                         (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
+            //                                         OR
+            //                                         (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
+            //                                         OR
+            //                                         (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
+            //                                         ";
+
+            //            DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
+            //            DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+            //            using (NpgsqlCommand cmd = db._conn.CreateCommand())
+            //            {
+            //                cmd.CommandText = sql_command;
+
+            //                cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
+            //                cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
+
+            //                cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
+            //                cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+
+            //                NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            //                dt.Load(reader);
+
+            //                reader.Close();
+            //                db.close_connection();
+            //                return dt;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            db.close_connection();
+            //            return null;
+            //        }
+            //    }
+            //    catch
+            //    {
+            //        if (db != null)
+            //        {
+            //            db.close_connection();
+            //        }
+            //        return null;
+            //    }
+            //    finally
+            //    { db.close_connection(); }
+            //}
             DataTable dt = new DataTable();
             using (NpgsqlDBConnection db = new NpgsqlDBConnection())
             {
@@ -603,7 +740,8 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute,
+
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute,
                                                         module_power,
                                                         module_ups,
                                                         module_door,
@@ -620,31 +758,25 @@ namespace DataLogger.Data
                                                         module_cleaning,
                                                         module_temperature,
                                                         module_humidity,
-                                                        mps_status,
                                                         station_status,
                                                         pumping_system_status
                                                FROM data_60minute_values
-                                               WHERE (:d_from < stored_date AND stored_date < :d_to)
-                                                     OR
-                                                     (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
-                                                     ";
+                                               WHERE created BETWEEN :date_from AND :date_to
+                                               ORDER BY created ASC
+                                                ";
 
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+                        DateTime date_from = datetime_from;
+                        DateTime date_to = datetime_to;
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
                             cmd.CommandText = sql_command;
 
-                            cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
-                            cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
-
-                            cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
-                            cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+                            cmd.Parameters.Add(":date_from", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_from;
+                            cmd.Parameters.Add(":date_to", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_to;
 
                             NpgsqlDataReader reader = cmd.ExecuteReader();
 
@@ -661,7 +793,7 @@ namespace DataLogger.Data
                         return null;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
                     if (db != null)
                     {
@@ -677,6 +809,70 @@ namespace DataLogger.Data
 
         public DataTable get_all_custom(DateTime datetime_from, DateTime datetime_to, List<string> custom_param_list)
         {
+            //DataTable dt = new DataTable();
+            //using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            //{
+            //    try
+            //    {
+            //        if (db.open_connection())
+            //        {
+            //            string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute
+            //                                            {custom_param}
+            //                                   FROM data_60minute_values
+            //                                   WHERE (:d_from < stored_date AND stored_date < :d_to)
+            //                                         OR
+            //                                         (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
+            //                                         OR
+            //                                         (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
+            //                                         OR
+            //                                         (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
+            //                                         ";
+            //            string custom_param = "";
+            //            if (custom_param_list != null && custom_param_list.Count > 0)
+            //            {
+            //                custom_param = " , " + string.Join(",", custom_param_list);
+            //            }
+            //            sql_command = sql_command.Replace("{custom_param}", custom_param);
+
+            //            DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
+            //            DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+            //            using (NpgsqlCommand cmd = db._conn.CreateCommand())
+            //            {
+            //                cmd.CommandText = sql_command;
+
+            //                cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
+            //                cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
+
+            //                cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
+            //                cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+
+            //                NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            //                dt.Load(reader);
+
+            //                reader.Close();
+            //                db.close_connection();
+            //                return dt;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            db.close_connection();
+            //            return null;
+            //        }
+            //    }
+            //    catch
+            //    {
+            //        if (db != null)
+            //        {
+            //            db.close_connection();
+            //        }
+            //        return null;
+            //    }
+            //    finally
+            //    { db.close_connection(); }
+            //}
             DataTable dt = new DataTable();
             using (NpgsqlDBConnection db = new NpgsqlDBConnection())
             {
@@ -684,36 +880,26 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute
+
+                        string sql_command = @"SELECT created, id, stored_date, stored_hour, stored_minute
                                                         {custom_param}
                                                FROM data_60minute_values
-                                               WHERE (:d_from < stored_date AND stored_date < :d_to)
-                                                     OR
-                                                     (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
-                                                     ";
-                        string custom_param = "";
-                        if (custom_param_list != null && custom_param_list.Count > 0)
-                        {
-                            custom_param = " , " + string.Join(",", custom_param_list);
-                        }
-                        sql_command = sql_command.Replace("{custom_param}", custom_param);
+                                               WHERE created BETWEEN :date_from AND :date_to
+                                               ORDER BY created ASC
+                                                ";
 
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+                        DateTime date_from = datetime_from;
+                        DateTime date_to = datetime_to;
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
                             cmd.CommandText = sql_command;
 
-                            cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
-                            cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
-
-                            cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
-                            cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+                            cmd.Parameters.Add(":date_from", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_from;
+                            cmd.Parameters.Add(":date_to", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_to;
 
                             NpgsqlDataReader reader = cmd.ExecuteReader();
 
@@ -730,7 +916,7 @@ namespace DataLogger.Data
                         return null;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
                     if (db != null)
                     {
@@ -746,6 +932,63 @@ namespace DataLogger.Data
 
         public DataTable get_all_sampler(DateTime datetime_from, DateTime datetime_to)
         {
+            //DataTable dt = new DataTable();
+            //using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            //{
+            //    try
+            //    {
+            //        if (db.open_connection())
+            //        {
+            //            string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, refrigeration_temperature, bottle_position, door_status, equipment_status
+            //                                   FROM data_60minute_values
+            //                                   WHERE (:d_from < stored_date AND stored_date < :d_to)
+            //                                         OR
+            //                                         (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
+            //                                         OR
+            //                                         (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
+            //                                         OR
+            //                                         (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
+            //                                         ";
+
+            //            DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
+            //            DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+            //            using (NpgsqlCommand cmd = db._conn.CreateCommand())
+            //            {
+            //                cmd.CommandText = sql_command;
+
+            //                cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
+            //                cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
+
+            //                cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
+            //                cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+
+            //                NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            //                dt.Load(reader);
+
+            //                reader.Close();
+            //                db.close_connection();
+            //                return dt;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            db.close_connection();
+            //            return null;
+            //        }
+            //    }
+            //    catch
+            //    {
+            //        if (db != null)
+            //        {
+            //            db.close_connection();
+            //        }
+            //        return null;
+            //    }
+            //    finally
+            //    { db.close_connection(); }
+            //}
             DataTable dt = new DataTable();
             using (NpgsqlDBConnection db = new NpgsqlDBConnection())
             {
@@ -753,29 +996,41 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, refrigeration_temperature, bottle_position, door_status, equipment_status
+                        //string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tn, tn_status, tp ,tp_status, toc, toc_status
+                        //                       FROM data_60minute_values
+                        //                       WHERE (:d_from < stored_date AND stored_date < :d_to)
+                        //                             OR
+                        //                             (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
+                        //                             OR
+                        //                             (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
+                        //                             OR
+                        //                             (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
+                        //                             ";
+
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, refrigeration_temperature, bottle_position, door_status, equipment_status                                                     
                                                FROM data_60minute_values
-                                               WHERE (:d_from < stored_date AND stored_date < :d_to)
-                                                     OR
-                                                     (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
-                                                     ";
+                                               WHERE created BETWEEN :date_from AND :date_to
+                                               ORDER BY created ASC
+                                                ";
 
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+                        DateTime date_from = datetime_from;
+                        DateTime date_to = datetime_to;
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
                             cmd.CommandText = sql_command;
 
-                            cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
-                            cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
+                            //cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
+                            //cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
 
-                            cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
-                            cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+                            //cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
+                            //cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+
+                            cmd.Parameters.Add(":date_from", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_from;
+                            cmd.Parameters.Add(":date_to", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_to;
 
                             NpgsqlDataReader reader = cmd.ExecuteReader();
 
@@ -792,7 +1047,7 @@ namespace DataLogger.Data
                         return null;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
                     if (db != null)
                     {
@@ -804,7 +1059,6 @@ namespace DataLogger.Data
                 { db.close_connection(); }
             }
         }
-
         public DataTable get_all_history(DateTime datetime_from, DateTime datetime_to)
         {
             DataTable dt = new DataTable();
@@ -868,6 +1122,73 @@ namespace DataLogger.Data
 
         public DataTable get_all_analyzer(DateTime datetime_from, DateTime datetime_to)
         {
+            //DataTable dt = new DataTable();
+            //using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            //{
+            //    try
+            //    {
+            //        if (db.open_connection())
+            //        {
+            //            //string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tn, tn_status, tp ,tp_status, toc, toc_status
+            //            //                       FROM data_60minute_values
+            //            //                       WHERE (:d_from < stored_date AND stored_date < :d_to)
+            //            //                             OR
+            //            //                             (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
+            //            //                             OR
+            //            //                             (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
+            //            //                             OR
+            //            //                             (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
+            //            //                             ";
+
+            //            string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tn, tn_status, tp ,tp_status, toc, toc_status
+            //                                   FROM data_60minute_values
+            //                                   WHERE created BETWEEN :date_from AND :date_to";
+
+            //            DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
+            //            DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+            //            DateTime date_from = datetime_from; 
+            //            DateTime date_to = datetime_to; 
+
+            //            using (NpgsqlCommand cmd = db._conn.CreateCommand())
+            //            {
+            //                cmd.CommandText = sql_command;
+
+            //                //cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
+            //                //cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
+
+            //                //cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
+            //                //cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+
+            //                cmd.Parameters.Add(":date_from", NpgsqlTypes.NpgsqlDbType.Date).Value = date_from;
+            //                cmd.Parameters.Add(":date_to", NpgsqlTypes.NpgsqlDbType.Date).Value = date_to;
+
+            //                NpgsqlDataReader reader = cmd.ExecuteReader();
+
+            //                dt.Load(reader);
+
+            //                reader.Close();
+            //                db.close_connection();
+            //                return dt;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            db.close_connection();
+            //            return null;
+            //        }
+            //    }
+            //    catch(Exception e)
+            //    {
+            //        if (db != null)
+            //        {
+            //            db.close_connection();
+            //        }
+            //        return null;
+            //    }
+            //    finally
+            //    { db.close_connection(); }
+            //}
             DataTable dt = new DataTable();
             using (NpgsqlDBConnection db = new NpgsqlDBConnection())
             {
@@ -875,32 +1196,41 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, tn, tn_status, tp ,tp_status, toc, toc_status
+                        //string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tn, tn_status, tp ,tp_status, toc, toc_status
+                        //                       FROM data_60minute_values
+                        //                       WHERE (:d_from < stored_date AND stored_date < :d_to)
+                        //                             OR
+                        //                             (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
+                        //                             OR
+                        //                             (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
+                        //                             OR
+                        //                             (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
+                        //                             ";
+
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tn, tn_status, tp ,tp_status, toc, toc_status
                                                FROM data_60minute_values
-                                               WHERE (:d_from < stored_date AND stored_date < :d_to)
-                                                     OR
-                                                     (stored_date = :d_from AND stored_date < :d_to   AND (stored_hour  >= :h_from))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date > :d_from AND (stored_hour  <= :h_to))
-                                                     OR
-                                                     (stored_date = :d_to   AND stored_date = :d_from AND ((stored_hour  >= :h_from AND stored_hour  <= :h_to)  ))
-                                                     ";
+                                               WHERE created BETWEEN :date_from AND :date_to
+                                               ORDER BY created ASC
+                                                ";
 
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+                        DateTime date_from = datetime_from;
+                        DateTime date_to = datetime_to;
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
                             cmd.CommandText = sql_command;
 
-                            cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
-                            cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
+                            //cmd.Parameters.Add(":d_from", NpgsqlTypes.NpgsqlDbType.Date).Value = d_from;
+                            //cmd.Parameters.Add(":d_to", NpgsqlTypes.NpgsqlDbType.Date).Value = d_to;
 
-                            cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
-                            cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
+                            //cmd.Parameters.Add(":h_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Hour;
+                            //cmd.Parameters.Add(":h_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Hour;
 
-                            //cmd.Parameters.Add(":m_from", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_from.Minute;
-                            //cmd.Parameters.Add(":m_to", NpgsqlTypes.NpgsqlDbType.Integer).Value = datetime_to.Minute;
+                            cmd.Parameters.Add(":date_from", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_from;
+                            cmd.Parameters.Add(":date_to", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_to;
 
                             NpgsqlDataReader reader = cmd.ExecuteReader();
 
@@ -917,7 +1247,7 @@ namespace DataLogger.Data
                         return null;
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     if (db != null)
                     {
@@ -943,7 +1273,9 @@ namespace DataLogger.Data
                         string sql_command = @" SELECT *
                                                 FROM data_60minute_values
                                                 WHERE EXTRACT(YEAR FROM stored_date) = :year
-                                              ";
+                                              
+                                               ORDER BY created ASC
+                                                ";
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
                             cmd.CommandText = sql_command;

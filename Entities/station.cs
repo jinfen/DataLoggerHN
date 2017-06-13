@@ -43,6 +43,11 @@ namespace DataLogger.Entities
         public string do7_caption_vi { get; set; }
         public string do8_caption_vi { get; set; }
 
+        public string ftpserver { get; set; }
+        public string ftpusername { get; set; }
+        public string ftppassword { get; set; }
+        public string ftpfolder { get; set; }
+        public int ftpflag { get; set; }
         public station()
         {
             id = -1;
@@ -80,6 +85,13 @@ namespace DataLogger.Entities
             do6_caption_vi = "D/O #6";
             do7_caption_vi = "D/O #7";
             do8_caption_vi = "D/O #8";
+
+            ftpserver = "";
+            ftpusername = "";
+            ftppassword = "";
+            ftpfolder = "";
+            ftpflag = -1;
+
         }
     }
 }

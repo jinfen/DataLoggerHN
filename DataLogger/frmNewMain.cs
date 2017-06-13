@@ -21,6 +21,7 @@ using System.Resources;
 using System.Net.Sockets;
 using System.Net;
 using WinformProtocol;
+using Npgsql;
 
 namespace DataLogger
 {
@@ -2508,17 +2509,17 @@ namespace DataLogger
                 objMeasuredDataGlobal.MPS_ORP = -1;
                 objMeasuredDataGlobal.MPS_Turbidity = -1;
             }
-            objDataValue.MPS_DO = objMeasuredDataGlobal.MPS_DO;
+            objDataValue.MPS_DO = System.Math.Round(objMeasuredDataGlobal.MPS_DO,2);
             objDataValue.MPS_DO_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_EC = objMeasuredDataGlobal.MPS_EC;
+            objDataValue.MPS_EC = System.Math.Round(objMeasuredDataGlobal.MPS_EC,2);
             objDataValue.MPS_EC_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_ORP = objMeasuredDataGlobal.MPS_ORP;
+            objDataValue.MPS_ORP = System.Math.Round(objMeasuredDataGlobal.MPS_ORP,2);
             objDataValue.MPS_ORP_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_pH = objMeasuredDataGlobal.MPS_pH;
+            objDataValue.MPS_pH = System.Math.Round(objMeasuredDataGlobal.MPS_pH,2);
             objDataValue.MPS_pH_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_Temp = objMeasuredDataGlobal.MPS_Temp;
+            objDataValue.MPS_Temp = System.Math.Round(objMeasuredDataGlobal.MPS_Temp,2);
             objDataValue.MPS_Temp_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_Turbidity = objMeasuredDataGlobal.MPS_Turbidity;
+            objDataValue.MPS_Turbidity = System.Math.Round(objMeasuredDataGlobal.MPS_Turbidity,2);
             objDataValue.MPS_Turbidity_status = objMeasuredDataGlobal.MPS_status;
             objDataValue.MPS_status = objMeasuredDataGlobal.MPS_status;
 
@@ -2538,11 +2539,11 @@ namespace DataLogger
                 objMeasuredDataGlobal.TP_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
                 objMeasuredDataGlobal.TP = -1;
             }
-            objDataValue.TN = objMeasuredDataGlobal.TN;
+            objDataValue.TN = System.Math.Round(objMeasuredDataGlobal.TN,2);
             objDataValue.TN_status = objMeasuredDataGlobal.TN_status;
-            objDataValue.TOC = objMeasuredDataGlobal.TOC;
+            objDataValue.TOC = System.Math.Round(objMeasuredDataGlobal.TOC,2);
             objDataValue.TOC_status = objMeasuredDataGlobal.TOC_status;
-            objDataValue.TP = objMeasuredDataGlobal.TP;
+            objDataValue.TP = System.Math.Round(objMeasuredDataGlobal.TP,2);
             objDataValue.TP_status = objMeasuredDataGlobal.TP_status;
 
             // water sampler
@@ -2925,6 +2926,345 @@ namespace DataLogger
 
 
             return ret;
+        }
+
+        public void dataCSV(string firts,data_value data,string path,string date)
+        {
+            using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            {
+                try
+                {
+                var csv = new StringBuilder();
+                csv.Append(firts + "\t" + "");
+                csv.AppendLine();
+                //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
+
+                    if (db.open_connection())
+                    {
+                        string sql_command1 = "SELECT * from " + "databinding";
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command1;
+                            NpgsqlDataReader dr;
+                            dr = cmd.ExecuteReader();
+                            DataTable tbcode = new DataTable();
+                            tbcode.Load(dr); // Load bang chua mapping cac truong
+                            foreach (DataRow row2 in tbcode.Rows)
+                            {
+                                string code = Convert.ToString(row2["code"]);
+                                switch (code)
+                                {
+                                    case "ph":
+                                        csv.Append(date + "\t" + "ph" + "\t" + data.MPS_pH + "\t" + "");
+                                        csv.AppendLine();
+                                        break;
+                                    case "ec":
+                                        csv.Append(date + "\t" + "ec" + "\t" + data.MPS_EC + "\t" + "uS/cm");
+                                        csv.AppendLine();
+                                        break;
+                                    case "do":
+                                        csv.Append(date + "\t" + "do" + "\t" + data.MPS_DO + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                    case "tss":
+                                        csv.Append(date + "\t" + "tss" + "\t" + data.MPS_Turbidity + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                    case "orp":
+                                        csv.Append(date + "\t" + "orp" + "\t" + data.MPS_ORP + "\t" + "mV");
+                                        csv.AppendLine();
+                                        break;
+                                    case "temp":
+                                        csv.Append(date + "\t" + "temp" + "\t" + data.MPS_Temp + "\t" + "oC");
+                                        csv.AppendLine();
+                                        break;
+                                    case "turbi":
+                                        csv.Append(date + "\t" + "turbi" + "\t" + data.MPS_Turbidity + "\t" + "NTU");
+                                        csv.AppendLine();
+                                        break;
+                                    case "tn":
+                                        csv.Append(date + "\t" + "tn" + "\t" + data.TN + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                    case "tp":
+                                        csv.Append(date + "\t" + "tp" + "\t" + data.TP + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                    case "toc":
+                                        csv.Append(date + "\t" + "toc" + "\t" + data.TOC + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                }
+                            }
+                            using (StreamWriter swriter = new StreamWriter(path))
+                            {
+                                swriter.Write(csv.ToString());
+                            }
+                            db.close_connection();
+                        }
+                    }
+                    else
+                    {
+                        db.close_connection();
+                    }
+                }
+                catch (Exception e)
+                {
+                    db.close_connection();
+                    Console.WriteLine(e.StackTrace);
+                }          
+            }
+        }
+        public Boolean FTP(data_value data,DateTime datetime)
+        {
+            try
+            {
+                GlobalVar.stationSettings = new station_repository().get_info();
+                string stationID = GlobalVar.stationSettings.station_id;
+                string stationName = GlobalVar.stationSettings.station_name;
+                string server = GlobalVar.stationSettings.ftpserver;
+                string username = GlobalVar.stationSettings.ftpusername;
+                string password = GlobalVar.stationSettings.ftppassword;
+                string folder = GlobalVar.stationSettings.ftpfolder;
+                String datetimeS = datetime.ToString("yyyyMMddHHmmss");
+                string date = datetimeS.Substring(0, 4) + datetimeS.Substring(4, 2) + datetimeS.Substring(6, 2) + datetimeS.Substring(8, 2) + datetimeS.Substring(10, 2) + datetimeS.Substring(12, 2);
+                //server = " \@" " + server + "\"" ;
+                //ftp ftpClient = new ftp( @"ftp://127.0.0.1/", username, password);
+                ftp ftpClient = new ftp(server, username, password);
+
+                string appPath = Path.GetDirectoryName(Application.ExecutablePath);
+                string csv = "push";
+
+                //string tempFileName = "push.txt";
+                string newFileName = stationID + "_" + stationName + "_" + date + ".txt";
+
+                string yearFolder = datetimeS.Substring(0, 4);
+                string monthFolder = datetimeS.Substring(4, 2);
+                string dayFolder = datetimeS.Substring(6, 2);
+
+                //string tempFilePath = Path.Combine(appPath, dataFolderName, tempFileName);
+                string newFolderPath = Path.Combine(appPath, csv);
+                string newFilePath = Path.Combine(appPath, csv, newFileName);
+
+                /// Year Folder
+                string[] simpleDirectoryYear = ftpClient.directoryListSimple(folder);
+                Boolean hasFolderY = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(yearFolder))
+                    {
+                        hasFolderY = true;
+                    }
+                }
+
+                string folderPathY;
+                if (hasFolderY == false)
+                {
+                    folderPathY = Path.Combine(folder, yearFolder);
+                    ftpClient.createDirectory(folderPathY);
+                }
+                else
+                {
+                    folderPathY = Path.Combine(folder, yearFolder);
+                }
+                ///
+                /// Month Folder
+                string[] simpleDirectoryMonth = ftpClient.directoryListSimple(folderPathY);
+                Boolean hasFolderM = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(monthFolder))
+                    {
+                        hasFolderM = true;
+                    }
+                }
+
+                string folderPathM;
+                if (hasFolderM == false)
+                {
+                    folderPathM = Path.Combine(folderPathY, monthFolder);
+                    ftpClient.createDirectory(folderPathM);
+                }
+                else
+                {
+                    folderPathM = Path.Combine(folderPathY, monthFolder);
+                }
+                /// 
+                /// Day Folder
+                string[] simpleDirectoryDay = ftpClient.directoryListSimple(folderPathM);
+                Boolean hasFolderD = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(dayFolder))
+                    {
+                        hasFolderD = true;
+                    }
+                }
+
+                string folderPathD;
+                if (hasFolderD == false)
+                {
+                    folderPathD = Path.Combine(folderPathM, dayFolder);
+                    ftpClient.createDirectory(folderPathD);
+                }
+                else
+                {
+                    folderPathD = Path.Combine(folderPathM, dayFolder);
+                }
+                /// 
+                if (!Directory.Exists(newFolderPath))
+                {
+                    // Try to create the directory.
+                    DirectoryInfo di = Directory.CreateDirectory(newFolderPath);
+                }
+                string header = stationID + "_" + stationName;
+                if (!File.Exists(newFilePath))
+                {
+                    File.Create(newFilePath).Close();
+                    dataCSV(header, data, newFilePath, date);
+                }
+                else
+                {
+                    System.IO.File.WriteAllText(newFilePath, string.Empty);
+                    dataCSV(header, data, newFilePath, date);
+                }
+                /* Upload a File */
+                //ftpClient.upload("/test/2017/data_report.csv", @"C:\Users\Admin\Desktop\data_report.csv");
+                string filePath = Path.Combine(folderPathD, newFileName);
+                ftpClient.upload(filePath, newFilePath);
+                Form1.control1.AppendTextLog1Box("Manual/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Form1.control1.AppendTextLog1Box("Manual/Error " + Environment.NewLine, Form1.control1.getForm1fromControl);
+                return false;
+            }
+        }
+        public Boolean FTP(data_value data) {
+            string newFileName = null;
+            try
+            {
+                GlobalVar.stationSettings = new station_repository().get_info();
+                string stationID = GlobalVar.stationSettings.station_id;
+                string stationName = GlobalVar.stationSettings.station_name;
+                string server = GlobalVar.stationSettings.ftpserver;
+                string username = GlobalVar.stationSettings.ftpusername;
+                string password = GlobalVar.stationSettings.ftppassword;
+                string folder = GlobalVar.stationSettings.ftpfolder;
+                DateTime s = DateTime.Now;
+                String datetimeS = s.ToString("yyyyMMddHHmmss");
+                string date = datetimeS.Substring(0, 4) + datetimeS.Substring(4, 2) + datetimeS.Substring(6, 2) + datetimeS.Substring(8, 2) + datetimeS.Substring(10, 2) + datetimeS.Substring(12, 2);
+                //server = " \@" " + server + "\"" ;
+                //ftp ftpClient = new ftp( @"ftp://127.0.0.1/", username, password);
+                ftp ftpClient = new ftp(server, username, password);
+
+                string appPath = Path.GetDirectoryName(Application.ExecutablePath);
+                string csv = "push";
+
+                //string tempFileName = "push.txt";
+                newFileName = stationID + "_" + stationName + "_" + date + ".txt";
+
+                string yearFolder = datetimeS.Substring(0, 4);
+                string monthFolder = datetimeS.Substring(4, 2);
+                string dayFolder = datetimeS.Substring(6, 2);
+
+                //string tempFilePath = Path.Combine(appPath, dataFolderName, tempFileName);
+                string newFolderPath = Path.Combine(appPath, csv);
+                string newFilePath = Path.Combine(appPath, csv, newFileName);
+
+                /// Year Folder
+                string[] simpleDirectoryYear = ftpClient.directoryListSimple(folder);            
+                Boolean hasFolderY = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(yearFolder)) {
+                        hasFolderY = true;
+                    }
+                }
+                
+                string folderPathY ;
+                if (hasFolderY == false)
+                {
+                    folderPathY = Path.Combine(folder, yearFolder);
+                    ftpClient.createDirectory(folderPathY);
+                }
+                else
+                {
+                    folderPathY = Path.Combine(folder, yearFolder);
+                }
+                ///
+                /// Month Folder
+                string[] simpleDirectoryMonth = ftpClient.directoryListSimple(folderPathY); 
+                Boolean hasFolderM = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(monthFolder))
+                    {
+                        hasFolderM = true;
+                    }
+                }
+
+                string folderPathM;
+                if (hasFolderM == false)
+                {
+                    folderPathM = Path.Combine(folderPathY, monthFolder);
+                    ftpClient.createDirectory(folderPathM);
+                }
+                else
+                {
+                    folderPathM = Path.Combine(folderPathY, monthFolder);
+                }
+                /// 
+                /// Day Folder
+                string[] simpleDirectoryDay = ftpClient.directoryListSimple(folderPathM);
+                Boolean hasFolderD = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(dayFolder))
+                    {
+                        hasFolderD = true;
+                    }
+                }
+
+                string folderPathD;
+                if (hasFolderD == false)
+                {
+                    folderPathD = Path.Combine(folderPathM, dayFolder);
+                    ftpClient.createDirectory(folderPathD);
+                }
+                else
+                {
+                    folderPathD = Path.Combine(folderPathM, dayFolder);
+                }
+                /// 
+                if (!Directory.Exists(newFolderPath))
+                {
+                    // Try to create the directory.
+                    DirectoryInfo di = Directory.CreateDirectory(newFolderPath);
+                }
+                string header = stationID + "_" + stationName;
+                if (!File.Exists(newFilePath))
+                {
+                    File.Create(newFilePath).Close();
+                    dataCSV(header, data, newFilePath, date);
+                }
+                else
+                {
+                    System.IO.File.WriteAllText(newFilePath, string.Empty);
+                    dataCSV(header, data, newFilePath, date);
+                }
+                /* Upload a File */
+                //ftpClient.upload("/test/2017/data_report.csv", @"C:\Users\Admin\Desktop\data_report.csv");
+                string filePath = Path.Combine(folderPathD, newFileName);
+                ftpClient.upload(filePath, newFilePath);
+                Form1.control1.AppendTextLog1Box("Auto/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl);
+                return true;
+            }
+            catch (Exception e) {
+                Form1.control1.AppendTextLog1Box("Auto/Error" + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl);
+                return false;
+            }
         }
         #endregion
 
@@ -5360,6 +5700,7 @@ namespace DataLogger
                             objDataValue.bottle_position = objDataValue.bottle_position
                                / countingWaterSampler;
                         }
+                        frmNewMain main = new frmNewMain();
                         // get latest to check before add
                         objLatest = new data_5minute_value_repository().get_latest_info();
                         if (objLatest != null &&
@@ -5490,6 +5831,19 @@ namespace DataLogger
                                 }
 
                             }
+
+                            /// Send File ftp
+                            if (main.FTP(objLatest))
+                            {
+                                objLatest.push = 1;
+                                objLatest.push_time = DateTime.Now;
+                            }
+                            else
+                            {
+                                objLatest.push = 0;
+                                objLatest.push_time = DateTime.Now;
+                            }
+                            ///
                             //// save to data value table
                             if (new data_5minute_value_repository().update(ref objLatest) > 0)
                             {
@@ -5508,6 +5862,19 @@ namespace DataLogger
                                 objDataValue.pumping_system_status = CommonInfo.INT_STATUS_MAINTENANCE;
                                 //objDataValue.station_status = CommonInfo.INT_STATUS_MAINTENANCE;
                             }
+                            
+                            /// Send File ftp
+                            if (main.FTP(objDataValue))
+                            {
+                                objDataValue.push = 1;
+                                objDataValue.push_time = DateTime.Now;
+                            }
+                            else
+                            {
+                                objDataValue.push = 0;
+                                objDataValue.push_time = DateTime.Now;
+                            }
+                            ///
                             //// save to data value table
                             if (new data_5minute_value_repository().add(ref objDataValue) > 0)
                             {

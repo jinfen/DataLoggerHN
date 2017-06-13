@@ -38,6 +38,7 @@ namespace DataLogger.Data
                                             " module_Temperature, module_Humidity, " +
                                             " stored_date, stored_hour, stored_minute, MPS_status,pumping_system_status, station_status, " +
                                             " refrigeration_temperature, bottle_position, door_status, equipment_status, " +
+                                            " push, push_time, " +
                                             " created)" +
                                             " VALUES (:MPS_pH, :MPS_pH_status, :MPS_EC, :MPS_EC_status, " +
                                             " :MPS_DO,:MPS_DO_status, :MPS_Turbidity, :MPS_Turbidity_status, " +
@@ -49,6 +50,7 @@ namespace DataLogger.Data
                                             " :module_Temperature, :module_Humidity," +
                                             " :stored_date, :stored_hour, :stored_minute, :MPS_status, :pumping_system_status, :station_status, " +
                                             " :refrigeration_temperature, :bottle_position, :door_status, :equipment_status, " +
+                                            " :push, :push_time, " +
                                             " :created)";                        
                         sql_command += " RETURNING id;";
 
@@ -106,6 +108,10 @@ namespace DataLogger.Data
                             cmd.Parameters.Add(":door_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.door_status;
                             cmd.Parameters.Add(":equipment_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.equipment_status;
                             cmd.Parameters.Add(":created", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = obj.created;
+
+                            cmd.Parameters.Add(":push", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.push;
+                            cmd.Parameters.Add(":push_time", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = obj.push_time;
+
                             //cmd.ExecuteNonQuery();
                             ID = (Int32)cmd.ExecuteScalar();
                             obj.id = ID;
@@ -553,6 +559,15 @@ namespace DataLogger.Data
                     obj.created = Convert.ToDateTime(dataReader["created"].ToString().Trim());
                 else
                     obj.created = DateTime.Now;
+
+                if (!DBNull.Value.Equals(dataReader["push"]))
+                    obj.push = Convert.ToInt32(dataReader["push"].ToString().Trim());
+                else
+                    obj.push = -1;
+                if (!DBNull.Value.Equals(dataReader["push_time"]))
+                    obj.push_time = Convert.ToDateTime(dataReader["push_time"].ToString().Trim());
+                else
+                    obj.push_time = new DateTime();
 
             }
             catch (Exception ex)

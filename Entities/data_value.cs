@@ -61,7 +61,8 @@ namespace DataLogger.Entities
         public int pumping_system_status { get; set; }
         // 0:normal; 6: Maintenance; 7: periodic; 8: incident
         public int station_status { get; set; } 
-
+        public int push { get; set; }
+        public DateTime push_time { get; set; }
         public data_value()
         {
             id = -1;
@@ -116,6 +117,9 @@ namespace DataLogger.Entities
 
             pumping_system_status = 0;
             station_status = 0;
+
+            push = -1;
+            push_time = new DateTime();
         }
     }
     public class measured_data
@@ -142,7 +146,8 @@ namespace DataLogger.Entities
         public int MPS_status { get; set; }        
 
         public DateTime created { get; set; }
-
+        public int push { get; set; }
+        public DateTime push_time { get; set; }
         public DateTime latest_update_MPS_communication { get; set; }
         public DateTime latest_update_TN_communication { get; set; }
         public DateTime latest_update_TP_communication { get; set; }
@@ -176,6 +181,9 @@ namespace DataLogger.Entities
             latest_update_TOC_communication = DateTime.Now;
             latest_update_TN_communication = DateTime.Now;
             latest_update_TP_communication = DateTime.Now;
+
+            push = -1;
+            push_time = new DateTime();
         }
     }
     public class station_status

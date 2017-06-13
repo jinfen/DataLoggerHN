@@ -32,8 +32,20 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.DataTranfer = new System.Windows.Forms.TabControl();
+            this.Pull = new System.Windows.Forms.TabPage();
             this.textLog = new System.Windows.Forms.TextBox();
+            this.Push = new System.Windows.Forms.TabPage();
+            this.textLog1 = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblTo = new System.Windows.Forms.Label();
+            this.dtpDateTo = new System.Windows.Forms.DateTimePicker();
+            this.dtpDateFrom = new System.Windows.Forms.DateTimePicker();
+            this.lblFrom = new System.Windows.Forms.Label();
+            this.btnSend = new System.Windows.Forms.Button();
+            this.textFolderFTP = new System.Windows.Forms.TextBox();
+            this.textUserFTP = new System.Windows.Forms.TextBox();
+            this.textServerFTP = new System.Windows.Forms.TextBox();
             this.textIP = new System.Windows.Forms.TextBox();
             this.chkRun = new System.Windows.Forms.CheckBox();
             this.textPort = new System.Windows.Forms.TextBox();
@@ -43,20 +55,13 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Restore = new System.Windows.Forms.ToolStripMenuItem();
             this.Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.Push = new System.Windows.Forms.TabPage();
-            this.DataTranfer = new System.Windows.Forms.TabControl();
-            this.Pull = new System.Windows.Forms.TabPage();
-            this.textLog1 = new System.Windows.Forms.TextBox();
-            this.textIPFTP = new System.Windows.Forms.TextBox();
-            this.textPortFTP = new System.Windows.Forms.TextBox();
-            this.textFolder = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
-            this.Push.SuspendLayout();
             this.DataTranfer.SuspendLayout();
             this.Pull.SuspendLayout();
+            this.Push.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -73,11 +78,33 @@
             // 
             this.panel3.Controls.Add(this.DataTranfer);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(0, 71);
+            this.panel3.Location = new System.Drawing.Point(0, 122);
             this.panel3.Margin = new System.Windows.Forms.Padding(10);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(685, 334);
+            this.panel3.Size = new System.Drawing.Size(685, 283);
             this.panel3.TabIndex = 8;
+            // 
+            // DataTranfer
+            // 
+            this.DataTranfer.Controls.Add(this.Pull);
+            this.DataTranfer.Controls.Add(this.Push);
+            this.DataTranfer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DataTranfer.Location = new System.Drawing.Point(0, 0);
+            this.DataTranfer.Name = "DataTranfer";
+            this.DataTranfer.SelectedIndex = 0;
+            this.DataTranfer.Size = new System.Drawing.Size(685, 283);
+            this.DataTranfer.TabIndex = 6;
+            // 
+            // Pull
+            // 
+            this.Pull.Controls.Add(this.textLog);
+            this.Pull.Location = new System.Drawing.Point(4, 22);
+            this.Pull.Name = "Pull";
+            this.Pull.Padding = new System.Windows.Forms.Padding(3);
+            this.Pull.Size = new System.Drawing.Size(677, 257);
+            this.Pull.TabIndex = 0;
+            this.Pull.Text = "Pull";
+            this.Pull.UseVisualStyleBackColor = true;
             // 
             // textLog
             // 
@@ -88,14 +115,42 @@
             this.textLog.Multiline = true;
             this.textLog.Name = "textLog";
             this.textLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textLog.Size = new System.Drawing.Size(671, 302);
+            this.textLog.Size = new System.Drawing.Size(671, 251);
             this.textLog.TabIndex = 5;
+            // 
+            // Push
+            // 
+            this.Push.Controls.Add(this.textLog1);
+            this.Push.Location = new System.Drawing.Point(4, 22);
+            this.Push.Name = "Push";
+            this.Push.Padding = new System.Windows.Forms.Padding(3);
+            this.Push.Size = new System.Drawing.Size(677, 257);
+            this.Push.TabIndex = 1;
+            this.Push.Text = "Push";
+            this.Push.UseVisualStyleBackColor = true;
+            // 
+            // textLog1
+            // 
+            this.textLog1.BackColor = System.Drawing.SystemColors.Window;
+            this.textLog1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textLog1.Location = new System.Drawing.Point(3, 3);
+            this.textLog1.Margin = new System.Windows.Forms.Padding(10);
+            this.textLog1.Multiline = true;
+            this.textLog1.Name = "textLog1";
+            this.textLog1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textLog1.Size = new System.Drawing.Size(671, 251);
+            this.textLog1.TabIndex = 6;
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.textFolder);
-            this.panel2.Controls.Add(this.textPortFTP);
-            this.panel2.Controls.Add(this.textIPFTP);
+            this.panel2.Controls.Add(this.lblTo);
+            this.panel2.Controls.Add(this.dtpDateTo);
+            this.panel2.Controls.Add(this.dtpDateFrom);
+            this.panel2.Controls.Add(this.lblFrom);
+            this.panel2.Controls.Add(this.btnSend);
+            this.panel2.Controls.Add(this.textFolderFTP);
+            this.panel2.Controls.Add(this.textUserFTP);
+            this.panel2.Controls.Add(this.textServerFTP);
             this.panel2.Controls.Add(this.textIP);
             this.panel2.Controls.Add(this.chkRun);
             this.panel2.Controls.Add(this.textPort);
@@ -104,8 +159,92 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(685, 68);
+            this.panel2.Size = new System.Drawing.Size(685, 127);
             this.panel2.TabIndex = 7;
+            // 
+            // lblTo
+            // 
+            this.lblTo.AutoSize = true;
+            this.lblTo.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTo.ForeColor = System.Drawing.Color.Black;
+            this.lblTo.Location = new System.Drawing.Point(17, 95);
+            this.lblTo.Name = "lblTo";
+            this.lblTo.Size = new System.Drawing.Size(30, 17);
+            this.lblTo.TabIndex = 55;
+            this.lblTo.Text = "To:";
+            // 
+            // dtpDateTo
+            // 
+            this.dtpDateTo.CustomFormat = "dd/MM/yyyy HH:mm";
+            this.dtpDateTo.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpDateTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpDateTo.Location = new System.Drawing.Point(71, 95);
+            this.dtpDateTo.MaxDate = new System.DateTime(2100, 12, 31, 0, 0, 0, 0);
+            this.dtpDateTo.MinDate = new System.DateTime(2000, 1, 1, 0, 0, 0, 0);
+            this.dtpDateTo.Name = "dtpDateTo";
+            this.dtpDateTo.Size = new System.Drawing.Size(131, 21);
+            this.dtpDateTo.TabIndex = 57;
+            this.dtpDateTo.Value = new System.DateTime(2015, 10, 22, 0, 0, 0, 0);
+            this.dtpDateTo.ValueChanged += new System.EventHandler(this.dtpDateTo_ValueChanged);
+            // 
+            // dtpDateFrom
+            // 
+            this.dtpDateFrom.CustomFormat = "dd/MM/yyyy HH:mm";
+            this.dtpDateFrom.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpDateFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpDateFrom.Location = new System.Drawing.Point(71, 69);
+            this.dtpDateFrom.MaxDate = new System.DateTime(2100, 12, 31, 0, 0, 0, 0);
+            this.dtpDateFrom.MinDate = new System.DateTime(2000, 1, 1, 0, 0, 0, 0);
+            this.dtpDateFrom.Name = "dtpDateFrom";
+            this.dtpDateFrom.Size = new System.Drawing.Size(131, 21);
+            this.dtpDateFrom.TabIndex = 58;
+            this.dtpDateFrom.Value = new System.DateTime(2015, 10, 22, 0, 0, 0, 0);
+            this.dtpDateFrom.ValueChanged += new System.EventHandler(this.dtpDateFrom_ValueChanged);
+            // 
+            // lblFrom
+            // 
+            this.lblFrom.AutoSize = true;
+            this.lblFrom.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFrom.ForeColor = System.Drawing.Color.Black;
+            this.lblFrom.Location = new System.Drawing.Point(17, 70);
+            this.lblFrom.Name = "lblFrom";
+            this.lblFrom.Size = new System.Drawing.Size(48, 17);
+            this.lblFrom.TabIndex = 56;
+            this.lblFrom.Text = "From:";
+            // 
+            // btnSend
+            // 
+            this.btnSend.Location = new System.Drawing.Point(577, 36);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(75, 23);
+            this.btnSend.TabIndex = 10;
+            this.btnSend.Text = "Send";
+            this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
+            // 
+            // textFolderFTP
+            // 
+            this.textFolderFTP.Enabled = false;
+            this.textFolderFTP.Location = new System.Drawing.Point(365, 38);
+            this.textFolderFTP.Name = "textFolderFTP";
+            this.textFolderFTP.Size = new System.Drawing.Size(184, 20);
+            this.textFolderFTP.TabIndex = 9;
+            // 
+            // textUserFTP
+            // 
+            this.textUserFTP.Enabled = false;
+            this.textUserFTP.Location = new System.Drawing.Point(228, 38);
+            this.textUserFTP.Name = "textUserFTP";
+            this.textUserFTP.Size = new System.Drawing.Size(100, 20);
+            this.textUserFTP.TabIndex = 8;
+            // 
+            // textServerFTP
+            // 
+            this.textServerFTP.Enabled = false;
+            this.textServerFTP.Location = new System.Drawing.Point(20, 38);
+            this.textServerFTP.Name = "textServerFTP";
+            this.textServerFTP.Size = new System.Drawing.Size(182, 20);
+            this.textServerFTP.TabIndex = 7;
             // 
             // textIP
             // 
@@ -181,72 +320,6 @@
             this.Exit.Size = new System.Drawing.Size(113, 22);
             this.Exit.Text = "Exit";
             // 
-            // Push
-            // 
-            this.Push.Controls.Add(this.textLog1);
-            this.Push.Location = new System.Drawing.Point(4, 22);
-            this.Push.Name = "Push";
-            this.Push.Padding = new System.Windows.Forms.Padding(3);
-            this.Push.Size = new System.Drawing.Size(677, 308);
-            this.Push.TabIndex = 1;
-            this.Push.Text = "Push";
-            this.Push.UseVisualStyleBackColor = true;
-            // 
-            // DataTranfer
-            // 
-            this.DataTranfer.Controls.Add(this.Pull);
-            this.DataTranfer.Controls.Add(this.Push);
-            this.DataTranfer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DataTranfer.Location = new System.Drawing.Point(0, 0);
-            this.DataTranfer.Name = "DataTranfer";
-            this.DataTranfer.SelectedIndex = 0;
-            this.DataTranfer.Size = new System.Drawing.Size(685, 334);
-            this.DataTranfer.TabIndex = 6;
-            // 
-            // Pull
-            // 
-            this.Pull.Controls.Add(this.textLog);
-            this.Pull.Location = new System.Drawing.Point(4, 22);
-            this.Pull.Name = "Pull";
-            this.Pull.Padding = new System.Windows.Forms.Padding(3);
-            this.Pull.Size = new System.Drawing.Size(677, 308);
-            this.Pull.TabIndex = 0;
-            this.Pull.Text = "Pull";
-            this.Pull.UseVisualStyleBackColor = true;
-            // 
-            // textLog1
-            // 
-            this.textLog1.BackColor = System.Drawing.SystemColors.Window;
-            this.textLog1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textLog1.Location = new System.Drawing.Point(3, 3);
-            this.textLog1.Margin = new System.Windows.Forms.Padding(10);
-            this.textLog1.Multiline = true;
-            this.textLog1.Name = "textLog1";
-            this.textLog1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textLog1.Size = new System.Drawing.Size(671, 302);
-            this.textLog1.TabIndex = 6;
-            // 
-            // textIPFTP
-            // 
-            this.textIPFTP.Location = new System.Drawing.Point(20, 38);
-            this.textIPFTP.Name = "textIPFTP";
-            this.textIPFTP.Size = new System.Drawing.Size(182, 20);
-            this.textIPFTP.TabIndex = 7;
-            // 
-            // textPortFTP
-            // 
-            this.textPortFTP.Location = new System.Drawing.Point(228, 38);
-            this.textPortFTP.Name = "textPortFTP";
-            this.textPortFTP.Size = new System.Drawing.Size(100, 20);
-            this.textPortFTP.TabIndex = 8;
-            // 
-            // textFolder
-            // 
-            this.textFolder.Location = new System.Drawing.Point(353, 38);
-            this.textFolder.Name = "textFolder";
-            this.textFolder.Size = new System.Drawing.Size(196, 20);
-            this.textFolder.TabIndex = 9;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -262,14 +335,14 @@
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
-            this.Push.ResumeLayout(false);
-            this.Push.PerformLayout();
             this.DataTranfer.ResumeLayout(false);
             this.Pull.ResumeLayout(false);
             this.Pull.PerformLayout();
+            this.Push.ResumeLayout(false);
+            this.Push.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -293,9 +366,14 @@
         private System.Windows.Forms.TabPage Pull;
         private System.Windows.Forms.TabPage Push;
         public System.Windows.Forms.TextBox textLog1;
-        private System.Windows.Forms.TextBox textPortFTP;
-        private System.Windows.Forms.TextBox textIPFTP;
-        private System.Windows.Forms.TextBox textFolder;
+        private System.Windows.Forms.TextBox textUserFTP;
+        private System.Windows.Forms.TextBox textServerFTP;
+        private System.Windows.Forms.TextBox textFolderFTP;
+        private System.Windows.Forms.Button btnSend;
+        private System.Windows.Forms.Label lblTo;
+        private System.Windows.Forms.DateTimePicker dtpDateTo;
+        private System.Windows.Forms.DateTimePicker dtpDateFrom;
+        private System.Windows.Forms.Label lblFrom;
     }
 }
 

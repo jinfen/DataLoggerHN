@@ -36,6 +36,10 @@ namespace WinformProtocol
         public static bool isStop;
         public static int isSamp = -1;
         public static DateTime datetime10;
+        private readonly data_5minute_value_repository db5m = new data_5minute_value_repository();
+        public static Control control1;
+        ManualResetEvent _requestTermination = new ManualResetEvent(false);
+        Thread _threadFTP =  null;
         // The path to the key where Windows looks for startup applications
         RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         public Form1(frmNewMain newmain)
@@ -59,6 +63,7 @@ namespace WinformProtocol
                 chkRun.Checked = true;
             }
             this.Hide();
+            control1 = new Control(this);
         }
         public string TextLog
         {
@@ -98,6 +103,9 @@ namespace WinformProtocol
             //textPort.Enabled = false;
             localAddr = IPAddress.Parse(Protocol.MyTcpListener.GetLocalIPAddress());
             textIP.Text = localAddr.ToString();
+            textServerFTP.Text = existedStationsSetting.ftpserver;
+            textUserFTP.Text = existedStationsSetting.ftpusername;
+            textFolderFTP.Text = existedStationsSetting.ftpfolder;
             btnListen.PerformClick();
             
             this.WindowState = FormWindowState.Normal;
@@ -138,42 +146,6 @@ namespace WinformProtocol
             btnRefesh.Enabled = false;
             //textLog.Enabled = false;
             Control control = new Control(this);
-            //tcpListener = new TcpListener(localAddr, port);
-            //tcpListener.Start();
-            //Protocol.MyTcpListener.counter = 0;
-            //try
-            //{
-            //    String data = null;
-            //    TcpClient client = new TcpClient(AddressFamily.InterNetworkV6);
-            //    client.Client.DualMode = true;
-            //    textLog.Text = textLog.Text + "\n" + " >>> " + "Server Started";
-            //    Protocol.MyTcpListener.counter = 0;
-            //    await Task.Run(() =>
-            //    {
-            //        while (true)
-            //        {
-            //            Protocol.MyTcpListener.counter += 1;
-            //            textLog.Text = textLog.Text + "\n" + " >> " + " While(true) ";
-            //            client = tcpListener.AcceptTcpClient();
-            //            textLog.Text = textLog.Text + "\n" + " >> " + client.Connected;
-            //            textLog.Text = textLog.Text + "\n" + " >> " + "Client IP:" + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() + " started!";
-            //            Protocol.MyTcpListener.newThread = new Thread(() => Protocol.MyTcpListener.doChat(client, data, Protocol.MyTcpListener._encoder, Protocol.MyTcpListener.serialPortTN, Protocol.MyTcpListener.serialPortTP, Protocol.MyTcpListener.serialPortTOC, Protocol.MyTcpListener.serialPortSAMP, Protocol.MyTcpListener.objRelayIOControlGlobal, Protocol.MyTcpListener.objStationStatusGlobal, Protocol.MyTcpListener.objWaterSamplerGLobal, Protocol.MyTcpListener.objMeasuredDataGlobal));
-            //            Protocol.MyTcpListener.newThread.Start();
-            //            Thread.Sleep(1000);
-            //        }
-            //        tcpListener.Stop();
-
-            //    });
-            //}
-            //catch (SocketException ex)
-            //{
-            //    Console.WriteLine(ex.StackTrace);
-            //}
-            //finally
-            //{
-            //    tcpListener.Stop();
-            //}
-            //textLog.Text = textLog.Text + "\n" + "End";
             control.StartListening(Convert.ToInt32(textPort.Text), localAddr);
         }
         private void btnRefesh_Click(object sender, EventArgs e)
@@ -205,6 +177,8 @@ namespace WinformProtocol
                     ((ClientHandler)Client).Stop();
                 }
             }
+            Dispose();
+            control1.AppendTextLog1Box("Manual/Success " + "END" + Environment.NewLine, control1.getForm1fromControl);
         }
 
         private void chkRun_CheckedChanged(object sender, EventArgs e)
@@ -219,6 +193,462 @@ namespace WinformProtocol
                 // Remove the value from the registry so that the application doesn't start
                 rkApp.DeleteValue("Protocol", false);
             }
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            //control1 = new Control(this);
+            //ThreadStart manualFTP = new ThreadStart(ManualFTP);
+            //Thread manualFtp = new Thread(manualFTP);
+            //manualFtp.Start();
+            _threadFTP = new Thread(() =>
+            {
+
+                while (!_requestTermination.WaitOne(0))
+                {
+                    // do something usefull
+                    ManualFTP();
+                }
+
+            });
+
+            _threadFTP.Start();
+
+
+            //stop the main thread for some time
+
+            //Console.ReadKey();
+            //using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            //{
+            //    try
+            //    {
+            //        if (db.open_connection())
+            //        {
+            //            string sql_command1 = "SELECT * from " + "databinding";
+            //            using (NpgsqlCommand cmd = db._conn.CreateCommand())
+            //            {
+            //                cmd.CommandText = sql_command1;
+            //                NpgsqlDataReader dr;
+            //                dr = cmd.ExecuteReader();
+            //                DataTable tbcode = new DataTable();
+            //                tbcode.Load(dr); // Load bang chua mapping cac truong
+
+            //                List<string> _paramListForQuery = new List<string>();
+            //                List<string> _valueListForQuery = new List<string>();
+
+            //                foreach (DataRow row2 in tbcode.Rows)
+            //                {
+            //                    string code = Convert.ToString(row2["code"]);
+            //                    _valueListForQuery.Add(code);
+            //                    string clnnamevalue = Convert.ToString(row2["clnnamevalue"]);
+            //                    _paramListForQuery.Add(clnnamevalue);
+            //                }
+
+            //                _valueListForQuery.ToArray();
+            //                _paramListForQuery.ToArray();
+            //                DataTable dt_source = null;
+            //                dt_source = db5m.get_all_custom(dtpDateFrom.Value, dtpDateTo.Value, _paramListForQuery);
+            //                foreach (DataRow row3 in dt_source.Rows)
+            //                {
+            //                    frmNewMain newmain = new frmNewMain();
+            //                    data_value data = new data_value();
+            //                    //Type elementType = Type.GetType(_paramListForQuery[0]);
+            //                    //Type listType = typeof(string).MakeGenericType(new Type[] { elementType });
+            //                    //object list = Activator.CreateInstance(listType);
+            //                    int id = Int32.Parse(Convert.ToString(row3["id"]));
+            //                    DateTime created = (DateTime)row3["created"];
+            //                    for (int i = 0; i < _paramListForQuery.Count; i++)
+            //                    {
+            //                        var variable = Convert.ToDouble(Convert.ToString(row3[_paramListForQuery[i]]));
+            //                            //string code = Convert.ToString(row3[_valueListForQuery[i]]);
+            //                        switch(_valueListForQuery[i])
+            //                        {
+            //                            case "ph":
+            //                                data.MPS_pH = variable;
+            //                                break;
+            //                            case "ec":
+            //                                data.MPS_EC = variable;
+            //                                break;
+            //                            case "do":
+            //                                data.MPS_DO = variable;
+            //                                break;
+            //                            case "turbi":
+            //                                data.MPS_Turbidity = variable;
+            //                                break;
+            //                            case "tss":
+            //                                data.MPS_Turbidity = variable;
+            //                                break;
+            //                            case "orp":
+            //                                data.MPS_ORP = variable;
+            //                                break;
+            //                            case "temp":
+            //                                data.MPS_Temp = variable;
+            //                                break;
+            //                            case "tn":
+            //                                data.TN = variable;
+            //                                break;
+            //                            case "tp":
+            //                                data.TP = variable;
+            //                                break;
+            //                            case "toc":
+            //                                data.TOC = variable;
+            //                                break;
+            //                        }
+            //                    }
+            //                    if (newmain.FTP(data, created))
+            //                    {
+            //                        db5m.updatePush(id, 1, DateTime.Now);
+            //                        //control1.AppendTextLog1Box();
+            //                    }
+            //                    else
+            //                    {
+            //                        db5m.updatePush(id, 0, DateTime.Now);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex) {
+            //        Console.WriteLine(ex.StackTrace);
+            //    }
+            //}
+        }
+        public void ManualFTP()
+        {
+            using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            {
+                try
+                {
+                    if (db.open_connection())
+                    {
+                        string sql_command1 = "SELECT * from " + "databinding";
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command1;
+                            NpgsqlDataReader dr;
+                            dr = cmd.ExecuteReader();
+                            DataTable tbcode = new DataTable();
+                            tbcode.Load(dr); // Load bang chua mapping cac truong
+
+                            List<string> _paramListForQuery = new List<string>();
+                            List<string> _valueListForQuery = new List<string>();
+
+                            foreach (DataRow row2 in tbcode.Rows)
+                            {
+                                string code = Convert.ToString(row2["code"]);
+                                _valueListForQuery.Add(code);
+                                string clnnamevalue = Convert.ToString(row2["clnnamevalue"]);
+                                _paramListForQuery.Add(clnnamevalue);
+                            }
+
+                            _valueListForQuery.ToArray();
+                            _paramListForQuery.ToArray();
+                            DataTable dt_source = null;
+                            dt_source = db5m.get_all_custom(dtpDateFrom.Value, dtpDateTo.Value, _paramListForQuery);
+                            foreach (DataRow row3 in dt_source.Rows)
+                            {
+                                frmNewMain newmain = new frmNewMain();
+                                data_value data = new data_value();
+                                //Type elementType = Type.GetType(_paramListForQuery[0]);
+                                //Type listType = typeof(string).MakeGenericType(new Type[] { elementType });
+                                //object list = Activator.CreateInstance(listType);
+                                int id = Int32.Parse(Convert.ToString(row3["id"]));
+                                DateTime created = (DateTime)row3["created"];
+                                for (int i = 0; i < _paramListForQuery.Count; i++)
+                                {
+                                    var variable = Convert.ToDouble(Convert.ToString(row3[_paramListForQuery[i]]));
+                                    //string code = Convert.ToString(row3[_valueListForQuery[i]]);
+                                    switch (_valueListForQuery[i])
+                                    {
+                                        case "ph":
+                                            data.MPS_pH = variable;
+                                            break;
+                                        case "ec":
+                                            data.MPS_EC = variable;
+                                            break;
+                                        case "do":
+                                            data.MPS_DO = variable;
+                                            break;
+                                        case "turbi":
+                                            data.MPS_Turbidity = variable;
+                                            break;
+                                        case "tss":
+                                            data.MPS_Turbidity = variable;
+                                            break;
+                                        case "orp":
+                                            data.MPS_ORP = variable;
+                                            break;
+                                        case "temp":
+                                            data.MPS_Temp = variable;
+                                            break;
+                                        case "tn":
+                                            data.TN = variable;
+                                            break;
+                                        case "tp":
+                                            data.TP = variable;
+                                            break;
+                                        case "toc":
+                                            data.TOC = variable;
+                                            break;
+                                    }
+                                }
+                                if (FTP(data, created))
+                                {
+                                    db5m.updatePush(id, 1, DateTime.Now);
+                                    //control1.AppendTextLog1Box();
+                                }
+                                else
+                                {
+                                    db5m.updatePush(id, 0, DateTime.Now);
+                                }
+                                
+                            }
+                        }
+                        control1.AppendTextLog1Box("Manual/Success " + "END" + Environment.NewLine, control1.getForm1fromControl);
+                    }
+                    Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                }
+            }
+        }
+        public void Dispose()
+        {
+            _requestTermination.Set();
+
+            // you could enter a maximum wait time in the Join(...)
+            if (_threadFTP != null)
+            {
+                _threadFTP.Join();
+            }
+        }
+        public Boolean FTP(data_value data, DateTime datetime)
+        {
+            string newFileName = null;
+            try
+            {
+                GlobalVar.stationSettings = new station_repository().get_info();
+                string stationID = GlobalVar.stationSettings.station_id;
+                string stationName = GlobalVar.stationSettings.station_name;
+                string server = GlobalVar.stationSettings.ftpserver;
+                string username = GlobalVar.stationSettings.ftpusername;
+                string password = GlobalVar.stationSettings.ftppassword;
+                string folder = GlobalVar.stationSettings.ftpfolder;
+                String datetimeS = datetime.ToString("yyyyMMddHHmmss");
+                string date = datetimeS.Substring(0, 4) + datetimeS.Substring(4, 2) + datetimeS.Substring(6, 2) + datetimeS.Substring(8, 2) + datetimeS.Substring(10, 2) + datetimeS.Substring(12, 2);
+                //server = " \@" " + server + "\"" ;
+                //ftp ftpClient = new ftp( @"ftp://127.0.0.1/", username, password);
+                ftp ftpClient = new ftp(server, username, password);
+
+                string appPath = Path.GetDirectoryName(Application.ExecutablePath);
+                string csv = "push";
+
+                //string tempFileName = "push.txt";
+                newFileName = stationID + "_" + stationName + "_" + date + ".txt";
+
+                string yearFolder = datetimeS.Substring(0, 4);
+                string monthFolder = datetimeS.Substring(4, 2);
+                string dayFolder = datetimeS.Substring(6, 2);
+
+                //string tempFilePath = Path.Combine(appPath, dataFolderName, tempFileName);
+                string newFolderPath = Path.Combine(appPath, csv);
+                string newFilePath = Path.Combine(appPath, csv, newFileName);
+
+                /// Year Folder
+                string[] simpleDirectoryYear = ftpClient.directoryListSimple(folder);
+
+                Boolean hasFolderY = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(yearFolder))
+                    {
+                        hasFolderY = true;
+                    }
+                }
+
+                string folderPathY;
+                if (hasFolderY == false)
+                {
+                    folderPathY = Path.Combine(folder, yearFolder);
+                    ftpClient.createDirectory(folderPathY);
+                }
+                else
+                {
+                    folderPathY = Path.Combine(folder, yearFolder);
+                }
+                ///
+                /// Month Folder
+                string[] simpleDirectoryMonth = ftpClient.directoryListSimple(folderPathY);
+                Boolean hasFolderM = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(monthFolder))
+                    {
+                        hasFolderM = true;
+                    }
+                }
+
+                string folderPathM;
+                if (hasFolderM == false)
+                {
+                    folderPathM = Path.Combine(folderPathY, monthFolder);
+                    ftpClient.createDirectory(folderPathM);
+                }
+                else
+                {
+                    folderPathM = Path.Combine(folderPathY, monthFolder);
+                }
+                /// 
+                /// Day Folder
+                string[] simpleDirectoryDay = ftpClient.directoryListSimple(folderPathM);               
+                Boolean hasFolderD = false;
+                for (int i = 0; i < simpleDirectoryYear.Count(); i++)
+                {
+                    if (simpleDirectoryYear[i].Equals(dayFolder))
+                    {
+                        hasFolderD = true;
+                    }
+                }
+
+                string folderPathD;
+                if (hasFolderD == false)
+                {
+                    folderPathD = Path.Combine(folderPathM, dayFolder);
+                    ftpClient.createDirectory(folderPathD);
+                }
+                else
+                {
+                    folderPathD = Path.Combine(folderPathM, dayFolder);
+                }
+                /// 
+                if (!Directory.Exists(newFolderPath))
+                {
+                    // Try to create the directory.
+                    DirectoryInfo di = Directory.CreateDirectory(newFolderPath);
+                }
+                string header = stationID + "_" + stationName;
+                if (!File.Exists(newFilePath))
+                {
+                    File.Create(newFilePath).Close();
+                    dataCSV(header, data, newFilePath, date);
+                }
+                else
+                {
+                    System.IO.File.WriteAllText(newFilePath, string.Empty);
+                    dataCSV(header, data, newFilePath, date);
+                }
+                /* Upload a File */
+                //ftpClient.upload("/test/2017/data_report.csv", @"C:\Users\Admin\Desktop\data_report.csv");
+                string filePath = Path.Combine(folderPathD, newFileName);
+                ftpClient.upload(filePath, newFilePath);
+                control1.AppendTextLog1Box("Manual/Success " + newFileName + Environment.NewLine, control1.getForm1fromControl);
+                return true;
+            }
+            catch (Exception e)
+            {
+                control1.AppendTextLog1Box("Manual/Error " + newFileName + Environment.NewLine, control1.getForm1fromControl);
+                return false;
+            }
+        }
+        public void dataCSV(string firts, data_value data, string path, string date)
+        {
+            using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            {
+                try
+                {
+                    var csv = new StringBuilder();
+                    csv.Append(firts + "\t" + "");
+                    csv.AppendLine();
+                    //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
+
+                    if (db.open_connection())
+                    {
+                        string sql_command1 = "SELECT * from " + "databinding";
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command1;
+                            NpgsqlDataReader dr;
+                            dr = cmd.ExecuteReader();
+                            DataTable tbcode = new DataTable();
+                            tbcode.Load(dr); // Load bang chua mapping cac truong
+                            foreach (DataRow row2 in tbcode.Rows)
+                            {
+                                string code = Convert.ToString(row2["code"]);
+                                switch (code)
+                                {
+                                    case "ph":
+                                        csv.Append(date + "\t" + "ph" + "\t" + data.MPS_pH + "\t" + "");
+                                        csv.AppendLine();
+                                        break;
+                                    case "ec":
+                                        csv.Append(date + "\t" + "ec" + "\t" + data.MPS_EC + "\t" + "uS/cm");
+                                        csv.AppendLine();
+                                        break;
+                                    case "do":
+                                        csv.Append(date + "\t" + "do" + "\t" + data.MPS_DO + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                    case "tss":
+                                        csv.Append(date + "\t" + "tss" + "\t" + data.MPS_Turbidity + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                    case "orp":
+                                        csv.Append(date + "\t" + "orp" + "\t" + data.MPS_ORP + "\t" + "mV");
+                                        csv.AppendLine();
+                                        break;
+                                    case "temp":
+                                        csv.Append(date + "\t" + "temp" + "\t" + data.MPS_Temp + "\t" + "oC");
+                                        csv.AppendLine();
+                                        break;
+                                    case "turbi":
+                                        csv.Append(date + "\t" + "turbi" + "\t" + data.MPS_Turbidity + "\t" + "NTU");
+                                        csv.AppendLine();
+                                        break;
+                                    case "tn":
+                                        csv.Append(date + "\t" + "tn" + "\t" + data.TN + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                    case "tp":
+                                        csv.Append(date + "\t" + "tp" + "\t" + data.TP + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                    case "toc":
+                                        csv.Append(date + "\t" + "toc" + "\t" + data.TOC + "\t" + "mg/L");
+                                        csv.AppendLine();
+                                        break;
+                                }
+                            }
+                            using (StreamWriter swriter = new StreamWriter(path))
+                            {
+                                swriter.Write(csv.ToString());
+                            }
+                            db.close_connection();
+                        }
+                    }
+                    else
+                    {
+                        db.close_connection();
+                    }
+                }
+                catch (Exception e)
+                {
+                    db.close_connection();
+                    Console.WriteLine(e.StackTrace);
+                }
+            }
+        }
+        private void dtpDateFrom_ValueChanged(object sender, EventArgs e)
+        {
+            // không cho phép DateFrom lớn hơn DateTo
+            if (dtpDateFrom.Value > dtpDateTo.Value) dtpDateFrom.Value = dtpDateTo.Value;
+        }
+
+        private void dtpDateTo_ValueChanged(object sender, EventArgs e)
+        {
+            // không cho phép DateFrom lớn hơn DateTo
+            if (dtpDateFrom.Value > dtpDateTo.Value) dtpDateTo.Value = dtpDateFrom.Value;
         }
     }
     public class Control
@@ -258,6 +688,11 @@ namespace WinformProtocol
         {
             get { return listener; }
             set { listener = value; }
+        }
+        public Form1 getForm1fromControl
+        {
+            get { return form1; }
+
         }
         public static string CalculateChecksum(string dataToCalculate)
         {
@@ -341,6 +776,35 @@ namespace WinformProtocol
                 form.TextLog = form.TextLog + value;
                 form.textLog.SelectionStart = form.TextLog.Length;
                 form.textLog.ScrollToCaret();
+            }
+        }
+        public void ClearTextLog1Box(Form1 form)
+        {
+
+            if (form.textLog.InvokeRequired)
+            {
+                StringDelegate d = new StringDelegate(AppendTextLog1Box);
+                form.textLog.Invoke(d, new object[] { "", form });
+            }
+            else
+            {
+                form.textLog1.Text = "";
+                form.textLog1.SelectionStart = form.textLog1.Text.Length;
+                form.textLog1.ScrollToCaret();
+            }
+        }
+        public void AppendTextLog1Box(string value, Form1 form)
+        {
+            if (form.textLog1.InvokeRequired)
+            {
+                StringDelegate d = new StringDelegate(AppendTextLog1Box);
+                form.textLog.Invoke(d, new object[] { value, form });
+            }
+            else
+            {
+                form.textLog1.Text = form.textLog1.Text + value;
+                form.textLog1.SelectionStart = form.textLog1.Text.Length;
+                form.textLog1.ScrollToCaret();
             }
         }
         public void sendMsg(NetworkStream nwStream, String msg)
@@ -562,12 +1026,14 @@ namespace WinformProtocol
                     NpgsqlDataReader dr = cmd.ExecuteReader();
                     DataTable data = new DataTable();
                     data.Load(dr); // Load data phu hop trong command DUMP
+
                     string sql_command1 = "SELECT * from " + tablebinding;
                     cmd.CommandText = sql_command1;
                     dr = cmd.ExecuteReader();
                     DataTable tbcode = new DataTable();
                     byte[] databyte = new byte[BUFFER_SIZE];
                     tbcode.Load(dr); // Load bang chua mapping cac truong
+
                     string strvalue = "";
                     byte[] clnnamevalue;
                     byte[] clnnamestatus;
@@ -2184,4 +2650,340 @@ namespace WinformProtocol
             }
         }
     } // class ClientHandler 
+
+    public class ftp
+    {
+        private string host = null;
+        private string user = null;
+        private string pass = null;
+        private FtpWebRequest ftpRequest = null;
+        private FtpWebResponse ftpResponse = null;
+        private Stream ftpStream = null;
+        private int bufferSize = 2048;
+
+        /* Construct Object */
+        public ftp(string hostIP, string userName, string password) { host = hostIP; user = userName; pass = password; }
+
+        /* Download File */
+        public void download(string remoteFile, string localFile)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(host + "/" + remoteFile);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                /* Establish Return Communication with the FTP Server */
+                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                /* Get the FTP Server's Response Stream */
+                ftpStream = ftpResponse.GetResponseStream();
+                /* Open a File Stream to Write the Downloaded File */
+                FileStream localFileStream = new FileStream(localFile, FileMode.Create);
+                /* Buffer for the Downloaded Data */
+                byte[] byteBuffer = new byte[bufferSize];
+                int bytesRead = ftpStream.Read(byteBuffer, 0, bufferSize);
+                /* Download the File by Writing the Buffered Data Until the Transfer is Complete */
+                try
+                {
+                    while (bytesRead > 0)
+                    {
+                        localFileStream.Write(byteBuffer, 0, bytesRead);
+                        bytesRead = ftpStream.Read(byteBuffer, 0, bufferSize);
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                /* Resource Cleanup */
+                localFileStream.Close();
+                ftpStream.Close();
+                ftpResponse.Close();
+                ftpRequest = null;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            return;
+        }
+
+        /* Upload File */
+        public void upload(string remoteFile, string localFile)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(host + "/" + remoteFile);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+                /* Establish Return Communication with the FTP Server */
+                ftpStream = ftpRequest.GetRequestStream();
+                /* Open a File Stream to Read the File for Upload */
+                FileStream localFileStream = new FileStream(localFile, FileMode.Open);
+                /* Buffer for the Downloaded Data */
+                byte[] byteBuffer = new byte[bufferSize];
+                int bytesSent = localFileStream.Read(byteBuffer, 0, bufferSize);
+                /* Upload the File by Sending the Buffered Data Until the Transfer is Complete */
+                try
+                {
+                    while (bytesSent != 0)
+                    {
+                        ftpStream.Write(byteBuffer, 0, bytesSent);
+                        bytesSent = localFileStream.Read(byteBuffer, 0, bufferSize);
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                /* Resource Cleanup */
+                localFileStream.Close();
+                ftpStream.Close();
+                ftpRequest = null;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            return;
+        }
+
+        /* Delete File */
+        public void delete(string deleteFile)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)WebRequest.Create(host + "/" + deleteFile);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+                /* Establish Return Communication with the FTP Server */
+                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                /* Resource Cleanup */
+                ftpResponse.Close();
+                ftpRequest = null;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            return;
+        }
+
+        /* Rename File */
+        public void rename(string currentFileNameAndPath, string newFileName)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)WebRequest.Create(host + "/" + currentFileNameAndPath);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.Rename;
+                /* Rename the File */
+                ftpRequest.RenameTo = newFileName;
+                /* Establish Return Communication with the FTP Server */
+                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                /* Resource Cleanup */
+                ftpResponse.Close();
+                ftpRequest = null;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            return;
+        }
+
+        /* Create a New Directory on the FTP Server */
+        public void createDirectory(string newDirectory)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)WebRequest.Create(host + "/" + newDirectory);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+                /* Establish Return Communication with the FTP Server */
+                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                /* Resource Cleanup */
+                ftpResponse.Close();
+                ftpRequest = null;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            return;
+        }
+
+        /* Get the Date/Time a File was Created */
+        public string getFileCreatedDateTime(string fileName)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(host + "/" + fileName);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp;
+                /* Establish Return Communication with the FTP Server */
+                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                /* Establish Return Communication with the FTP Server */
+                ftpStream = ftpResponse.GetResponseStream();
+                /* Get the FTP Server's Response Stream */
+                StreamReader ftpReader = new StreamReader(ftpStream);
+                /* Store the Raw Response */
+                string fileInfo = null;
+                /* Read the Full Response Stream */
+                try { fileInfo = ftpReader.ReadToEnd(); }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                /* Resource Cleanup */
+                ftpReader.Close();
+                ftpStream.Close();
+                ftpResponse.Close();
+                ftpRequest = null;
+                /* Return File Created Date Time */
+                return fileInfo;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            /* Return an Empty string Array if an Exception Occurs */
+            return "";
+        }
+
+        /* Get the Size of a File */
+        public string getFileSize(string fileName)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(host + "/" + fileName);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.GetFileSize;
+                /* Establish Return Communication with the FTP Server */
+                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                /* Establish Return Communication with the FTP Server */
+                ftpStream = ftpResponse.GetResponseStream();
+                /* Get the FTP Server's Response Stream */
+                StreamReader ftpReader = new StreamReader(ftpStream);
+                /* Store the Raw Response */
+                string fileInfo = null;
+                /* Read the Full Response Stream */
+                try { while (ftpReader.Peek() != -1) { fileInfo = ftpReader.ReadToEnd(); } }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                /* Resource Cleanup */
+                ftpReader.Close();
+                ftpStream.Close();
+                ftpResponse.Close();
+                ftpRequest = null;
+                /* Return File Size */
+                return fileInfo;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            /* Return an Empty string Array if an Exception Occurs */
+            return "";
+        }
+
+        /* List Directory Contents File/Folder Name Only */
+        public string[] directoryListSimple(string directory)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(host + "/" + directory);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+                /* Establish Return Communication with the FTP Server */
+                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                /* Establish Return Communication with the FTP Server */
+                ftpStream = ftpResponse.GetResponseStream();
+                /* Get the FTP Server's Response Stream */
+                StreamReader ftpReader = new StreamReader(ftpStream);
+                /* Store the Raw Response */
+                string directoryRaw = null;
+                /* Read Each Line of the Response and Append a Pipe to Each Line for Easy Parsing */
+                try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                directoryRaw = directoryRaw.Remove(directoryRaw.ToString().LastIndexOf('|'), 1);
+                /* Resource Cleanup */
+                ftpReader.Close();
+                ftpStream.Close();
+                ftpResponse.Close();
+                ftpRequest = null;
+                /* Return the Directory Listing as a string Array by Parsing 'directoryRaw' with the Delimiter you Append (I use | in This Example) */
+                try { string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList; }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            /* Return an Empty string Array if an Exception Occurs */
+            return null;
+        }
+
+        /* List Directory Contents in Detail (Name, Size, Created, etc.) */
+        public string[] directoryListDetailed(string directory)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(host + "/" + directory);
+                /* Log in to the FTP Server with the User Name and Password Provided */
+                ftpRequest.Credentials = new NetworkCredential(user, pass);
+                /* When in doubt, use these options */
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                ftpRequest.KeepAlive = true;
+                /* Specify the Type of FTP Request */
+                ftpRequest.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                /* Establish Return Communication with the FTP Server */
+                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                /* Establish Return Communication with the FTP Server */
+                ftpStream = ftpResponse.GetResponseStream();
+                /* Get the FTP Server's Response Stream */
+                StreamReader ftpReader = new StreamReader(ftpStream);
+                /* Store the Raw Response */
+                string directoryRaw = null;
+                /* Read Each Line of the Response and Append a Pipe to Each Line for Easy Parsing */
+                try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                directoryRaw = directoryRaw.Remove(directoryRaw.ToString().LastIndexOf('|'), 1);
+                /* Resource Cleanup */
+                ftpReader.Close();
+                ftpStream.Close();
+                ftpResponse.Close();
+                ftpRequest = null;
+                /* Return the Directory Listing as a string Array by Parsing 'directoryRaw' with the Delimiter you Append (I use | in This Example) */
+                try { string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList; }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            /* Return an Empty string Array if an Exception Occurs */
+            return null;
+        }
+    }  //class ftp
 }

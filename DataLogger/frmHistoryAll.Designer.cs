@@ -220,6 +220,7 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(187, 53);
             this.panel4.TabIndex = 59;
+            this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
             // 
             // lblTo
             // 
