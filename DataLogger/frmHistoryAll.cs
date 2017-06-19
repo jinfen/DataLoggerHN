@@ -53,7 +53,7 @@ namespace DataLogger
         private DataViewType currentViewType = DataViewType.List;
 
         // Lưu kiểu loại tham số hiện tại: Analyzer/MPS/SamplerSystem/Station
-        private DataViewParameterType currentViewParameterType = DataViewParameterType.Analyzer;
+        private DataViewParameterType currentViewParameterType = DataViewParameterType.MPS;
 
         // Lưu inteval hiện tại: 5minute/60minute
         private DataTimeType currentTimeType = DataTimeType._5Minute;
@@ -384,7 +384,7 @@ namespace DataLogger
                     viewrow["Date"] = (Convert.ToDateTime(row["created"].ToString())).ToString("dd/MM/yyyy");
                     viewrow["Time"] = time;
 
-                    viewrow["Refrigeration_Temperature"] = row["refrigeration_temperature"];
+                    viewrow["Refrigeration_Temperature"] = String.Format("{0:0.00}", row["refrigeration_temperature"]);
                     viewrow["Bottle_Position"] = row["bottle_position"];
                     viewrow["Door_Status"] = row["door_status"];
                     viewrow["Equipment_Status"] = row["equipment_status"];
@@ -502,7 +502,7 @@ namespace DataLogger
                         DateTime _rdate = new DateTime(Int32.Parse(created.Substring(0, 4)), Int32.Parse(created.Substring(4, 2)), Int32.Parse(created.Substring(6, 2)), Int32.Parse(created.Substring(8, 2)), Int32.Parse(created.Substring(10, 2)), Int32.Parse(created.Substring(12, 2)));
 
                         viewrow["CreatedDate"] = _rdate;
-                        viewrow["Refrigeration_Temperature"] = row["refrigeration_temperature"];
+                        viewrow["Refrigeration_Temperature"] = String.Format("{0:0.00}", row["refrigeration_temperature"]);
                         viewrow["Bottle_Position"] = row["bottle_position"];
                         viewrow["Door_Status"] = row["door_status"];
                         viewrow["Equipment_Status"] = row["equipment_status"];
@@ -603,12 +603,12 @@ namespace DataLogger
                     //viewrow["Date"] = (Convert.ToDateTime((row["stored_date"].ToString().Split(' '))[0])).ToString("dd/MM/yyyy");
                     //viewrow["Time"] = ((int)row["stored_hour"]).ToString("00") + ":" + ((int)row["stored_minute"]).ToString("00") + ":00";
 
-                    viewrow["MPS_pH"] = System.Math.Round(Convert.ToDouble(row["mps_ph"]),2);
-                    viewrow["MPS_EC"] = System.Math.Round(Convert.ToDouble(row["mps_ec"]),2);
-                    viewrow["MPS_DO"] = System.Math.Round(Convert.ToDouble(row["mps_do"]),2);
-                    viewrow["MPS_TSS"] = System.Math.Round(Convert.ToDouble(row["mps_turbidity"]),2);
-                    viewrow["MPS_ORP"] = System.Math.Round(Convert.ToDouble(row["mps_orp"]),2);
-                    viewrow["MPS_Temp"] = System.Math.Round(Convert.ToDouble(row["mps_temp"]),2);
+                    viewrow["MPS_pH"] = String.Format("{0:0.00}", row["mps_ph"]);
+                    viewrow["MPS_EC"] = String.Format("{0:0.00}", row["mps_ec"]);
+                    viewrow["MPS_DO"] = String.Format("{0:0.00}", row["mps_do"]);
+                    viewrow["MPS_TSS"] = String.Format("{0:0.00}", row["mps_turbidity"]);
+                    viewrow["MPS_ORP"] = String.Format("{0:0.00}", row["mps_orp"]);
+                    viewrow["MPS_Temp"] = String.Format("{0:0.00}", row["mps_temp"]);
 
                     viewrow["Status_Val"] = row["mps_status"];
 
@@ -724,24 +724,24 @@ namespace DataLogger
                     int _status = (int)row["mps_status"];
                     //if (_status == 0)
                     //{
-                        viewrow = dt_view.NewRow();
-                        //DateTime _date = (DateTime)row["stored_date"];
-                        //int _hour = (int)row["stored_hour"];
-                        //int _minute = (int)row["stored_minute"];
-                        //DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
+                    viewrow = dt_view.NewRow();
+                    //DateTime _date = (DateTime)row["stored_date"];
+                    //int _hour = (int)row["stored_hour"];
+                    //int _minute = (int)row["stored_minute"];
+                    //DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
                  
-                        string created = (Convert.ToDateTime(row["created"].ToString())).ToString("yyyyMMddHHmmss");
-                        DateTime _rdate = new DateTime(Int32.Parse(created.Substring(0, 4)), Int32.Parse(created.Substring(4, 2)), Int32.Parse(created.Substring(6, 2)), Int32.Parse(created.Substring(8, 2)), Int32.Parse(created.Substring(10, 2)), Int32.Parse(created.Substring(12, 2)));
+                    string created = (Convert.ToDateTime(row["created"].ToString())).ToString("yyyyMMddHHmmss");
+                    DateTime _rdate = new DateTime(Int32.Parse(created.Substring(0, 4)), Int32.Parse(created.Substring(4, 2)), Int32.Parse(created.Substring(6, 2)), Int32.Parse(created.Substring(8, 2)), Int32.Parse(created.Substring(10, 2)), Int32.Parse(created.Substring(12, 2)));
                         
-                        viewrow["CreatedDate"] = _rdate;
-                        viewrow["MPS_pH"] = row["mps_ph"];
-                        viewrow["MPS_EC"] = row["mps_ec"];
-                        viewrow["MPS_DO"] = row["mps_do"];
-                        viewrow["MPS_TSS"] = row["mps_turbidity"];
-                        viewrow["MPS_ORP"] = row["mps_orp"];
-                        viewrow["MPS_Temp"] = row["mps_temp"];
+                    viewrow["CreatedDate"] = _rdate;
+                    viewrow["MPS_pH"] = String.Format("{0:0.00}", row["mps_ph"]);
+                    viewrow["MPS_EC"] = String.Format("{0:0.00}", row["mps_ec"]);
+                    viewrow["MPS_DO"] = String.Format("{0:0.00}", row["mps_do"]);
+                    viewrow["MPS_TSS"] = String.Format("{0:0.00}", row["mps_turbidity"]);
+                    viewrow["MPS_ORP"] = String.Format("{0:0.00}", row["mps_orp"]);
+                    viewrow["MPS_Temp"] = String.Format("{0:0.00}", row["mps_temp"]);
 
-                        dt_view.Rows.Add(viewrow);
+                    dt_view.Rows.Add(viewrow);
                     //}
                 }
 
@@ -874,9 +874,9 @@ namespace DataLogger
                         viewrow["Date"] = (Convert.ToDateTime(row["created"].ToString())).ToString("dd/MM/yyyy");
                         viewrow["Time"] = time;
 
-                        viewrow["TN"] = System.Math.Round(Convert.ToDouble(row["TN"]), 2);
-                        viewrow["TP"] = System.Math.Round(Convert.ToDouble(row["TP"]), 2);
-                        viewrow["TOC"] = System.Math.Round(Convert.ToDouble(row["TOC"]), 2);
+                        viewrow["TN"] = String.Format("{0:0.00}", row["tn"]);
+                        viewrow["TP"] = String.Format("{0:0.00}", row["tp"]);
+                        viewrow["TOC"] = String.Format("{0:0.00}", row["toc"]);
 
                         viewrow["TN_Status"] = row["TN_Status"];
                         viewrow["TP_Status"] = row["TP_Status"];
@@ -1013,9 +1013,9 @@ namespace DataLogger
                         DateTime _rdate = new DateTime(Int32.Parse(created.Substring(0, 4)), Int32.Parse(created.Substring(4, 2)), Int32.Parse(created.Substring(6, 2)), Int32.Parse(created.Substring(8, 2)), Int32.Parse(created.Substring(10, 2)), Int32.Parse(created.Substring(12, 2)));
 
                         viewrow["CreatedDate"] = _rdate;
-                        viewrow["TN"] = row["TN"];
-                        viewrow["TP"] = row["TP"];
-                        viewrow["TOC"] = row["TOC"];
+                        viewrow["TN"] = String.Format("{0:0.00}", row["tn"]);
+                        viewrow["TP"] = String.Format("{0:0.00}", row["tp"]);
+                        viewrow["TOC"] = String.Format("{0:0.00}", row["toc"]);
 
                         viewrow["TN_Status"] = row["TN_Status"];
                         viewrow["TP_Status"] = row["TP_Status"];
@@ -1749,7 +1749,8 @@ namespace DataLogger
 
                     foreach (ParamInfo item in DataLoggerParam.PARAMETER_LIST.Where(p => p.Selected))
                     {
-                        viewrow[item.NameDisplay] = System.Math.Round(Convert.ToDouble(row[item.NameDB]),2);
+                        viewrow[item.NameDisplay] = String.Format("{0:0.00}", row[item.NameDB]);
+
                         if (item.HasStatus)
                             viewrow[item.StatusNameVisible] = row[item.StatusNameDB];
 
@@ -2011,14 +2012,14 @@ namespace DataLogger
                             int _status = (int)row[item.StatusNameDB];
                             //if (_status == 0)
                             //{
-                                
-                                //DateTime _date = (DateTime)row["stored_date"];
-                                //int _hour = (int)row["stored_hour"];
-                                //int _minute = (int)row["stored_minute"];
-                                //DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
 
-                                //viewrow["StoredDate"] = _rdate;
-                                viewrow[item.NameDisplay] = row[item.NameDB];
+                            //DateTime _date = (DateTime)row["stored_date"];
+                            //int _hour = (int)row["stored_hour"];
+                            //int _minute = (int)row["stored_minute"];
+                            //DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
+
+                            //viewrow["StoredDate"] = _rdate;
+                            viewrow[item.NameDisplay] = String.Format("{0:0.00}", row[item.NameDB]);
                             //}
                             //else
                             //{

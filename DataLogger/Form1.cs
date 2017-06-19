@@ -39,12 +39,13 @@ namespace WinformProtocol
         private readonly data_5minute_value_repository db5m = new data_5minute_value_repository();
         public static Control control1;
         ManualResetEvent _requestTermination = new ManualResetEvent(false);
-        Thread _threadFTP =  null;
+        Thread _threadFTP = null;
+        private System.Threading.Timer threadingTimerFor5Minute;
         // The path to the key where Windows looks for startup applications
         RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         public Form1(frmNewMain newmain)
         {
-            
+
             InitializeComponent();
             newMain = newmain;
             SAMPPort = newmain.serialPortSAMP;
@@ -95,7 +96,7 @@ namespace WinformProtocol
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
             //SAMPPort.DataReceived += mySerialThing_DataReceived;
             station existedStationsSetting = new station_repository().get_info();
             port = 3001;
@@ -107,7 +108,7 @@ namespace WinformProtocol
             textUserFTP.Text = existedStationsSetting.ftpusername;
             textFolderFTP.Text = existedStationsSetting.ftpfolder;
             btnListen.PerformClick();
-            
+
             this.WindowState = FormWindowState.Normal;
             this.Hide();
 
@@ -120,9 +121,11 @@ namespace WinformProtocol
             /////////////////////////////////////////////////////////////////////
             //Console.WriteLine("FORM 1 lenght " + e.Data.Length);
             //isSamp = 2;
-            foreach (var a in e.Data) {
+            foreach (var a in e.Data)
+            {
                 //Console.WriteLine("FORM 1 " + a);
-                if (a == 0x06) {
+                if (a == 0x06)
+                {
                     //Console.WriteLine("FORM 1 ACK");
                     isSamp = 10;
                 }
@@ -207,7 +210,7 @@ namespace WinformProtocol
                 while (!_requestTermination.WaitOne(0))
                 {
                     // do something usefull
-                    ManualFTP();
+                    ManualFTP(dtpDateFrom.Value, dtpDateTo.Value);
                 }
 
             });
@@ -313,7 +316,15 @@ namespace WinformProtocol
             //    }
             //}
         }
-        public void ManualFTP()
+        //public void LastedFTP(object state)
+        //public void ManualFTP()     258	        
+        public void LastedFTP(object state)
+        {
+            setting_repository s = new setting_repository();
+            int id = s.get_id_by_key("lasted_push");
+            //ManualFTP(lastedPush, DateTime.Now);
+        }
+        public void ManualFTP(DateTime dtpDateFrom, DateTime dtpDateTo)
         {
             using (NpgsqlDBConnection db = new NpgsqlDBConnection())
             {
@@ -344,7 +355,7 @@ namespace WinformProtocol
                             _valueListForQuery.ToArray();
                             _paramListForQuery.ToArray();
                             DataTable dt_source = null;
-                            dt_source = db5m.get_all_custom(dtpDateFrom.Value, dtpDateTo.Value, _paramListForQuery);
+                            dt_source = db5m.get_all_custom(dtpDateFrom, dtpDateTo, _paramListForQuery);
                             foreach (DataRow row3 in dt_source.Rows)
                             {
                                 frmNewMain newmain = new frmNewMain();
@@ -356,7 +367,7 @@ namespace WinformProtocol
                                 DateTime created = (DateTime)row3["created"];
                                 for (int i = 0; i < _paramListForQuery.Count; i++)
                                 {
-                                    var variable = Convert.ToDouble(Convert.ToString(row3[_paramListForQuery[i]]));
+                                    var variable = Convert.ToDouble(String.Format("{0:0.00}", row3[_paramListForQuery[i]]));
                                     //string code = Convert.ToString(row3[_valueListForQuery[i]]);
                                     switch (_valueListForQuery[i])
                                     {
@@ -401,7 +412,7 @@ namespace WinformProtocol
                                 {
                                     db5m.updatePush(id, 0, DateTime.Now);
                                 }
-                                
+
                             }
                         }
                         control1.AppendTextLog1Box("Manual/Success " + "END" + Environment.NewLine, control1.getForm1fromControl);
@@ -502,7 +513,7 @@ namespace WinformProtocol
                 }
                 /// 
                 /// Day Folder
-                string[] simpleDirectoryDay = ftpClient.directoryListSimple(folderPathM);               
+                string[] simpleDirectoryDay = ftpClient.directoryListSimple(folderPathM);
                 Boolean hasFolderD = false;
                 for (int i = 0; i < simpleDirectoryYear.Count(); i++)
                 {
@@ -576,47 +587,87 @@ namespace WinformProtocol
                             foreach (DataRow row2 in tbcode.Rows)
                             {
                                 string code = Convert.ToString(row2["code"]);
+                                int min_value = Convert.ToInt32(row2["min_value"]);
                                 switch (code)
                                 {
                                     case "ph":
-                                        csv.Append(date + "\t" + "ph" + "\t" + data.MPS_pH + "\t" + "");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_pH)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "ph" + "\t" + String.Format("{0:0.00}", data.MPS_pH) + "\t" + "");
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "ec":
-                                        csv.Append(date + "\t" + "ec" + "\t" + data.MPS_EC + "\t" + "uS/cm");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_EC)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "ec" + "\t" + String.Format("{0:0.00}", data.MPS_EC) + "\t" + "uS/cm");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "do":
-                                        csv.Append(date + "\t" + "do" + "\t" + data.MPS_DO + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_DO)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "do" + "\t" + String.Format("{0:0.00}", data.MPS_DO) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "tss":
-                                        csv.Append(date + "\t" + "tss" + "\t" + data.MPS_Turbidity + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Turbidity)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "tss" + "\t" + String.Format("{0:0.00}", data.MPS_Turbidity) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "orp":
-                                        csv.Append(date + "\t" + "orp" + "\t" + data.MPS_ORP + "\t" + "mV");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_ORP)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "orp" + "\t" + String.Format("{0:0.00}", data.MPS_ORP) + "\t" + "mV");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "temp":
-                                        csv.Append(date + "\t" + "temp" + "\t" + data.MPS_Temp + "\t" + "oC");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Temp)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "temp" + "\t" + String.Format("{0:0.00}", data.MPS_Temp) + "\t" + "oC");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "turbi":
-                                        csv.Append(date + "\t" + "turbi" + "\t" + data.MPS_Turbidity + "\t" + "NTU");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Turbidity)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "turbi" + "\t" + String.Format("{0:0.00}", data.MPS_Turbidity) + "\t" + "NTU");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "tn":
-                                        csv.Append(date + "\t" + "tn" + "\t" + data.TN + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.TN)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "tn" + "\t" + String.Format("{0:0.00}", data.TN) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "tp":
-                                        csv.Append(date + "\t" + "tp" + "\t" + data.TP + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.TP)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "tp" + "\t" + String.Format("{0:0.00}", data.TP) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "toc":
-                                        csv.Append(date + "\t" + "toc" + "\t" + data.TOC + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.TOC)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "toc" + "\t" + String.Format("{0:0.00}", data.TOC) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                 }
                             }
@@ -1070,22 +1121,25 @@ namespace WinformProtocol
                         //strvalue = strvalue + DateFormat(Convert.ToString(row1["created"])) + tbcode.Rows.Count.ToString() + "\\";
                         foreach (DataRow row2 in tbcode.Rows)
                         {
+                            int min_value = Convert.ToInt32(row2["min_value"]);
+                            if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]))>= min_value)
+                            {
+                                byte[] _code = _encoder.GetBytes(Convert.ToString(row2["code"]));
+                                //byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamevalue"])]), 10));
+                                byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
+                                byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
+                                //strvalue = strvalue + Convert.ToString(row2["code"]);
+                                code = new byte[5];
+                                _code.CopyTo(code, 0);
+                                //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamevalue"])]), 10);
+                                clnnamevalue = new byte[10];
+                                _clnnamevalue.CopyTo(clnnamevalue, 10 - _clnnamevalue.Length);
+                                //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2);
+                                clnnamestatus = new byte[2];
+                                _clnnamestatus.CopyTo(clnnamestatus, 2 - _clnnamestatus.Length);
 
-                            byte[] _code = _encoder.GetBytes(Convert.ToString(row2["code"]));
-                            byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamevalue"])]), 10));
-                            byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
-                            //strvalue = strvalue + Convert.ToString(row2["code"]);
-                            code = new byte[5];
-                            _code.CopyTo(code, 0);
-                            //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamevalue"])]), 10);
-                            clnnamevalue = new byte[10];
-                            _clnnamevalue.CopyTo(clnnamevalue, 10 - _clnnamevalue.Length);
-                            //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2);
-                            clnnamestatus = new byte[2];
-                            _clnnamestatus.CopyTo(clnnamestatus, 2 - _clnnamestatus.Length);
-
-                            sql = sql.Concat(code).Concat(clnnamevalue).Concat(clnnamestatus).ToArray();
-
+                                sql = sql.Concat(code).Concat(clnnamevalue).Concat(clnnamestatus).ToArray();
+                            }
                         }
                         lstData.Add(sql);
                     }
@@ -1719,7 +1773,7 @@ namespace WinformProtocol
         {
 
         }
-        public void SAMP(string newstationid,SerialPort serialPortSAMP, byte[] buffer, String data, int j, NetworkStream nwStream, TcpClient client,water_sampler objWaterSamplerGLobal)
+        public void SAMP(string newstationid, SerialPort serialPortSAMP, byte[] buffer, String data, int j, NetworkStream nwStream, TcpClient client, water_sampler objWaterSamplerGLobal)
         {
             if (_encoder.GetString(SubArray(buffer, j + 26, 2)).Equals("00"))
             {
@@ -1735,7 +1789,7 @@ namespace WinformProtocol
                     sendByte(nwStream, _EOT, form1);
                     Form1.isSamp = 11;
                 }
-                else if(Form1.isSamp == 00)
+                else if (Form1.isSamp == 00)
                 {
                     byte[] _NAK = new byte[1];
                     new byte[] { 0x15 }.CopyTo(_NAK, 0);
@@ -1770,7 +1824,8 @@ namespace WinformProtocol
                 byte[] _header = _STX.Concat(_Command).Concat(_StationCode).Concat(_Datetime).Concat(_Analyze).ToArray();
 
                 byte[] _Temp = new byte[10];
-                _encoder.GetBytes(objWaterSamplerGLobal.refrigeration_Temperature.ToString("00.00")).CopyTo(_Temp, 0);
+                //_encoder.GetBytes(objWaterSamplerGLobal.refrigeration_Temperature.ToString("00.00")).CopyTo(_Temp, 0);
+                _encoder.GetBytes(String.Format("{0:0.00}", objWaterSamplerGLobal.refrigeration_Temperature)).CopyTo(_Temp, 0);
 
                 byte[] _Type = new byte[1];
                 _encoder.GetBytes("1").CopyTo(_Type, 0);
@@ -1829,7 +1884,7 @@ namespace WinformProtocol
                     }
                     if (nwStream.Read(buffer, 0, buffer.Length) != 0)
                     {
-                        if (buffer[0] == 6 )
+                        if (buffer[0] == 6)
                         {
                             sendByte(nwStream, _EOT, form1);
                             a = 0;
@@ -2023,7 +2078,7 @@ namespace WinformProtocol
             ThreadReclaim = new Thread(new ThreadStart(Reclaim));
             ThreadReclaim.Start();
             Int32 Port = port;
-            IPAddress LocalAddr = localAddr;   
+            IPAddress LocalAddr = localAddr;
             try
             {
                 listener = new TcpListener(LocalAddr, Port);
@@ -2050,7 +2105,8 @@ namespace WinformProtocol
                         if (handler != null)
                         {
                             ClientNbr = ClientNbr + 1;
-                            if( ClientNbr % 25 == 0) {
+                            if (ClientNbr % 25 == 0)
+                            {
                                 ClearTextBox(form1);
                             }
                             AppendTextBox(Environment.NewLine + "Client#" + ClientNbr + " accepted!", form1);
@@ -2338,7 +2394,7 @@ namespace WinformProtocol
         {
             //init(null, serialPortTN, serialPortTP, serialPortTOC, serialPortSAMP, nwStream, buffer, data, client, username, objRelayIOControlGlobal, objStationStatusGlobal, objWaterSamplerGLobal, objMeasuredDataGlobal);
         }
-        public void init(string newstationid,Form1 form, SerialPort serialPortTN, SerialPort serialPortTP, SerialPort serialPortTOC, SerialPort serialPortSAMP, NetworkStream nwStream, byte[] buffer, String data, TcpClient client, String username, relay_io_control objRelayIOControlGlobal, station_status objStationStatusGlobal, water_sampler objWaterSamplerGLobal, measured_data objMeasuredDataGlobal)
+        public void init(string newstationid, Form1 form, SerialPort serialPortTN, SerialPort serialPortTP, SerialPort serialPortTOC, SerialPort serialPortSAMP, NetworkStream nwStream, byte[] buffer, String data, TcpClient client, String username, relay_io_control objRelayIOControlGlobal, station_status objStationStatusGlobal, water_sampler objWaterSamplerGLobal, measured_data objMeasuredDataGlobal)
         {
             //Control control = new
             int i;
@@ -2391,7 +2447,7 @@ namespace WinformProtocol
                         }
                         else if (_encoder.GetString(SubArray(buffer, j + 15, 4)).Equals("SAMP"))
                         {
-                            SAMP(newstationid,serialPortSAMP, buffer, data, j, nwStream, client, objWaterSamplerGLobal);
+                            SAMP(newstationid, serialPortSAMP, buffer, data, j, nwStream, client, objWaterSamplerGLobal);
                             break;
                         }
                         else if (_encoder.GetString(SubArray(buffer, j + 15, 4)).Equals("INFO"))
@@ -2417,7 +2473,7 @@ namespace WinformProtocol
                             break;
                         }
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         sendByte(nwStream, _encoder.GetBytes("ERROR : FORMAT MESSAGE INTI"), form1);
                         //sendMsg(nwStream, "ERROR : FORMAT MESSAGE");

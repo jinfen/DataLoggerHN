@@ -162,6 +162,7 @@ namespace DataLogger
         private byte[] ADAM405x_receive_buffer = new byte[2048];
         private int ADAM405x_buffer_counter = 0;
 
+        private readonly data_5minute_value_repository db5m = new data_5minute_value_repository();
         private readonly data_60minute_value_repository db60m = new data_60minute_value_repository();
         private readonly maintenance_log_repository _maintenance_logs = new maintenance_log_repository();
 
@@ -2952,47 +2953,87 @@ namespace DataLogger
                             foreach (DataRow row2 in tbcode.Rows)
                             {
                                 string code = Convert.ToString(row2["code"]);
+                                int min_value = Convert.ToInt32(row2["min_value"]);
                                 switch (code)
                                 {
                                     case "ph":
-                                        csv.Append(date + "\t" + "ph" + "\t" + data.MPS_pH + "\t" + "");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_pH)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "ph" + "\t" + String.Format("{0:0.00}", data.MPS_pH) + "\t" + "");
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "ec":
-                                        csv.Append(date + "\t" + "ec" + "\t" + data.MPS_EC + "\t" + "uS/cm");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_EC)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "ec" + "\t" + String.Format("{0:0.00}", data.MPS_EC) + "\t" + "uS/cm");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "do":
-                                        csv.Append(date + "\t" + "do" + "\t" + data.MPS_DO + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_DO)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "do" + "\t" + String.Format("{0:0.00}", data.MPS_DO) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "tss":
-                                        csv.Append(date + "\t" + "tss" + "\t" + data.MPS_Turbidity + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Turbidity)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "tss" + "\t" + String.Format("{0:0.00}", data.MPS_Turbidity) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "orp":
-                                        csv.Append(date + "\t" + "orp" + "\t" + data.MPS_ORP + "\t" + "mV");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_ORP)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "orp" + "\t" + String.Format("{0:0.00}", data.MPS_ORP) + "\t" + "mV");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "temp":
-                                        csv.Append(date + "\t" + "temp" + "\t" + data.MPS_Temp + "\t" + "oC");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Temp)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "temp" + "\t" + String.Format("{0:0.00}", data.MPS_Temp) + "\t" + "oC");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "turbi":
-                                        csv.Append(date + "\t" + "turbi" + "\t" + data.MPS_Turbidity + "\t" + "NTU");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Turbidity)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "turbi" + "\t" + String.Format("{0:0.00}", data.MPS_Turbidity) + "\t" + "NTU");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "tn":
-                                        csv.Append(date + "\t" + "tn" + "\t" + data.TN + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.TN)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "tn" + "\t" + String.Format("{0:0.00}", data.TN) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "tp":
-                                        csv.Append(date + "\t" + "tp" + "\t" + data.TP + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.TP)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "tp" + "\t" + String.Format("{0:0.00}", data.TP) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                     case "toc":
-                                        csv.Append(date + "\t" + "toc" + "\t" + data.TOC + "\t" + "mg/L");
-                                        csv.AppendLine();
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.TOC)) >= min_value)
+                                        {
+                                            csv.Append(date + "\t" + "toc" + "\t" + String.Format("{0:0.00}", data.TOC) + "\t" + "mg/L");
+
+                                            csv.AppendLine();
+                                        }
                                         break;
                                 }
                             }
@@ -3264,6 +3305,122 @@ namespace DataLogger
             catch (Exception e) {
                 Form1.control1.AppendTextLog1Box("Auto/Error" + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl);
                 return false;
+            }
+        }
+        public Boolean ManualFTP(DateTime dtpDateFrom, DateTime dtpDateTo)
+        {
+            using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            {
+                try
+                {
+                    if (db.open_connection())
+                    {
+                        string sql_command1 = "SELECT * from " + "databinding";
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command1;
+                            NpgsqlDataReader dr;
+                            dr = cmd.ExecuteReader();
+                            DataTable tbcode = new DataTable();
+                            tbcode.Load(dr); // Load bang chua mapping cac truong
+
+                            List<string> _paramListForQuery = new List<string>();
+                            List<string> _codeListForQuery = new List<string>();
+                            List<string> _minListForQuery = new List<string>();
+
+                            foreach (DataRow row2 in tbcode.Rows)
+                            {
+                                string code = Convert.ToString(row2["code"]);
+                                _codeListForQuery.Add(code);
+                                string clnnamevalue = Convert.ToString(row2["clnnamevalue"]);
+                                _paramListForQuery.Add(clnnamevalue);
+                                string min_value = Convert.ToString(row2["min_value"]);
+                                _minListForQuery.Add(min_value);
+                            }
+
+                            _codeListForQuery.ToArray();
+                            _paramListForQuery.ToArray();
+                            DataTable dt_source = null;
+                            dt_source = db5m.get_all_custom(dtpDateFrom, dtpDateTo, _paramListForQuery);
+                            foreach (DataRow row3 in dt_source.Rows)
+                            {
+                                frmNewMain newmain = new frmNewMain();
+                                data_value data = new data_value();
+                                //Type elementType = Type.GetType(_paramListForQuery[0]);
+                                //Type listType = typeof(string).MakeGenericType(new Type[] { elementType });
+                                //object list = Activator.CreateInstance(listType);
+                                int id = Int32.Parse(Convert.ToString(row3["id"]));
+                                DateTime created = (DateTime)row3["created"];
+                                data.created = created;
+                                for (int i = 0; i < _paramListForQuery.Count; i++)
+                                {
+                                    var variable = Convert.ToDouble(String.Format("{0:0.00}", row3[_paramListForQuery[i]]));
+                                    //string code = Convert.ToString(row3[_valueListForQuery[i]]);
+                                    switch (_codeListForQuery[i])
+                                    {
+                                        case "ph":
+                                            data.MPS_pH = variable;
+                                            break;
+                                        case "ec":
+                                            data.MPS_EC = variable;
+                                            break;
+                                        case "do":
+                                            data.MPS_DO = variable;
+                                            break;
+                                        case "turbi":
+                                            data.MPS_Turbidity = variable;
+                                            break;
+                                        case "tss":
+                                            data.MPS_Turbidity = variable;
+                                            break;
+                                        case "orp":
+                                            data.MPS_ORP = variable;
+                                            break;
+                                        case "temp":
+                                            data.MPS_Temp = variable;
+                                            break;
+                                        case "tn":
+                                            data.TN = variable;
+                                            break;
+                                        case "tp":
+                                            data.TP = variable;
+                                            break;
+                                        case "toc":
+                                            data.TOC = variable;
+                                            break;
+                                    }
+                                }
+                                if (FTP(data, created))
+                                {
+                                    db5m.updatePush(id, 1, DateTime.Now);
+                                    //control1.AppendTextLog1Box();
+                                    setting_repository s = new setting_repository();
+                                    int idLasted = s.get_id_by_key("lasted_push");
+                                    setting set = new setting();
+                                    set.setting_key = "lasted_push";
+                                    set.setting_type = "";
+                                    set.setting_value = "";
+                                    set.note = "";
+                                    set.setting_datetime = data.created;
+                                    //int id = setre.get_id_by_key("lasted_push");
+                                    s.update_with_id(ref set, idLasted);
+                                }
+                                else
+                                {
+                                    db5m.updatePush(id, 0, DateTime.Now);
+                                }
+
+                            }
+                        }
+                        Form1.control1.AppendTextLog1Box("Lasted/Success " + "END" + Environment.NewLine, Form1.control1.getForm1fromControl);
+                    }
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                    return false;
+                }
             }
         }
         #endregion
@@ -5832,11 +5989,25 @@ namespace DataLogger
 
                             }
 
-                            /// Send File ftp
-                            if (main.FTP(objLatest))
+                            ///
+                            setting_repository s = new setting_repository();
+                            int id = s.get_id_by_key("lasted_push");
+                            DateTime lastedPush = s.get_datetime_by_id(id);
+
+                            /// Send File ftp			
+                            if (main.ManualFTP(lastedPush, DateTime.Now) && main.FTP(objLatest))
                             {
                                 objLatest.push = 1;
                                 objLatest.push_time = DateTime.Now;
+                                //setting_repository setre = new setting_repository();
+                                setting set = new setting();
+                                set.setting_key = "lasted_push";
+                                set.setting_type = "";
+                                set.setting_value = "";
+                                set.note = "";
+                                set.setting_datetime = objLatest.created;
+                                //int id = setre.get_id_by_key("lasted_push");
+                                s.update_with_id(ref set, id);
                             }
                             else
                             {
@@ -5857,17 +6028,31 @@ namespace DataLogger
                         }
                         else
                         {
+
                             if (GlobalVar.isMaintenanceStatus && GlobalVar.maintenanceLog.pumping_system == 1)
                             {
                                 objDataValue.pumping_system_status = CommonInfo.INT_STATUS_MAINTENANCE;
                                 //objDataValue.station_status = CommonInfo.INT_STATUS_MAINTENANCE;
                             }
-                            
-                            /// Send File ftp
-                            if (main.FTP(objDataValue))
+                            ///
+                            setting_repository s = new setting_repository();
+                            int id = s.get_id_by_key("lasted_push");
+                            DateTime lastedPush = s.get_datetime_by_id(id);
+
+                            /// Send File ftp			
+                            if (main.ManualFTP(lastedPush, DateTime.Now) && main.FTP(objDataValue))
                             {
                                 objDataValue.push = 1;
                                 objDataValue.push_time = DateTime.Now;
+                                //setting_repository setre = new setting_repository();
+                                setting set = new setting();
+                                set.setting_key = "lasted_push";
+                                set.setting_type = "";
+                                set.setting_value = "";
+                                set.note = "";
+                                set.setting_datetime = objDataValue.created;
+                                //int id = setre.get_id_by_key("lasted_push");
+                                s.update_with_id(ref set, id);
                             }
                             else
                             {

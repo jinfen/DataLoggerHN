@@ -38,7 +38,7 @@ namespace DataLogger.Data
                                             " module_Temperature, module_Humidity, " +
                                             " stored_date, stored_hour, stored_minute, MPS_status,pumping_system_status, station_status, " +
                                             " refrigeration_temperature, bottle_position, door_status, equipment_status, " +
-                                            " push, push_time, "+
+                                            " push, push_time, " +
                                             " created)" +
                                             " VALUES (:MPS_pH, :MPS_pH_status, :MPS_EC, :MPS_EC_status, " +
                                             " :MPS_DO,:MPS_DO_status, :MPS_Turbidity, :MPS_Turbidity_status, " +
@@ -175,7 +175,7 @@ namespace DataLogger.Data
                                             " module_Humidity =:module_Humidity, stored_date =:stored_date,  " +
                                             " stored_hour =:stored_hour, stored_minute =:stored_minute,  " +
 
-                                            " MPS_status =:MPS_status, pumping_system_status =:pumping_system_status, station_status=:station_status, "+
+                                            " MPS_status =:MPS_status, pumping_system_status =:pumping_system_status, station_status=:station_status, " +
                                             " refrigeration_temperature =:refrigeration_temperature,  " +
                                             " bottle_position =:bottle_position, door_status =:door_status,  " +
                                             " equipment_status =:equipment_status, created =:created,  " +
@@ -303,7 +303,7 @@ namespace DataLogger.Data
                         return -1;
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     if (db != null)
                     {
@@ -423,7 +423,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, toc, toc_status
+                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, toc, toc_status
                                                FROM data_5minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR
@@ -498,7 +498,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tn, tn_status
+                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, tn, tn_status
                                                FROM data_5minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR
@@ -573,7 +573,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tp, tp_status
+                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, tp, tp_status
                                                FROM data_5minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR
@@ -1016,15 +1016,20 @@ namespace DataLogger.Data
                         string sql_command = @"SELECT created, id, stored_date, stored_hour, stored_minute
                                                         {custom_param}
                                                FROM data_5minute_values
-                                               WHERE created BETWEEN :date_from AND :date_to
+                                               WHERE created BETWEEN  :date_from  AND  :date_to 
                                                ORDER BY created ASC
                                                 ";
-
+                        string custom_param = "";
+                        if (custom_param_list != null && custom_param_list.Count > 0)
+                        {
+                            custom_param = " , " + string.Join(",", custom_param_list);
+                        }
+                        sql_command = sql_command.Replace("{custom_param}", custom_param);
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
 
-                        DateTime date_from = datetime_from;
-                        DateTime date_to = datetime_to;
+                        DateTime date_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day, datetime_from.Hour, datetime_from.Minute, datetime_from.Second);
+                        DateTime date_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day, datetime_to.Hour, datetime_to.Minute, datetime_to.Second);
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
@@ -1278,7 +1283,7 @@ namespace DataLogger.Data
                 { db.close_connection(); }
             }
         }
- /// <summary>
+        /// <summary>
         ///
         /// </summary>
         /// <param name="datetime_from"></param>
