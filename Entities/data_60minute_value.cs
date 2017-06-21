@@ -20,6 +20,8 @@ namespace DataLogger.Entities
         public int MPS_ORP_status { get; set; }
         public Double MPS_Temp { get; set; }
         public int MPS_Temp_status { get; set; }
+        public Double MPS_SS { get; set; }
+        public int MPS_SS_status { get; set; }
         public Double TN { get; set; }
         public int TN_status { get; set; }
         public Double TP { get; set; }
@@ -42,7 +44,7 @@ namespace DataLogger.Entities
         public int module_air2 { get; set; }
         public int module_cleaning { get; set; }
         public Double module_Temperature { get; set; }
-        public Double module_Humidity { get; set; }       
+        public Double module_Humidity { get; set; }
 
         public DateTime created { get; set; }
 
@@ -53,55 +55,57 @@ namespace DataLogger.Entities
         public int MPS_status { get; set; }
 
         // sampler data
-        public Double refrigeration_temperature{ get; set; }
+        public Double refrigeration_temperature { get; set; }
         public int bottle_position { get; set; }
         public int door_status { get; set; } // 0->6; 0: close
         public int equipment_status { get; set; } // 0:normal
         // 0:normal; 6: Maintenance; 7: periodic; 8: incident
         public int pumping_system_status { get; set; }
         // 0:normal; 6: Maintenance; 7: periodic; 8: incident
-        public int station_status { get; set; } 
+        public int station_status { get; set; }
         public data_60minute_value()
         {
             id = -1;
-            MPS_pH = -1000;
-            MPS_EC = -1000;
-            MPS_DO = -1000;
-            MPS_Turbidity = -1000;
-            MPS_ORP = -1000;
-            MPS_Temp = -1000;
-            TN = -1000;
-            TP = -1000;
-            TOC = -1000;
+            MPS_pH = -1;
+            MPS_EC = -1;
+            MPS_DO = -1;
+            MPS_Turbidity = -1;
+            MPS_ORP = -1;
+            MPS_Temp = -1;
+            MPS_SS = -1;
+            TN = -1;
+            TP = -1;
+            TOC = -1;
 
-            MPS_status = -1000;
-            MPS_pH_status = -1000;
-            MPS_EC_status = -1000;
-            MPS_DO_status = -1000;
-            MPS_Turbidity_status = -1000;
-            MPS_ORP_status = -1000;
-            MPS_Temp_status = -1000;
-            TN_status = -1000;
-            TP_status = -1000;
-            TOC_status = -1000;
+            MPS_status = -1;
+            MPS_pH_status = -1;
+            MPS_EC_status = -1;
+            MPS_DO_status = -1;
+            MPS_Turbidity_status = -1;
+            MPS_ORP_status = -1;
+            MPS_Temp_status = -1;
+            MPS_SS_status = -1;
+            TN_status = -1;
+            TP_status = -1;
+            TOC_status = -1;
 
-            module_Power = -1000;
-            module_UPS = -1000;
-            module_Door = -1000;
-            module_Fire = -1000;
-            module_Flow = -1000;
-            module_PumpLAM = -1000;
-            module_PumpLRS = -1000;
-            module_PumpLFLT = -1000;
-            module_PumpRAM = -1000;
-            module_PumpRRS = -1000;
-            module_PumpRFLT = -1000;
-            module_air1 = -1000;
-            module_air2 = -1000;
-            module_cleaning = -1000;
+            module_Power = -1;
+            module_UPS = -1;
+            module_Door = -1;
+            module_Fire = -1;
+            module_Flow = -1;
+            module_PumpLAM = -1;
+            module_PumpLRS = -1;
+            module_PumpLFLT = -1;
+            module_PumpRAM = -1;
+            module_PumpRRS = -1;
+            module_PumpRFLT = -1;
+            module_air1 = -1;
+            module_air2 = -1;
+            module_cleaning = -1;
 
-            module_Temperature = -1000;
-            module_Humidity = -1000;       
+            module_Temperature = -1;
+            module_Humidity = -1;
 
             created = DateTime.Now;
 

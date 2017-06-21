@@ -181,7 +181,7 @@ namespace WinformProtocol
                 }
             }
             Dispose();
-            control1.AppendTextLog1Box("Manual/Success " + "END" + Environment.NewLine, control1.getForm1fromControl);
+            control1.AppendTextBox("Manual/Success " + "END" + Environment.NewLine, control1.getForm1fromControl,1);
         }
 
         private void chkRun_CheckedChanged(object sender, EventArgs e)
@@ -415,7 +415,7 @@ namespace WinformProtocol
 
                             }
                         }
-                        control1.AppendTextLog1Box("Manual/Success " + "END" + Environment.NewLine, control1.getForm1fromControl);
+                        control1.AppendTextBox("Manual/Success " + "END" + Environment.NewLine, control1.getForm1fromControl,1);
                     }
                     Dispose();
                 }
@@ -554,12 +554,12 @@ namespace WinformProtocol
                 //ftpClient.upload("/test/2017/data_report.csv", @"C:\Users\Admin\Desktop\data_report.csv");
                 string filePath = Path.Combine(folderPathD, newFileName);
                 ftpClient.upload(filePath, newFilePath);
-                control1.AppendTextLog1Box("Manual/Success " + newFileName + Environment.NewLine, control1.getForm1fromControl);
+                control1.AppendTextBox("Manual/Success " + newFileName + Environment.NewLine, control1.getForm1fromControl,1);
                 return true;
             }
             catch (Exception e)
             {
-                control1.AppendTextLog1Box("Manual/Error " + newFileName + Environment.NewLine, control1.getForm1fromControl);
+                control1.AppendTextBox("Manual/Error " + newFileName + Environment.NewLine, control1.getForm1fromControl,1);
                 return false;
             }
         }
@@ -727,6 +727,8 @@ namespace WinformProtocol
         public static measured_data objMeasuredDataGlobal = new measured_data();
 
         internal delegate void StringDelegate(string data, Form1 form);
+        internal delegate void SetTextDelegate(string data, Form1 form);
+        internal delegate void SetClearTextDelegate(Form1 form);
         public Control()
         {
         }
@@ -771,7 +773,7 @@ namespace WinformProtocol
         //        form1.textLog.Text = text;
         //    }
         //}
-        public void ClearTextBox(Form1 form)
+        public void ClearTextBox(Form1 form, int i)
         {
             //if (form1.textLog.InvokeRequired)
             //{
@@ -788,19 +790,71 @@ namespace WinformProtocol
             //                                            Environment.NewLine);
             //                    });
 
-            if (form.textLog.InvokeRequired)
+            //if (form.textLog.InvokeRequired)
+            //{
+            //    StringDelegate d = new StringDelegate(AppendTextBox);
+            //    form.textLog.Invoke(d, new object[] { "", form });
+            //}
+            //else
+            //{
+            //    form.TextLog = "";
+            //    form.textLog.SelectionStart = form.TextLog.Length;
+            //    form.textLog.ScrollToCaret();
+            //}
+            if (i == 0)
             {
-                StringDelegate d = new StringDelegate(AppendTextBox);
-                form.textLog.Invoke(d, new object[] { "", form });
+                if (form.textLog.InvokeRequired)
+                {
+                    //StringDelegate d = new StringDelegate(AppendTextBox);
+                    //form.textLog.Invoke(d, new object[] { value, form });
+                    SetClearTextDelegate d = new SetClearTextDelegate(ClearText0);
+                    form.textLog.Invoke(d, new object[] { form });
+                }
+                else
+                {
+                    //form.TextLog.SuspendLayout();
+                    //form.TextLog = form.TextLog + value;
+                    //form.textLog.SelectionStart = form.TextLog.Length;
+                    //form.textLog.ScrollToCaret();
+                    ClearText0(form);
+                }
             }
-            else
+            if (i == 1)
             {
-                form.TextLog = "";
-                form.textLog.SelectionStart = form.TextLog.Length;
-                form.textLog.ScrollToCaret();
+                if (form.textLog1.InvokeRequired)
+                {
+                    //StringDelegate d = new StringDelegate(AppendTextBox);
+                    //form.textLog.Invoke(d, new object[] { value, form });
+                    SetClearTextDelegate d = new SetClearTextDelegate(ClearText1);
+                    form.textLog1.Invoke(d, new object[] { form });
+                }
+                else
+                {
+                    //form.TextLog.SuspendLayout();
+                    //form.TextLog = form.TextLog + value;
+                    //form.textLog.SelectionStart = form.TextLog.Length;
+                    //form.textLog.ScrollToCaret();
+                    ClearText1(form);
+                }
             }
         }
-        public void AppendTextBox(string value, Form1 form)
+        private void ClearText0(Form1 form)
+        {
+            form.textLog.SuspendLayout();
+            form.textLog.Text = "";
+            form.textLog.SelectionStart = form.textLog.Text.Length;
+            form.textLog.ScrollToCaret();
+            form.textLog.ResumeLayout();
+        }
+        private void ClearText1(Form1 form)
+        {
+            form.textLog1.SuspendLayout();
+            form.textLog1.Text = "";
+            form.textLog1.SelectionStart = form.textLog1.Text.Length;
+            form.textLog1.ScrollToCaret();
+            form.textLog1.ResumeLayout();
+        }
+        public void AppendTextBox(string value, Form1 form, int i)
         {
             //if (form1.textLog.InvokeRequired)
             //{
@@ -816,47 +870,58 @@ namespace WinformProtocol
             //                                            value,
             //                                            Environment.NewLine);
             //                    });
-
-            if (form.textLog.InvokeRequired)
+            if (i == 0)
             {
-                StringDelegate d = new StringDelegate(AppendTextBox);
-                form.textLog.Invoke(d, new object[] { value, form });
+                if (form.textLog.InvokeRequired)
+                {
+                    //StringDelegate d = new StringDelegate(AppendTextBox);
+                    //form.textLog.Invoke(d, new object[] { value, form });
+                    SetTextDelegate d = new SetTextDelegate(UpdateText0);
+                    form.textLog.Invoke(d, new object[] { value, form });
+                }
+                else
+                {
+                    //form.TextLog.SuspendLayout();
+                    //form.TextLog = form.TextLog + value;
+                    //form.textLog.SelectionStart = form.TextLog.Length;
+                    //form.textLog.ScrollToCaret();
+                    UpdateText0(value, form);
+                }
             }
-            else
+            if (i == 1)
             {
-                form.TextLog = form.TextLog + value;
-                form.textLog.SelectionStart = form.TextLog.Length;
-                form.textLog.ScrollToCaret();
+                if (form.textLog1.InvokeRequired)
+                {
+                    //StringDelegate d = new StringDelegate(AppendTextBox);
+                    //form.textLog.Invoke(d, new object[] { value, form });
+                    SetTextDelegate d = new SetTextDelegate(UpdateText1);
+                    form.textLog1.Invoke(d, new object[] { value, form });
+                }
+                else
+                {
+                    //form.TextLog.SuspendLayout();
+                    //form.TextLog = form.TextLog + value;
+                    //form.textLog.SelectionStart = form.TextLog.Length;
+                    //form.textLog.ScrollToCaret();
+                    UpdateText1(value, form);
+                }
             }
         }
-        public void ClearTextLog1Box(Form1 form)
+        private void UpdateText0(string text, Form1 form)
         {
-
-            if (form.textLog.InvokeRequired)
-            {
-                StringDelegate d = new StringDelegate(AppendTextLog1Box);
-                form.textLog.Invoke(d, new object[] { "", form });
-            }
-            else
-            {
-                form.textLog1.Text = "";
-                form.textLog1.SelectionStart = form.textLog1.Text.Length;
-                form.textLog1.ScrollToCaret();
-            }
+            form.textLog.SuspendLayout();
+            form.textLog.Text = form.textLog.Text + text + System.Environment.NewLine;
+            form.textLog.SelectionStart = form.textLog.Text.Length;
+            form.textLog.ScrollToCaret();
+            form.textLog.ResumeLayout();
         }
-        public void AppendTextLog1Box(string value, Form1 form)
+        private void UpdateText1(string text, Form1 form)
         {
-            if (form.textLog1.InvokeRequired)
-            {
-                StringDelegate d = new StringDelegate(AppendTextLog1Box);
-                form.textLog.Invoke(d, new object[] { value, form });
-            }
-            else
-            {
-                form.textLog1.Text = form.textLog1.Text + value;
-                form.textLog1.SelectionStart = form.textLog1.Text.Length;
-                form.textLog1.ScrollToCaret();
-            }
+            form.textLog1.SuspendLayout();
+            form.textLog1.Text = form.textLog1.Text + text + System.Environment.NewLine;
+            form.textLog1.SelectionStart = form.textLog1.Text.Length;
+            form.textLog1.ScrollToCaret();
+            form.textLog1.ResumeLayout();
         }
         public void sendMsg(NetworkStream nwStream, String msg)
         {
@@ -881,12 +946,12 @@ namespace WinformProtocol
             {
                 nwStream.Write(msg, 0, msg.Length);
                 nwStream.Flush();
-                AppendTextBox(Environment.NewLine + " Sended : " + _encoder.GetString(new_msg).Replace("\0", " "), form);
+                AppendTextBox(Environment.NewLine + " Sended : " + _encoder.GetString(new_msg).Replace("\0", " "), form,0);
             }
             catch
             {
-                AppendTextBox(Environment.NewLine + "SENDING: " + "\"" + _encoder.GetString(new_msg).Replace("\0", " ") + "\"" + " BUT", form);
-                AppendTextBox(Environment.NewLine + "ERROR : CAN NOT LISTEN ANY CONNECT, CHECK CONNECT IN CENTER.", form);
+                AppendTextBox(Environment.NewLine + "SENDING: " + "\"" + _encoder.GetString(new_msg).Replace("\0", " ") + "\"" + " BUT", form,0);
+                AppendTextBox(Environment.NewLine + "ERROR : CAN NOT LISTEN ANY CONNECT, CHECK CONNECT IN CENTER.", form,0);
             }
         }
         public string Encrypt(string data, string _publicKey, RSACryptoServiceProvider rsa)
@@ -895,7 +960,7 @@ namespace WinformProtocol
             var dataToEncrypt = _encoder.GetBytes(data);
             var encryptedByteArray = rsa.Encrypt(dataToEncrypt, false).ToArray();
             String encrypt = _encoder.GetString(encryptedByteArray);
-            AppendTextBox(Environment.NewLine + "ENCRYPT : " + encrypt, form1);
+            AppendTextBox(Environment.NewLine + "ENCRYPT : " + encrypt, form1,0);
             var length = encryptedByteArray.Count();
             var item = 0;
             var sb = new StringBuilder();
@@ -1718,7 +1783,7 @@ namespace WinformProtocol
                     }
                     buffer = new byte[BUFFER_SIZE];
                     sendByte(nwStream, _dataarray[ct], form1);
-                    AppendTextBox(Environment.NewLine + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString(), form1);
+                    AppendTextBox(Environment.NewLine + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString(), form1,0);
                     if (nwStream.Read(buffer, 0, buffer.Length) != 0)
                     {
                         if (buffer[0] == 6 && ct == ctend)  //ACK - Va het du lieu truyen
@@ -2088,7 +2153,7 @@ namespace WinformProtocol
                     int TestingCycle = 100;
                     int ClientNbr = 0;
                     // Start listening for connections.
-                    AppendTextBox(Environment.NewLine + "Waiting for a connection...", form1);
+                    AppendTextBox(Environment.NewLine + "Waiting for a connection...", form1,0);
                     while (TestingCycle > 0)
                     {
                         TcpClient handler;
@@ -2107,9 +2172,9 @@ namespace WinformProtocol
                             ClientNbr = ClientNbr + 1;
                             if (ClientNbr % 25 == 0)
                             {
-                                ClearTextBox(form1);
+                                ClearTextBox(form1,0);
                             }
-                            AppendTextBox(Environment.NewLine + "Client#" + ClientNbr + " accepted!", form1);
+                            AppendTextBox(Environment.NewLine + "Client#" + ClientNbr + " accepted!", form1,0);
                             // An incoming connection needs to be processed.
                             lock (ClientSockets.SyncRoot)
                             {
@@ -2135,7 +2200,7 @@ namespace WinformProtocol
             }
             catch (Exception e)
             {
-                AppendTextBox(Environment.NewLine + e.StackTrace, form1);
+                AppendTextBox(Environment.NewLine + e.StackTrace, form1,0);
                 Console.WriteLine(e.ToString());
             }
         }
@@ -2151,7 +2216,7 @@ namespace WinformProtocol
                         if (!((ClientHandler)Client).Alive)
                         {
                             ClientSockets.Remove(Client);
-                            AppendTextBox(Environment.NewLine + "A client left", form1);
+                            AppendTextBox(Environment.NewLine + "A client left", form1,0);
                         }
                     }
                 }
@@ -2182,17 +2247,17 @@ namespace WinformProtocol
                 String data = null;
                 TcpClient client = new TcpClient(AddressFamily.InterNetworkV6);
                 client.Client.DualMode = true;
-                AppendTextBox(Environment.NewLine + " >>> " + "Server Started", form1);
+                AppendTextBox(Environment.NewLine + " >>> " + "Server Started", form1,0);
                 counter = 0;
                 //server.Start();
                 while (true)
                 {
                     counter += 1;
                     //---incoming client connected---
-                    AppendTextBox(Environment.NewLine + " >> " + "While(true)", form1);
+                    AppendTextBox(Environment.NewLine + " >> " + "While(true)", form1,0);
                     client = tcpListener.AcceptTcpClient();
-                    AppendTextBox(Environment.NewLine + " >> " + client.Connected, form1);
-                    AppendTextBox(Environment.NewLine + " >> " + "Client IP:" + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() + " started!", form1);
+                    AppendTextBox(Environment.NewLine + " >> " + client.Connected, form1,0);
+                    AppendTextBox(Environment.NewLine + " >> " + "Client IP:" + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() + " started!", form1,0);
                     //Console.WriteLine(" >> " + "Client IP:" + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
                     //handleClinet handleClinet = new handleClinet();
                     //NetworkStream nwStream = client.GetStream();
@@ -2214,7 +2279,7 @@ namespace WinformProtocol
             {
                 tcpListener.Stop();
             }
-            AppendTextBox(Environment.NewLine + "End", form1);
+            AppendTextBox(Environment.NewLine + "End", form1,0);
             //Console.WriteLine("\nHit enter to continue...");
             //Console.Read();
         }
@@ -2232,7 +2297,7 @@ namespace WinformProtocol
                 //{
                 try
                 {
-                    AppendTextBox(Environment.NewLine + " >> " + "Listening ...", form1);
+                    AppendTextBox(Environment.NewLine + " >> " + "Listening ...", form1,0);
                     requestCount = requestCount + 1;
                     //---get the incoming data through a network stream--- 
                     if (!client.Connected)
@@ -2248,7 +2313,7 @@ namespace WinformProtocol
                     //buffer = new byte[BUFFER_SIZE];
                     //Console.WriteLine(nwStream.);
                     //int i = 0;
-                    AppendTextBox(Environment.NewLine + "Client Connect" + client.Connected, form1);
+                    AppendTextBox(Environment.NewLine + "Client Connect" + client.Connected, form1,0);
                     int i = nwStream.Read(buffer, 0, buffer.Length);
                     // bug o dong 1224, nguyen nhan co the do client close truoc khi lay dc network strem tu client              
                     //if (i != 0)
@@ -2269,7 +2334,7 @@ namespace WinformProtocol
                             //Console.WriteLine(randomnumber.ToString());   
                             //foreach (var item in buffer)
                             //{ Console.Write("{0}", item + " "); }
-                            AppendTextBox(Environment.NewLine + " Received: " + data, form1);
+                            AppendTextBox(Environment.NewLine + " Received: " + data, form1,0);
                             //Console.WriteLine("Length: {0}", data.Length);
                             //buffer.SubArray();
                             //if ((buffer[0] == 5 && datas[2].Remove(datas[2].Length - 1, 1).Equals(stationid)) || (buffer[0] == 5 && datas[2].Remove(datas[2].Length - 2, 2).Equals(stationid)) || (buffer[0] == 5 && datas[2].Equals(stationid)) || (buffer[0] == 2))
@@ -2288,12 +2353,12 @@ namespace WinformProtocol
                                 try
                                 {
                                     //buffer = new byte[BUFFER_SIZE];
-                                    AppendTextBox(Environment.NewLine + "DataAvailable " + nwStream.DataAvailable, form1);
+                                    AppendTextBox(Environment.NewLine + "DataAvailable " + nwStream.DataAvailable, form1,0);
 
                                     i = nwStream.Read(buffer, 0, buffer.Length);
                                     if (i != 0)
                                     {
-                                        AppendTextBox(Environment.NewLine + "DataAvailable " + nwStream.DataAvailable, form1);
+                                        AppendTextBox(Environment.NewLine + "DataAvailable " + nwStream.DataAvailable, form1,0);
                                         data = System.Text.Encoding.ASCII.GetString(buffer, 0, i);
                                         //Console.WriteLine("Received ENCRYPT : {0}", data);
                                         //sendMsg(nwStream, _privateKey);
@@ -2343,7 +2408,7 @@ namespace WinformProtocol
                             {
                                 int j = nwStream.Read(buffer, 0, buffer.Length);
                                 string error = System.Text.Encoding.ASCII.GetString(buffer, 0, i);
-                                AppendTextBox(Environment.NewLine + "Received : " + data, form1);
+                                AppendTextBox(Environment.NewLine + "Received : " + data, form1,0);
                                 sendByte(nwStream, _encoder.GetBytes("ERROR : FORMAT MESSAGE STATION ID"), form1);
                                 break;
                             }
@@ -2361,7 +2426,7 @@ namespace WinformProtocol
                     //    break;
 
                     //}
-                    AppendTextBox(Environment.NewLine + "nwStream Closed", form1);
+                    AppendTextBox(Environment.NewLine + "nwStream Closed", form1,0);
                     nwStream.Close();
                 }
                 catch (Exception ex)
@@ -2404,12 +2469,12 @@ namespace WinformProtocol
                 while
                 ((i = nwStream.Read(buffer, 0, buffer.Length)) != 0)
                 {
-                    AppendTextBox(Environment.NewLine + " Listening COMMAND ...", form1);
+                    AppendTextBox(Environment.NewLine + " Listening COMMAND ...", form1,0);
                     try
                     {
                         int j = newstationid.Length;
                         data = System.Text.Encoding.ASCII.GetString(buffer, 0, i);
-                        AppendTextBox(Environment.NewLine + " Received: " + data, form1);
+                        AppendTextBox(Environment.NewLine + " Received: " + data, form1,0);
                         int count = 1;
                         int choice = 0;
 
@@ -2578,7 +2643,7 @@ namespace WinformProtocol
                                 _privateKey = rsa.ToXmlString(true);
                                 _publicKey = rsa.ToXmlString(false);
 
-                                control.AppendTextBox(Environment.NewLine + "Received: " + data, form1);
+                                control.AppendTextBox(Environment.NewLine + "Received: " + data, form1,0);
                                 //buffer.SubArray();
                                 if (((buffer[0] == 5 && datas[2].Remove(datas[2].Length - 1, 1).Equals(stationid)) || (buffer[0] == 5 && datas[2].Remove(datas[2].Length - 2, 2).Equals(stationid)) || (buffer[0] == 5 && datas[2].Equals(stationid)))
                                     || ((buffer[0] == 5 && datas[2].Remove(datas[2].Length - 1, 1).Equals(newstationid)) || (buffer[0] == 5 && datas[2].Remove(datas[2].Length - 2, 2).Equals(newstationid)) || (buffer[0] == 5 && datas[2].Equals(newstationid)))
@@ -2598,12 +2663,12 @@ namespace WinformProtocol
                                     try
                                     {
                                         //buffer = new byte[BUFFER_SIZE];
-                                        control.AppendTextBox(Environment.NewLine + "DataAvailable " + nwStream.DataAvailable, form1);
+                                        control.AppendTextBox(Environment.NewLine + "DataAvailable " + nwStream.DataAvailable, form1,0);
 
                                         BytesRead = nwStream.Read(buffer, 0, buffer.Length);
                                         if (BytesRead != 0)
                                         {
-                                            control.AppendTextBox(Environment.NewLine + "DataAvailable " + nwStream.DataAvailable, form1);
+                                            control.AppendTextBox(Environment.NewLine + "DataAvailable " + nwStream.DataAvailable, form1,0);
                                             data = System.Text.Encoding.ASCII.GetString(buffer, 0, BytesRead);
                                             //Console.WriteLine("Received ENCRYPT : {0}", data);
                                             //sendMsg(nwStream, _privateKey);
@@ -2645,7 +2710,7 @@ namespace WinformProtocol
                                     }
                                     catch (Exception ex)
                                     {
-                                        control.AppendTextBox(Environment.NewLine + ex.StackTrace, form1);
+                                        control.AppendTextBox(Environment.NewLine + ex.StackTrace, form1,0);
                                         control.sendByte(nwStream, Control._encoder.GetBytes("ERROR : CONNECTION ERROR"), form1);
                                         break;
                                     }
@@ -2654,14 +2719,14 @@ namespace WinformProtocol
                                 {
                                     //int j = nwStream.Read(buffer, 0, buffer.Length);
                                     string error = System.Text.Encoding.ASCII.GetString(buffer, 0, BytesRead);
-                                    control.AppendTextBox(Environment.NewLine + "Received : " + data, form1);
+                                    control.AppendTextBox(Environment.NewLine + "Received : " + data, form1,0);
                                     control.sendByte(nwStream, Control._encoder.GetBytes("ERROR : FORMAT MESSAGE"), form1);
                                     break;
                                 }
                             }
                             catch (Exception ex)
                             {
-                                control.AppendTextBox(Environment.NewLine + ex.StackTrace, form1);
+                                control.AppendTextBox(Environment.NewLine + ex.StackTrace, form1,0);
                                 control.sendByte(nwStream, Control._encoder.GetBytes("ERROR : FORMAT MESSAGE"), form1);
                                 break;
                             }
@@ -2671,7 +2736,7 @@ namespace WinformProtocol
                     }
                     catch (Exception e)
                     {
-                        control.AppendTextBox(Environment.NewLine + "Conection is broken !", form1);
+                        control.AppendTextBox(Environment.NewLine + "Conection is broken !", form1,0);
                         Console.WriteLine(e.StackTrace);
                         //Console.ReadLine();
                         break;
@@ -2986,7 +3051,13 @@ namespace WinformProtocol
                 /* Read Each Line of the Response and Append a Pipe to Each Line for Easy Parsing */
                 try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } }
                 catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-                directoryRaw = directoryRaw.Remove(directoryRaw.ToString().LastIndexOf('|'), 1);
+                if (directoryRaw != null)
+                {
+                    directoryRaw = directoryRaw.Remove(directoryRaw.ToString().LastIndexOf('|'), 1);
+                }
+                else {
+                    directoryRaw = "";
+                }
                 /* Resource Cleanup */
                 ftpReader.Close();
                 ftpStream.Close();
@@ -3027,7 +3098,13 @@ namespace WinformProtocol
                 /* Read Each Line of the Response and Append a Pipe to Each Line for Easy Parsing */
                 try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } }
                 catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-                directoryRaw = directoryRaw.Remove(directoryRaw.ToString().LastIndexOf('|'), 1);
+                if (directoryRaw != null)
+                {
+                    directoryRaw = directoryRaw.Remove(directoryRaw.ToString().LastIndexOf('|'), 1);
+                }
+                else {
+                    directoryRaw = "";
+                }
                 /* Resource Cleanup */
                 ftpReader.Close();
                 ftpStream.Close();

@@ -30,7 +30,7 @@ namespace DataLogger.Data
                     {
                         string sql_command = "INSERT INTO data_5minute_values (MPS_pH, MPS_pH_status, MPS_EC, MPS_EC_status, " +
                                             " MPS_DO, MPS_DO_status, MPS_Turbidity, MPS_Turbidity_status, " +
-                                            " MPS_ORP, MPS_ORP_status, MPS_Temp, MPS_Temp_status, " +
+                                            " MPS_ORP, MPS_ORP_status, MPS_Temp, MPS_Temp_status, MPS_SS, MPS_SS_status, " +
                                             " TN, TN_status, TP, TP_status, TOC, TOC_status, " +
                                             " module_Power, module_UPS, module_Door, module_Fire, module_Flow, " +
                                             " module_PumpLAM, module_PumpLRS, module_PumpLFLT, module_PumpRAM, module_PumpRRS, module_PumpRFLT, " +
@@ -42,7 +42,7 @@ namespace DataLogger.Data
                                             " created)" +
                                             " VALUES (:MPS_pH, :MPS_pH_status, :MPS_EC, :MPS_EC_status, " +
                                             " :MPS_DO,:MPS_DO_status, :MPS_Turbidity, :MPS_Turbidity_status, " +
-                                            " :MPS_ORP, :MPS_ORP_status, :MPS_Temp, :MPS_Temp_status, " +
+                                            " :MPS_ORP, :MPS_ORP_status, :MPS_Temp, :MPS_Temp_status, :MPS_SS, :MPS_SS_status, " +
                                             " :TN, :TN_status, :TP, :TP_status, :TOC, :TOC_status, " +
                                             " :module_Power, :module_UPS, :module_Door, :module_Fire, :module_Flow, " +
                                             " :module_PumpLAM,:module_PumpLRS,:module_PumpLFLT,:module_PumpRAM,:module_PumpRRS,:module_PumpRFLT, " +
@@ -70,6 +70,8 @@ namespace DataLogger.Data
                             cmd.Parameters.Add(":MPS_ORP_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.MPS_ORP_status;
                             cmd.Parameters.Add(":MPS_Temp", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.MPS_Temp;
                             cmd.Parameters.Add(":MPS_Temp_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.MPS_Temp_status;
+                            cmd.Parameters.Add(":MPS_SS", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.MPS_SS;
+                            cmd.Parameters.Add(":MPS_SS_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.MPS_SS_status;
                             cmd.Parameters.Add(":TN", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.TN;
                             cmd.Parameters.Add(":TN_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.TN_status;
                             cmd.Parameters.Add(":TP", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.TP;
@@ -160,6 +162,7 @@ namespace DataLogger.Data
                                             " MPS_Turbidity =:MPS_Turbidity, MPS_Turbidity_status =:MPS_Turbidity_status,  " +
                                             " MPS_ORP =:MPS_ORP, MPS_ORP_status =:MPS_ORP_status,  " +
                                             " MPS_Temp =:MPS_Temp, MPS_Temp_status =:MPS_Temp_status,  " +
+                                            " MPS_SS =:MPS_SS, MPS_SS_status =:MPS_SS_status,  " +
                                             " TN =:TN, TN_status =:TN_status,  " +
                                             " TP =:TP, TP_status =:TP_status,  " +
                                             " TOC =:TOC, TOC_status =:TOC_status,  " +
@@ -200,6 +203,8 @@ namespace DataLogger.Data
                             cmd.Parameters.Add(":MPS_ORP_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.MPS_ORP_status;
                             cmd.Parameters.Add(":MPS_Temp", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.MPS_Temp;
                             cmd.Parameters.Add(":MPS_Temp_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.MPS_Temp_status;
+                            cmd.Parameters.Add(":MPS_SS", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.MPS_SS;
+                            cmd.Parameters.Add(":MPS_SS_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.MPS_SS_status;
                             cmd.Parameters.Add(":TN", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.TN;
                             cmd.Parameters.Add(":TN_status", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.TN_status;
                             cmd.Parameters.Add(":TP", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.TP;
@@ -256,7 +261,7 @@ namespace DataLogger.Data
                         return -1;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
                     if (db != null)
                     {
@@ -714,7 +719,7 @@ namespace DataLogger.Data
                     {
 
                         string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, mps_ph,
-                                                      mps_ec, mps_do, mps_turbidity,mps_orp, mps_temp, mps_status
+                                                      mps_ec, mps_do, mps_turbidity,mps_orp, mps_temp, mps_ss, mps_status
                                                FROM data_5minute_values
                                                WHERE created BETWEEN :date_from AND :date_to
                                                ORDER BY created ASC
@@ -1598,6 +1603,15 @@ namespace DataLogger.Data
                     obj.MPS_Temp_status = Convert.ToInt32(dataReader["MPS_Temp_status"].ToString().Trim());
                 else
                     obj.MPS_Temp_status = 0;
+
+                if (!DBNull.Value.Equals(dataReader["MPS_SS"]))
+                    obj.MPS_SS = Convert.ToDouble(dataReader["MPS_SS"].ToString().Trim());
+                else
+                    obj.MPS_SS = 0;
+                if (!DBNull.Value.Equals(dataReader["MPS_SS_status"]))
+                    obj.MPS_SS_status = Convert.ToInt32(dataReader["MPS_SS_status"].ToString().Trim());
+                else
+                    obj.MPS_SS_status = 0;
 
                 if (!DBNull.Value.Equals(dataReader["TN"]))
                     obj.TN = Convert.ToDouble(dataReader["TN"].ToString().Trim());

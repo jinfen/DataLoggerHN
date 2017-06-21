@@ -24,13 +24,13 @@ namespace DataLogger.Entities
             id = -1;
             equipment_name = "";
             response_time = new DateTime();
-            refrigeration_Temperature = -1000;
-            bottle_position = -1000;
+            refrigeration_Temperature = -1;
+            bottle_position = -1;
             equipment_status = -1;
-            addInfo = "";
-            status_info = -1;
             door_status = -1;
             comm_port = "";
+            addInfo = "";
+            status_info = -1;
             created = new DateTime();
             latest_update_communication = DateTime.Now;
         }

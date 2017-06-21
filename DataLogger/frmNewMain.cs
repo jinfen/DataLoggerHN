@@ -41,6 +41,7 @@ namespace DataLogger
         private System.Threading.Timer tmrThreadingTimerStationStatus;
         private System.Threading.Timer tmrThreadingTimerFor5Minute;
         private System.Threading.Timer tmrThreadingTimerFor60Minute;
+        private System.Threading.Timer tmrThreadingTimerForFTP;
 
         public CalculationDataValue objCalCulationDataValue5Minute = new CalculationDataValue();
         public CalculationDataValue objCalCulationDataValue60Minute = new CalculationDataValue();
@@ -206,6 +207,9 @@ namespace DataLogger
             tmrThreadingTimerFor60Minute = new System.Threading.Timer(new TimerCallback(tmrThreadingTimerFor60Minute_TimerCallback), null, System.Threading.Timeout.Infinite, 2000);
             //tmrThreadingTimerFor60Minute.Change(0, 3000);
             tmrThreadingTimerFor60Minute.Change(0, 240000);
+            tmrThreadingTimerForFTP = new System.Threading.Timer(new TimerCallback(tmrThreadingTimerForFTP_TimerCallback), null, 1000 * 60, Timeout.Infinite);
+            tmrThreadingTimerForFTP.Change(0, 1000 * 60 * 60 * 2);
+            //tmrThreadingTimerForFTP.Change(0, 1000);
             initConfig(true);
 
         }
@@ -2613,7 +2617,48 @@ namespace DataLogger
             }
             // checking, calculating for save ving to data value 10 _minute table from 5 _minute data
         }
+        private void tmrThreadingTimerForFTP_TimerCallback(object state)
+        {
+            try
+            {
+                setting_repository s = new setting_repository();
+                int id = s.get_id_by_key("lasted_push");
+                DateTime lastedPush = s.get_datetime_by_id(id);
+                GlobalVar.stationSettings = new station_repository().get_info();
 
+                /// Send File ftp	
+                if (GlobalVar.stationSettings != null)
+                {
+                    if (GlobalVar.stationSettings.ftpflag == 1)
+                    {
+                        if (Application.OpenForms.OfType<Form1>().Count() == 1)
+                        {
+                            //Application.Exit(Application.OpenForms.OfType<Form1>().First());
+                            //Application.OpenForms.OfType<Form1>().First().;
+                        }
+                        Form1.control1.ClearTextBox(Form1.control1.getForm1fromControl, 1);
+                        //protocol = new Form1(frmConfiguration.newMain);
+                        if (ManualFTP(lastedPush, DateTime.Now))
+                        {
+                        }
+                        //protocol.Show();
+                    }
+                    else
+                    {
+                        Form1.control1.ClearTextBox(Form1.control1.getForm1fromControl, 1);
+                        //if (Application.OpenForms.OfType<Form1>().Count() == 1)
+                        //{
+                        //    Application.OpenForms.OfType<Form1>().First().Close();
+                        //}
+
+                        //protocol = new Form1(frmConfiguration.newMain);
+                        //protocol.Show();
+                    }
+                }
+            }
+            catch (Exception e)
+            { }
+        }
         private static void requestInfor(SerialPort com)
         {
             try
@@ -3173,12 +3218,12 @@ namespace DataLogger
                 //ftpClient.upload("/test/2017/data_report.csv", @"C:\Users\Admin\Desktop\data_report.csv");
                 string filePath = Path.Combine(folderPathD, newFileName);
                 ftpClient.upload(filePath, newFilePath);
-                Form1.control1.AppendTextLog1Box("Manual/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl);
+                Form1.control1.AppendTextBox("Manual/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl,1);
                 return true;
             }
             catch (Exception e)
             {
-                Form1.control1.AppendTextLog1Box("Manual/Error " + Environment.NewLine, Form1.control1.getForm1fromControl);
+                Form1.control1.AppendTextBox("Manual/Error " + Environment.NewLine, Form1.control1.getForm1fromControl,1);
                 return false;
             }
         }
@@ -3299,11 +3344,11 @@ namespace DataLogger
                 //ftpClient.upload("/test/2017/data_report.csv", @"C:\Users\Admin\Desktop\data_report.csv");
                 string filePath = Path.Combine(folderPathD, newFileName);
                 ftpClient.upload(filePath, newFilePath);
-                Form1.control1.AppendTextLog1Box("Auto/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl);
+                Form1.control1.AppendTextBox("Auto/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl,1);
                 return true;
             }
             catch (Exception e) {
-                Form1.control1.AppendTextLog1Box("Auto/Error" + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl);
+                Form1.control1.AppendTextBox("Auto/Error" + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl,1);
                 return false;
             }
         }
@@ -3412,7 +3457,7 @@ namespace DataLogger
 
                             }
                         }
-                        Form1.control1.AppendTextLog1Box("Lasted/Success " + "END" + Environment.NewLine, Form1.control1.getForm1fromControl);
+                        Form1.control1.AppendTextBox("Lasted/Success " + "END" + Environment.NewLine, Form1.control1.getForm1fromControl,1);
                     }
                     return true;
                 }
@@ -5995,19 +6040,21 @@ namespace DataLogger
                             DateTime lastedPush = s.get_datetime_by_id(id);
 
                             /// Send File ftp			
-                            if (main.ManualFTP(lastedPush, DateTime.Now) && main.FTP(objLatest))
+                            if (
+                                //main.ManualFTP(lastedPush, DateTime.Now) && 
+                                main.FTP(objLatest))
                             {
                                 objLatest.push = 1;
                                 objLatest.push_time = DateTime.Now;
-                                //setting_repository setre = new setting_repository();
-                                setting set = new setting();
-                                set.setting_key = "lasted_push";
-                                set.setting_type = "";
-                                set.setting_value = "";
-                                set.note = "";
-                                set.setting_datetime = objLatest.created;
-                                //int id = setre.get_id_by_key("lasted_push");
-                                s.update_with_id(ref set, id);
+                                ////setting_repository setre = new setting_repository();
+                                //setting set = new setting();
+                                //set.setting_key = "lasted_push";
+                                //set.setting_type = "";
+                                //set.setting_value = "";
+                                //set.note = "";
+                                //set.setting_datetime = objLatest.created;
+                                ////int id = setre.get_id_by_key("lasted_push");
+                                //s.update_with_id(ref set, id);
                             }
                             else
                             {
@@ -6040,19 +6087,21 @@ namespace DataLogger
                             DateTime lastedPush = s.get_datetime_by_id(id);
 
                             /// Send File ftp			
-                            if (main.ManualFTP(lastedPush, DateTime.Now) && main.FTP(objDataValue))
+                            if (
+                                //main.ManualFTP(lastedPush, DateTime.Now) && 
+                                main.FTP(objDataValue))
                             {
                                 objDataValue.push = 1;
                                 objDataValue.push_time = DateTime.Now;
-                                //setting_repository setre = new setting_repository();
-                                setting set = new setting();
-                                set.setting_key = "lasted_push";
-                                set.setting_type = "";
-                                set.setting_value = "";
-                                set.note = "";
-                                set.setting_datetime = objDataValue.created;
-                                //int id = setre.get_id_by_key("lasted_push");
-                                s.update_with_id(ref set, id);
+                                ////setting_repository setre = new setting_repository();
+                                //setting set = new setting();
+                                //set.setting_key = "lasted_push";
+                                //set.setting_type = "";
+                                //set.setting_value = "";
+                                //set.note = "";
+                                //set.setting_datetime = objDataValue.created;
+                                ////int id = setre.get_id_by_key("lasted_push");
+                                //s.update_with_id(ref set, id);
                             }
                             else
                             {
