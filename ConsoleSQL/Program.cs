@@ -13,20 +13,35 @@ namespace ConsoleSQL
         static void Main(string[] args)
         {
             SQL60();
-            //SQL5p();
+            SQL5p();
         }
-        public static Boolean update(double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
+        //public static Boolean update(double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
+        public static Boolean update(double ph, double ec, double mps_do, double tss, double orp, double temp,double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
         {
             try
             {
                 string sql_command = "UPDATE data_60minute_values set  " +
 
+                                    " mps_ph =:mps_ph, " +
+                                    " mps_ec =:mps_ec,  " +
+                                    " mps_do =:mps_do, " +
+                                    " mps_turbidity =:mps_turbidity, " +
+                                    " mps_orp =:mps_orp,  " +
+                                    " mps_temp =:mps_temp, " +
                                     " TN =:TN, " +
                                     " TP =:TP,  " +
                                     " TOC =:TOC " +
 
+
                                     " where id = :id";
                 command.CommandText = sql_command;
+
+                command.Parameters.Add(":mps_ph", NpgsqlTypes.NpgsqlDbType.Double).Value = ph;
+                command.Parameters.Add(":mps_ec", NpgsqlTypes.NpgsqlDbType.Double).Value = ec;
+                command.Parameters.Add(":mps_do", NpgsqlTypes.NpgsqlDbType.Double).Value = mps_do;
+                command.Parameters.Add(":mps_turbidity", NpgsqlTypes.NpgsqlDbType.Double).Value = tss;
+                command.Parameters.Add(":mps_orp", NpgsqlTypes.NpgsqlDbType.Double).Value = orp;
+                command.Parameters.Add(":mps_temp", NpgsqlTypes.NpgsqlDbType.Double).Value = temp;
 
                 command.Parameters.Add(":TN", NpgsqlTypes.NpgsqlDbType.Double).Value = tn;
                 command.Parameters.Add(":TP", NpgsqlTypes.NpgsqlDbType.Double).Value = tp;
@@ -46,18 +61,33 @@ namespace ConsoleSQL
             }
 
         }
-        public static Boolean update5p(double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
+        //public static Boolean update5p(double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
+        public static Boolean update5p(double ph, double ec, double mps_do, double tss, double orp, double temp, double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
         {
             try
             {
                 string sql_command = "UPDATE data_5minute_values set  " +
 
+                                    " mps_ph =:mps_ph, " +
+                                    " mps_ec =:mps_ec,  " +
+                                    " mps_do =:mps_do, " +
+                                    " mps_turbidity =:mps_turbidity, " +
+                                    " mps_orp =:mps_orp,  " +
+                                    " mps_temp =:mps_temp, " +
                                     " TN =:TN, " +
                                     " TP =:TP,  " +
                                     " TOC =:TOC " +
 
+
                                     " where id = :id";
                 command.CommandText = sql_command;
+
+                command.Parameters.Add(":mps_ph", NpgsqlTypes.NpgsqlDbType.Double).Value = ph;
+                command.Parameters.Add(":mps_ec", NpgsqlTypes.NpgsqlDbType.Double).Value = ec;
+                command.Parameters.Add(":mps_do", NpgsqlTypes.NpgsqlDbType.Double).Value = mps_do;
+                command.Parameters.Add(":mps_turbidity", NpgsqlTypes.NpgsqlDbType.Double).Value = tss;
+                command.Parameters.Add(":mps_orp", NpgsqlTypes.NpgsqlDbType.Double).Value = orp;
+                command.Parameters.Add(":mps_temp", NpgsqlTypes.NpgsqlDbType.Double).Value = temp;
 
                 command.Parameters.Add(":TN", NpgsqlTypes.NpgsqlDbType.Double).Value = tn;
                 command.Parameters.Add(":TP", NpgsqlTypes.NpgsqlDbType.Double).Value = tp;
@@ -77,15 +107,22 @@ namespace ConsoleSQL
             }
 
         }
-        public static Boolean insert5p(double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
+        public static Boolean insert5p(double ph, double ec, double mps_do, double tss, double orp, double temp, double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
         {
             int ID = -1;
             try
             {
-                string sql_command = "INSERT INTO data_5minute_values ( TN, TP, TOC )" +
-                                            " VALUES (:TN, :TP, :TOC)";
+                string sql_command = "INSERT INTO data_5minute_values ( mps_ph, mps_ec, mps_do, mps_turbidity, mps_orp, mps_temp, TN, TP, TOC )" +
+                                            " VALUES ( :mps_ph, :mps_ec, :mps_do, :mps_turbidity, :mps_orp, :mps_temp, :TN, :TP, :TOC)";
                 sql_command += " RETURNING id;";
                 command.CommandText = sql_command;
+
+                command.Parameters.Add(":mps_ph", NpgsqlTypes.NpgsqlDbType.Double).Value = ph;
+                command.Parameters.Add(":mps_ec", NpgsqlTypes.NpgsqlDbType.Double).Value = ec;
+                command.Parameters.Add(":mps_do", NpgsqlTypes.NpgsqlDbType.Double).Value = mps_do;
+                command.Parameters.Add(":mps_turbidity", NpgsqlTypes.NpgsqlDbType.Double).Value = tss;
+                command.Parameters.Add(":mps_orp", NpgsqlTypes.NpgsqlDbType.Double).Value = orp;
+                command.Parameters.Add(":mps_temp", NpgsqlTypes.NpgsqlDbType.Double).Value = temp;
 
                 command.Parameters.Add(":TN", NpgsqlTypes.NpgsqlDbType.Double).Value = tn;
                 command.Parameters.Add(":TP", NpgsqlTypes.NpgsqlDbType.Double).Value = tp;
@@ -106,14 +143,22 @@ namespace ConsoleSQL
             }
 
         }
-        public static Boolean insert60(double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
+        //public static Boolean insert60(double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
+        public static Boolean insert60(double ph, double ec, double mps_do, double tss, double orp, double temp, double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
         {
             try
             {
-                string sql_command = "INSERT INTO data_60minute_values ( TN, TP, TOC )" +
-                                            " VALUES (:TN, :TP, :TOC)";
+                string sql_command = "INSERT INTO data_60minute_values ( mps_ph, mps_ec, mps_do, mps_turbidity, mps_orp, mps_temp, TN, TP, TOC )" +
+                                            " VALUES ( :mps_ph, :mps_ec, :mps_do, :mps_turbidity, :mps_orp, :mps_temp, :TN, :TP, :TOC)";
                 sql_command += " RETURNING id;";
                 command.CommandText = sql_command;
+
+                command.Parameters.Add(":mps_ph", NpgsqlTypes.NpgsqlDbType.Double).Value = ph;
+                command.Parameters.Add(":mps_ec", NpgsqlTypes.NpgsqlDbType.Double).Value = ec;
+                command.Parameters.Add(":mps_do", NpgsqlTypes.NpgsqlDbType.Double).Value = mps_do;
+                command.Parameters.Add(":mps_turbidity", NpgsqlTypes.NpgsqlDbType.Double).Value = tss;
+                command.Parameters.Add(":mps_orp", NpgsqlTypes.NpgsqlDbType.Double).Value = orp;
+                command.Parameters.Add(":mps_temp", NpgsqlTypes.NpgsqlDbType.Double).Value = temp;
 
                 command.Parameters.Add(":TN", NpgsqlTypes.NpgsqlDbType.Double).Value = tn;
                 command.Parameters.Add(":TP", NpgsqlTypes.NpgsqlDbType.Double).Value = tp;
@@ -140,7 +185,8 @@ namespace ConsoleSQL
             NpgsqlConnection conn = new NpgsqlConnection("Server = localhost; User Id = postgres; " + "Password = 123; Database = DataLoggerDB;");
             conn.Open();
             // Define a query
-            string analayer_60_query = "SELECT tn,tp,toc,new FROM analayer_60";
+            //string analayer_60_query = "SELECT tn,tp,toc,new FROM analayer_60";
+            string analayer_60_query = "SELECT ph,ec,mps_do,tss,orp,temp,tn,tp,toc,new FROM min60_data_yt";
             NpgsqlCommand command = new NpgsqlCommand(analayer_60_query, conn);
 
             // Execute the query and obtain a result set
@@ -173,14 +219,24 @@ namespace ConsoleSQL
                     DateTime _datetime = DateTime.Parse(stringdatetime);
                     //DateTime _datetime = DateTime.ParseExact(stringdatetime, "M-dd-yyyy hh:mm:ss tt", System.Globalization.CultureInfo.InvariantCulture);
                     string datetime = _datetime.ToString("dd/MM/yyyy HH", System.Globalization.CultureInfo.InvariantCulture);
-                    if (datetime.Equals(time[3]))
+                    if (datetime.Equals(time[9]))
                     {
                         NpgsqlCommand cmd = conn.CreateCommand();
                         int id = Convert.ToInt32(date[0]);
-                        double tn = Convert.ToDouble(time[0]);
-                        double tp = Convert.ToDouble(time[1]);
-                        double toc = Convert.ToDouble(time[2]);
-                        if (update(tn, tp, toc, id, cmd, dr, conn))
+                        double ph = Convert.ToDouble(time[0]);
+                        double ec = Convert.ToDouble(time[1]);
+                        double mps_do = Convert.ToDouble(time[2]);
+                        double tss = Convert.ToDouble(time[3]);
+                        double orp = Convert.ToDouble(time[4]);
+                        double temp = Convert.ToDouble(time[5]);
+                        double tn = Convert.ToDouble(time[6]);
+                        double tp = Convert.ToDouble(time[7]);
+                        double toc = Convert.ToDouble(time[8]);
+
+                        //double tn = Convert.ToDouble(time[0]);
+                        //double tp = Convert.ToDouble(time[1]);
+                        //double toc = Convert.ToDouble(time[2]);
+                        if (update(ph,ec,mps_do,tss,orp,temp,tn, tp, toc, id, cmd, dr, conn))
                         {
                             Console.WriteLine("UPDATE" + datetime);
                         }
@@ -190,13 +246,23 @@ namespace ConsoleSQL
                     {
                         NpgsqlCommand cmd = conn.CreateCommand();
                         int id = Convert.ToInt32(date[0]);
-                        double tn = Convert.ToDouble(time[0]);
-                        double tp = Convert.ToDouble(time[1]);
-                        double toc = Convert.ToDouble(time[2]);
-                        if (insert60(tn, tp, toc, id, cmd, dr, conn))
-                        {
-                            Console.WriteLine("INT" + datetime);
-                        }
+                        double ph = Convert.ToDouble(time[0]);
+                        double ec = Convert.ToDouble(time[1]);
+                        double mps_do = Convert.ToDouble(time[2]);
+                        double tss = Convert.ToDouble(time[3]);
+                        double orp = Convert.ToDouble(time[4]);
+                        double temp = Convert.ToDouble(time[5]);
+                        double tn = Convert.ToDouble(time[6]);
+                        double tp = Convert.ToDouble(time[7]);
+                        double toc = Convert.ToDouble(time[8]);
+                        //double tn = Convert.ToDouble(time[0]);
+                        //double tp = Convert.ToDouble(time[1]);
+                        //double toc = Convert.ToDouble(time[2]);
+
+                        //if (insert60(ph, ec, mps_do, tss, orp, temp, tn, tp, toc, id, cmd, dr, conn))
+                        //{
+                        //    Console.WriteLine("INT" + datetime);
+                        //}
                     }
                 }
             }
@@ -209,7 +275,8 @@ namespace ConsoleSQL
             NpgsqlConnection conn = new NpgsqlConnection("Server = localhost; User Id = postgres; " + "Password = 123; Database = DataLoggerDB;");
             conn.Open();
             // Define a query
-            string analayer_query = "SELECT tn,tp,toc,new FROM analayer_5p";
+            //string analayer_query = "SELECT tn,tp,toc,new FROM analayer_5p";
+            string analayer_query = "SELECT ph,ec,mps_do,tss,orp,temp,tn,tp,toc,new FROM min5_data_yt";
             NpgsqlCommand command = new NpgsqlCommand(analayer_query, conn);
 
             // Execute the query and obtain a result set
@@ -242,14 +309,25 @@ namespace ConsoleSQL
                     DateTime _datetime = DateTime.Parse(stringdatetime);
                     //DateTime _datetime = DateTime.ParseExact(stringdatetime, "M-dd-yyyy hh:mm:ss tt", System.Globalization.CultureInfo.InvariantCulture);
                     string datetime = _datetime.ToString("dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture);
-                    if (datetime.Equals(time[3]))
+                    if (datetime.Equals(time[9]))
                     {
                         NpgsqlCommand cmd = conn.CreateCommand();
                         int id = Convert.ToInt32(date[0]);
-                        double tn = Convert.ToDouble(time[0]);
-                        double tp = Convert.ToDouble(time[1]);
-                        double toc = Convert.ToDouble(time[2]);
-                        if (update5p(tn, tp, toc, id, cmd, dr, conn))
+
+                        double ph = Convert.ToDouble(time[0]);
+                        double ec = Convert.ToDouble(time[1]);
+                        double mps_do = Convert.ToDouble(time[2]);
+                        double tss = Convert.ToDouble(time[3]);
+                        double orp = Convert.ToDouble(time[4]);
+                        double temp = Convert.ToDouble(time[5]);
+                        double tn = Convert.ToDouble(time[6]);
+                        double tp = Convert.ToDouble(time[7]);
+                        double toc = Convert.ToDouble(time[8]);
+
+                        //double tn = Convert.ToDouble(time[0]);
+                        //double tp = Convert.ToDouble(time[1]);
+                        //double toc = Convert.ToDouble(time[2]);
+                        if (update5p(ph, ec, mps_do, tss, orp, temp, tn, tp, toc, id, cmd, dr, conn))
                         {
                             Console.WriteLine("UPDATE" + datetime);
                         }

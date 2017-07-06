@@ -2877,7 +2877,39 @@ namespace DataLogger
             num = num % 0x100;
             return (this.HEX_Coding(((int)(num / 0x10)).ToString("X")) + this.HEX_Coding(((int)(num % 0x10)).ToString("X")));
         }
-
+        private static int getMinValueFromDatabinding(string code)
+        {
+            try
+            {
+                String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
+                NpgsqlConnection conn = new NpgsqlConnection(connstring);
+                conn.Open();
+                using (NpgsqlCommand cmd = conn.CreateCommand())
+                {
+                    string sql_command1 = "SELECT * from " + "databinding";
+                    cmd.CommandText = sql_command1;
+                    NpgsqlDataReader dr = cmd.ExecuteReader();
+                    DataTable tbcode = new DataTable();
+                    tbcode.Load(dr); // Load bang chua mapping cac truong
+                    int min_value = -1;
+                    foreach (DataRow row2 in tbcode.Rows)
+                    {
+                        if (Convert.ToString(row2["code"]).Equals(code))
+                        {
+                            min_value = Convert.ToInt32(row2["min_value"]);
+                            break;
+                        }
+                    }
+                    conn.Close();
+                    return min_value;
+                }          
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.Message);
+                return -1;
+            }
+        }
         /// <summary>
         /// Convert Byte Array to Hexa String
         /// </summary>
@@ -4205,11 +4237,17 @@ namespace DataLogger
             txtMPSTurbValue.Text = "---";
             txtMPSORPValue.Text = "---";
             txtMPSTempValue.Text = "---";
+
+
+
             if (obj.MPS_status != INT_STATUS_COMMUNICATION_ERROR &&
                 obj.MPS_status != INT_STATUS_INSTRUMENT_ERROR &&
                 obj.MPS_status != INT_STATUS_EMPTY_SAMPLER_RESERVOIR)
             {
-                if (obj.MPS_EC >= 0)
+                int ec = getMinValueFromDatabinding("ec");
+                if (obj.MPS_EC >= ec                 
+                    //getMinValueFromDatabinding("ec")
+                        )
                 {
                     txtMPSCondValue.Text = obj.MPS_EC.ToString("##0.00");
                 }
@@ -4217,7 +4255,10 @@ namespace DataLogger
                 {
                     txtMPSCondValue.Text = "Err";
                 }
-                if (obj.MPS_pH >= 0)
+                int ph = getMinValueFromDatabinding("ph");
+                if (obj.MPS_pH >= ph
+                    //getMinValueFromDatabinding("ph")
+                    )
                 {
                     txtMPSpHValue.Text = obj.MPS_pH.ToString("##0.00");
                 }
@@ -4225,7 +4266,10 @@ namespace DataLogger
                 {
                     txtMPSpHValue.Text = "Err";
                 }
-                if (obj.MPS_DO >= 0)
+                int Do = getMinValueFromDatabinding("do");
+                if (obj.MPS_DO >= Do
+                    //getMinValueFromDatabinding("do")
+                    )
                 {
                     txtMPSDOValue.Text = obj.MPS_DO.ToString("##0.00");
                 }
@@ -4233,7 +4277,10 @@ namespace DataLogger
                 {
                     txtMPSDOValue.Text = "Err";
                 }
-                if (obj.MPS_Turbidity >= 0)
+                int tss = getMinValueFromDatabinding("tss");
+                if (obj.MPS_Turbidity >= tss
+                    //getMinValueFromDatabinding("tss")
+                    )
                 {
                     txtMPSTurbValue.Text = obj.MPS_Turbidity.ToString("##0.00");
                 }
@@ -4241,15 +4288,10 @@ namespace DataLogger
                 {
                     txtMPSTurbValue.Text = "Err";
                 }
-                if (obj.MPS_Turbidity >= 0)
-                {
-                    txtMPSTurbValue.Text = obj.MPS_Turbidity.ToString("##0.00");
-                }
-                else
-                {
-                    txtMPSTurbValue.Text = "Err";
-                }
-                if (obj.MPS_ORP >= 0)
+                int orp = getMinValueFromDatabinding("orp");
+                if (obj.MPS_ORP >= orp
+                    //getMinValueFromDatabinding("orp")
+                    )
                 {
                     txtMPSORPValue.Text = obj.MPS_ORP.ToString("##0.00");
                 }
@@ -4257,7 +4299,10 @@ namespace DataLogger
                 {
                     txtMPSORPValue.Text = "Err";
                 }
-                if (obj.MPS_Temp >= 0)
+                int temp = getMinValueFromDatabinding("temp");
+                if (obj.MPS_Temp >= temp
+                    //getMinValueFromDatabinding("temp")
+                    )
                 {
                     txtMPSTempValue.Text = obj.MPS_Temp.ToString("##0.00");
                 }
