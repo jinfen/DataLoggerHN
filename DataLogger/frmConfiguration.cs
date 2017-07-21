@@ -37,7 +37,8 @@ namespace DataLogger
                                              "Pump (L) R/S", "Pump (L) FLT", "Pump (R) A/M",
                                              "Pump (R) R/S", "Pump (R) FLT",
                                              "Air1", "Air2", "Cleaning",
-                                             "Temperature", "Humidity","pH","Orp","Temp","DO","Turb","Cond"};
+                                             "Temperature", "Humidity","pH","Orp","Temp","DO","Turb","Cond",
+                                             "Tn", "Tp", "Toc"};
         public string[] MODULE_ID_LIST = { "40171", "4050", "4051", "40172" };
 
         DataTable dt = new DataTable();
@@ -315,6 +316,8 @@ namespace DataLogger
             int input_max = itemModuleSetting.input_max;
             int output_min = itemModuleSetting.output_min;
             int output_max = itemModuleSetting.output_max;
+            int error_min = itemModuleSetting.error_min;
+            int error_max = itemModuleSetting.error_max;
             double offset = itemModuleSetting.off_set;
             switch (itemModuleSetting.item_name.ToLower())
             {
@@ -427,6 +430,8 @@ namespace DataLogger
                     txtpHInputMax.Text = input_max.ToString();
                     txtpHOutputMin.Text = output_min.ToString();
                     txtpHOutputMax.Text = output_max.ToString();
+                    txtpHErrorMin.Text = error_min.ToString();
+                    txtpHErrorMax.Text = error_max.ToString();
                     txtpHOffset.Text = offset.ToString();
                     break;
                 case "orp":
@@ -436,6 +441,8 @@ namespace DataLogger
                     txtOrpInputMax.Text = input_max.ToString();
                     txtOrpOutputMin.Text = output_min.ToString();
                     txtOrpOutputMax.Text = output_max.ToString();
+                    txtOrpErrorMin.Text = error_min.ToString();
+                    txtOrpErrorMax.Text = error_max.ToString();
                     txtOrpOffset.Text = offset.ToString();
                     break;
                 case "temp":
@@ -445,6 +452,8 @@ namespace DataLogger
                     txtTempInputMax.Text = input_max.ToString();
                     txtTempOutputMin.Text = output_min.ToString();
                     txtTempOutputMax.Text = output_max.ToString();
+                    txtTempErrorMin.Text = error_min.ToString();
+                    txtTempErrorMax.Text = error_max.ToString();
                     txtTempOffset.Text = offset.ToString();
                     break;
                 case "do":
@@ -454,6 +463,8 @@ namespace DataLogger
                     txtDOInputMax.Text = input_max.ToString();
                     txtDOOutputMin.Text = output_min.ToString();
                     txtDOOutputMax.Text = output_max.ToString();
+                    txtDoErrorMin.Text = error_min.ToString();
+                    txtDoErrorMax.Text = error_max.ToString();
                     txtDOOffset.Text = offset.ToString();
                     break;
                 case "turb":
@@ -463,6 +474,8 @@ namespace DataLogger
                     txtTurbInputMax.Text = input_max.ToString();
                     txtTurbOutputMin.Text = output_min.ToString();
                     txtTurbOutputMax.Text = output_max.ToString();
+                    txtTssErrorMin.Text = error_min.ToString();
+                    txtTssErrorMax.Text = error_max.ToString();
                     txtTurbOffset.Text = offset.ToString();
                     break;
                 case "cond":
@@ -472,7 +485,21 @@ namespace DataLogger
                     txtCondInputMax.Text = input_max.ToString();
                     txtCondOutputMin.Text = output_min.ToString();
                     txtCondOutputMax.Text = output_max.ToString();
+                    txtEcErrorMin.Text = error_min.ToString();
+                    txtEcErrorMax.Text = error_max.ToString();
                     txtCondOffset.Text = offset.ToString();
+                    break;
+                case "tn":
+                    txtTnErrorMin.Text = error_min.ToString();
+                    txtTnErrorMax.Text = error_max.ToString();
+                    break;
+                case "tp":
+                    txtTpErrorMin.Text = error_min.ToString();
+                    txtTpErrorMax.Text = error_max.ToString();
+                    break;
+                case "toc":
+                    txtTocErrorMin.Text = error_min.ToString();
+                    txtTocErrorMax.Text = error_max.ToString();
                     break;
                 default:
                     break;
@@ -894,6 +921,8 @@ namespace DataLogger
                             objpH.output_min = Convert.ToInt32(txtpHOutputMin.Text);
                             objpH.output_max = Convert.ToInt32(txtpHOutputMax.Text);
                             objpH.off_set = Convert.ToDouble(txtpHOffset.Text);
+                            objpH.error_min = Convert.ToInt32(txtpHErrorMin.Text);
+                            objpH.error_max = Convert.ToInt32(txtpHErrorMax.Text);
                             if (_modules.update(ref objpH) > 0)
                             {
                                 // ok
@@ -913,6 +942,8 @@ namespace DataLogger
                             objOrp.output_min = Convert.ToInt32(txtOrpOutputMin.Text);
                             objOrp.output_max = Convert.ToInt32(txtOrpOutputMax.Text);
                             objOrp.off_set = Convert.ToDouble(txtOrpOffset.Text);
+                            objOrp.error_min = Convert.ToInt32(txtOrpErrorMin.Text);
+                            objOrp.error_max = Convert.ToInt32(txtOrpErrorMax.Text);
                             if (_modules.update(ref objOrp) > 0)
                             {
                                 // ok
@@ -932,6 +963,8 @@ namespace DataLogger
                             objTemp.output_min = Convert.ToInt32(txtTempOutputMin.Text);
                             objTemp.output_max = Convert.ToInt32(txtTempOutputMax.Text);
                             objTemp.off_set = Convert.ToDouble(txtTempOffset.Text);
+                            objTemp.error_min = Convert.ToInt32(txtTempErrorMin.Text);
+                            objTemp.error_max = Convert.ToInt32(txtTempErrorMax.Text);
                             if (_modules.update(ref objTemp) > 0)
                             {
                                 // ok
@@ -951,6 +984,8 @@ namespace DataLogger
                             objDO.output_min = Convert.ToInt32(txtDOOutputMin.Text);
                             objDO.output_max = Convert.ToInt32(txtDOOutputMax.Text);
                             objDO.off_set = Convert.ToDouble(txtDOOffset.Text);
+                            objDO.error_min = Convert.ToInt32(txtDoErrorMin.Text);
+                            objDO.error_max = Convert.ToInt32(txtDoErrorMax.Text);
                             if (_modules.update(ref objDO) > 0)
                             {
                                 // ok
@@ -970,6 +1005,8 @@ namespace DataLogger
                             objTurb.output_min = Convert.ToInt32(txtTurbOutputMin.Text);
                             objTurb.output_max = Convert.ToInt32(txtTurbOutputMax.Text);
                             objTurb.off_set = Convert.ToDouble(txtTurbOffset.Text);
+                            objTurb.error_min = Convert.ToInt32(txtTssErrorMin.Text);
+                            objTurb.error_max = Convert.ToInt32(txtTssErrorMax.Text);
                             if (_modules.update(ref objTurb) > 0)
                             {
                                 // ok
@@ -989,7 +1026,57 @@ namespace DataLogger
                             objCond.output_min = Convert.ToInt32(txtCondOutputMin.Text);
                             objCond.output_max = Convert.ToInt32(txtCondOutputMax.Text);
                             objCond.off_set = Convert.ToDouble(txtCondOffset.Text);
+                            objCond.error_min = Convert.ToInt32(txtEcErrorMin.Text);
+                            objCond.error_max = Convert.ToInt32(txtEcErrorMax.Text);
                             if (_modules.update(ref objCond) > 0)
+                            {
+                                // ok
+                            }
+                            else
+                            {
+                                // fail
+                            }
+                            break;
+                        case "tn":
+                            module objTn = _modules.get_info_by_name(itemModule);
+
+                            objTn.module_id = 0;
+                            objTn.channel_number = 0;
+                            objTn.error_min = Convert.ToInt32(txtTnErrorMin.Text);
+                            objTn.error_max = Convert.ToInt32(txtTnErrorMax.Text);
+                            if (_modules.update(ref objTn) > 0)
+                            {
+                                // ok
+                            }
+                            else
+                            {
+                                // fail
+                            }
+                            break;
+                        case "tp":
+                            module objTp = _modules.get_info_by_name(itemModule);
+
+                            objTp.module_id = 0;
+                            objTp.channel_number = 0;
+                            objTp.error_min = Convert.ToInt32(txtTpErrorMin.Text);
+                            objTp.error_max = Convert.ToInt32(txtTpErrorMax.Text);
+                            if (_modules.update(ref objTp) > 0)
+                            {
+                                // ok
+                            }
+                            else
+                            {
+                                // fail
+                            }
+                            break;
+                        case "toc":
+                            module objToc = _modules.get_info_by_name(itemModule);
+
+                            objToc.module_id = 0;
+                            objToc.channel_number = 0;
+                            objToc.error_min = Convert.ToInt32(txtTocErrorMin.Text);
+                            objToc.error_max = Convert.ToInt32(txtTocErrorMax.Text);
+                            if (_modules.update(ref objToc) > 0)
                             {
                                 // ok
                             }
@@ -1134,6 +1221,15 @@ namespace DataLogger
                     btnShow.Text = "Show";
                 }
             }
+        }
+        private void tabPage7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label48_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

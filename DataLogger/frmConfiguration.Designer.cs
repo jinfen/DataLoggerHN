@@ -259,6 +259,36 @@
             this.label39 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.txtEcErrorMax = new System.Windows.Forms.TextBox();
+            this.txtEcErrorMin = new System.Windows.Forms.TextBox();
+            this.txtTssErrorMax = new System.Windows.Forms.TextBox();
+            this.txtTssErrorMin = new System.Windows.Forms.TextBox();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.txtDoErrorMax = new System.Windows.Forms.TextBox();
+            this.txtDoErrorMin = new System.Windows.Forms.TextBox();
+            this.txtTempErrorMax = new System.Windows.Forms.TextBox();
+            this.txtTempErrorMin = new System.Windows.Forms.TextBox();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.txtOrpErrorMax = new System.Windows.Forms.TextBox();
+            this.txtOrpErrorMin = new System.Windows.Forms.TextBox();
+            this.txtpHErrorMax = new System.Windows.Forms.TextBox();
+            this.txtpHErrorMin = new System.Windows.Forms.TextBox();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.txtTocErrorMax = new System.Windows.Forms.TextBox();
+            this.txtTocErrorMin = new System.Windows.Forms.TextBox();
+            this.txtTpErrorMax = new System.Windows.Forms.TextBox();
+            this.txtTpErrorMin = new System.Windows.Forms.TextBox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.txtTnErrorMax = new System.Windows.Forms.TextBox();
+            this.txtTnErrorMin = new System.Windows.Forms.TextBox();
+            this.label49 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -266,6 +296,7 @@
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.tabPage7.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -278,6 +309,7 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage6);
+            this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Location = new System.Drawing.Point(9, 10);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
@@ -2403,6 +2435,272 @@
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.txtTocErrorMax);
+            this.tabPage7.Controls.Add(this.txtTocErrorMin);
+            this.tabPage7.Controls.Add(this.txtTpErrorMax);
+            this.tabPage7.Controls.Add(this.txtTpErrorMin);
+            this.tabPage7.Controls.Add(this.label41);
+            this.tabPage7.Controls.Add(this.label48);
+            this.tabPage7.Controls.Add(this.txtTnErrorMax);
+            this.tabPage7.Controls.Add(this.txtTnErrorMin);
+            this.tabPage7.Controls.Add(this.label49);
+            this.tabPage7.Controls.Add(this.txtEcErrorMax);
+            this.tabPage7.Controls.Add(this.txtEcErrorMin);
+            this.tabPage7.Controls.Add(this.txtTssErrorMax);
+            this.tabPage7.Controls.Add(this.txtTssErrorMin);
+            this.tabPage7.Controls.Add(this.label42);
+            this.tabPage7.Controls.Add(this.label43);
+            this.tabPage7.Controls.Add(this.txtDoErrorMax);
+            this.tabPage7.Controls.Add(this.txtDoErrorMin);
+            this.tabPage7.Controls.Add(this.txtTempErrorMax);
+            this.tabPage7.Controls.Add(this.txtTempErrorMin);
+            this.tabPage7.Controls.Add(this.label44);
+            this.tabPage7.Controls.Add(this.label45);
+            this.tabPage7.Controls.Add(this.txtOrpErrorMax);
+            this.tabPage7.Controls.Add(this.txtOrpErrorMin);
+            this.tabPage7.Controls.Add(this.txtpHErrorMax);
+            this.tabPage7.Controls.Add(this.txtpHErrorMin);
+            this.tabPage7.Controls.Add(this.label46);
+            this.tabPage7.Controls.Add(this.label47);
+            this.tabPage7.Controls.Add(this.label50);
+            this.tabPage7.Controls.Add(this.label51);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(654, 412);
+            this.tabPage7.TabIndex = 6;
+            this.tabPage7.Text = "Alarm";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            this.tabPage7.Click += new System.EventHandler(this.tabPage7_Click);
+            // 
+            // txtEcErrorMax
+            // 
+            this.txtEcErrorMax.Location = new System.Drawing.Point(158, 177);
+            this.txtEcErrorMax.Name = "txtEcErrorMax";
+            this.txtEcErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtEcErrorMax.TabIndex = 404;
+            // 
+            // txtEcErrorMin
+            // 
+            this.txtEcErrorMin.Location = new System.Drawing.Point(82, 176);
+            this.txtEcErrorMin.Name = "txtEcErrorMin";
+            this.txtEcErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtEcErrorMin.TabIndex = 403;
+            // 
+            // txtTssErrorMax
+            // 
+            this.txtTssErrorMax.Location = new System.Drawing.Point(158, 150);
+            this.txtTssErrorMax.Name = "txtTssErrorMax";
+            this.txtTssErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtTssErrorMax.TabIndex = 398;
+            // 
+            // txtTssErrorMin
+            // 
+            this.txtTssErrorMin.Location = new System.Drawing.Point(82, 149);
+            this.txtTssErrorMin.Name = "txtTssErrorMin";
+            this.txtTssErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtTssErrorMin.TabIndex = 397;
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(18, 179);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(21, 13);
+            this.label42.TabIndex = 394;
+            this.label42.Text = "EC";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(18, 152);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(28, 13);
+            this.label43.TabIndex = 393;
+            this.label43.Text = "TSS";
+            // 
+            // txtDoErrorMax
+            // 
+            this.txtDoErrorMax.Location = new System.Drawing.Point(158, 125);
+            this.txtDoErrorMax.Name = "txtDoErrorMax";
+            this.txtDoErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtDoErrorMax.TabIndex = 390;
+            // 
+            // txtDoErrorMin
+            // 
+            this.txtDoErrorMin.Location = new System.Drawing.Point(82, 125);
+            this.txtDoErrorMin.Name = "txtDoErrorMin";
+            this.txtDoErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtDoErrorMin.TabIndex = 389;
+            // 
+            // txtTempErrorMax
+            // 
+            this.txtTempErrorMax.Location = new System.Drawing.Point(158, 99);
+            this.txtTempErrorMax.Name = "txtTempErrorMax";
+            this.txtTempErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtTempErrorMax.TabIndex = 384;
+            // 
+            // txtTempErrorMin
+            // 
+            this.txtTempErrorMin.Location = new System.Drawing.Point(82, 98);
+            this.txtTempErrorMin.Name = "txtTempErrorMin";
+            this.txtTempErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtTempErrorMin.TabIndex = 383;
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(18, 126);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(23, 13);
+            this.label44.TabIndex = 380;
+            this.label44.Text = "DO";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(17, 101);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(34, 13);
+            this.label45.TabIndex = 379;
+            this.label45.Text = "Temp";
+            // 
+            // txtOrpErrorMax
+            // 
+            this.txtOrpErrorMax.Location = new System.Drawing.Point(158, 74);
+            this.txtOrpErrorMax.Name = "txtOrpErrorMax";
+            this.txtOrpErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtOrpErrorMax.TabIndex = 376;
+            // 
+            // txtOrpErrorMin
+            // 
+            this.txtOrpErrorMin.Location = new System.Drawing.Point(82, 73);
+            this.txtOrpErrorMin.Name = "txtOrpErrorMin";
+            this.txtOrpErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtOrpErrorMin.TabIndex = 375;
+            // 
+            // txtpHErrorMax
+            // 
+            this.txtpHErrorMax.Location = new System.Drawing.Point(158, 47);
+            this.txtpHErrorMax.Name = "txtpHErrorMax";
+            this.txtpHErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtpHErrorMax.TabIndex = 370;
+            // 
+            // txtpHErrorMin
+            // 
+            this.txtpHErrorMin.Location = new System.Drawing.Point(82, 47);
+            this.txtpHErrorMin.Name = "txtpHErrorMin";
+            this.txtpHErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtpHErrorMin.TabIndex = 369;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(18, 77);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(24, 13);
+            this.label46.TabIndex = 366;
+            this.label46.Text = "Orp";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(18, 48);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(21, 13);
+            this.label47.TabIndex = 365;
+            this.label47.Text = "pH";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(156, 14);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(51, 13);
+            this.label50.TabIndex = 362;
+            this.label50.Text = "Error max";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(79, 14);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(48, 13);
+            this.label51.TabIndex = 361;
+            this.label51.Text = "Error min";
+            // 
+            // txtTocErrorMax
+            // 
+            this.txtTocErrorMax.Location = new System.Drawing.Point(158, 258);
+            this.txtTocErrorMax.Name = "txtTocErrorMax";
+            this.txtTocErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtTocErrorMax.TabIndex = 413;
+            // 
+            // txtTocErrorMin
+            // 
+            this.txtTocErrorMin.Location = new System.Drawing.Point(82, 257);
+            this.txtTocErrorMin.Name = "txtTocErrorMin";
+            this.txtTocErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtTocErrorMin.TabIndex = 412;
+            // 
+            // txtTpErrorMax
+            // 
+            this.txtTpErrorMax.Location = new System.Drawing.Point(158, 231);
+            this.txtTpErrorMax.Name = "txtTpErrorMax";
+            this.txtTpErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtTpErrorMax.TabIndex = 411;
+            // 
+            // txtTpErrorMin
+            // 
+            this.txtTpErrorMin.Location = new System.Drawing.Point(82, 230);
+            this.txtTpErrorMin.Name = "txtTpErrorMin";
+            this.txtTpErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtTpErrorMin.TabIndex = 410;
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(18, 260);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(29, 13);
+            this.label41.TabIndex = 409;
+            this.label41.Text = "TOC";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(18, 233);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(21, 13);
+            this.label48.TabIndex = 408;
+            this.label48.Text = "TP";
+            this.label48.Click += new System.EventHandler(this.label48_Click);
+            // 
+            // txtTnErrorMax
+            // 
+            this.txtTnErrorMax.Location = new System.Drawing.Point(158, 206);
+            this.txtTnErrorMax.Name = "txtTnErrorMax";
+            this.txtTnErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtTnErrorMax.TabIndex = 407;
+            // 
+            // txtTnErrorMin
+            // 
+            this.txtTnErrorMin.Location = new System.Drawing.Point(82, 206);
+            this.txtTnErrorMin.Name = "txtTnErrorMin";
+            this.txtTnErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtTnErrorMin.TabIndex = 406;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(18, 209);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(22, 13);
+            this.label49.TabIndex = 405;
+            this.label49.Text = "TN";
+            // 
             // frmConfiguration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2430,6 +2728,8 @@
             this.tabPage4.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2667,5 +2967,35 @@
         private System.Windows.Forms.TextBox txtCleaningChannel;
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Button btnShow;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.TextBox txtEcErrorMax;
+        private System.Windows.Forms.TextBox txtEcErrorMin;
+        private System.Windows.Forms.TextBox txtTssErrorMax;
+        private System.Windows.Forms.TextBox txtTssErrorMin;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.TextBox txtDoErrorMax;
+        private System.Windows.Forms.TextBox txtDoErrorMin;
+        private System.Windows.Forms.TextBox txtTempErrorMax;
+        private System.Windows.Forms.TextBox txtTempErrorMin;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.TextBox txtOrpErrorMax;
+        private System.Windows.Forms.TextBox txtOrpErrorMin;
+        private System.Windows.Forms.TextBox txtpHErrorMax;
+        private System.Windows.Forms.TextBox txtpHErrorMin;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.TextBox txtTocErrorMax;
+        private System.Windows.Forms.TextBox txtTocErrorMin;
+        private System.Windows.Forms.TextBox txtTpErrorMax;
+        private System.Windows.Forms.TextBox txtTpErrorMin;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.TextBox txtTnErrorMax;
+        private System.Windows.Forms.TextBox txtTnErrorMin;
+        private System.Windows.Forms.Label label49;
     }
 }

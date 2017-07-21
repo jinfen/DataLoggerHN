@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonInfo.cs" />
+    <Compile Include="databinding.cs" />
     <Compile Include="data_60minute_value.cs" />
     <Compile Include="data_5minute_value.cs" />
     <Compile Include="module.cs" />

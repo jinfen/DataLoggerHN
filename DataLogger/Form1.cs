@@ -1132,7 +1132,7 @@ namespace WinformProtocol
             foreach (DataRow data in mindata.Rows)
             {
                 int min_value = Convert.ToInt32(data["min_value"]);
-                if (Convert.ToDouble(String.Format("{0:0.00}", Row[Convert.ToString(data["clnnamevalue"])])) >= min_value)
+                if (Convert.ToDouble(String.Format("{0:0.00}", Row[Convert.ToString(data["clnnamevalue"])])) >= min_value && Convert.ToDouble(String.Format("{0:0.00}", Row[Convert.ToString(data["clnnamevalue"])])) != -1)
                 {
                     i++;
                 }
@@ -1172,7 +1172,7 @@ namespace WinformProtocol
                     //_encoder.GetBytes(ConvertStr(tbcode.Rows.Count.ToString(), 2)).CopyTo(countitem1, 0);
 
                     byte[] sql = null;
-
+                    //---------------------------------------------------------------------------------------
                     foreach (DataRow delRow in data.Rows)
                     {
                         if (getNullNo(delRow, tbcode) == 0)
@@ -1182,6 +1182,7 @@ namespace WinformProtocol
                         }
                     }
                     data.AcceptChanges();
+                    //-----------------------------------------------------------------------------------------
                     foreach (DataRow row1 in data.Rows)  // lay moi row trong data phu hop voi DUMP command
                     {
                         sql = null;
@@ -1210,9 +1211,9 @@ namespace WinformProtocol
                         foreach (DataRow row2 in tbcode.Rows)
                         {
                             int min_value = Convert.ToInt32(row2["min_value"]);
-                            if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value)
+                            //if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value && Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) != -1)
                             //------------------------------------------------------------------------------------------------------
-                            //if (true)
+                            if (true)
                             {
                                 byte[] _code = _encoder.GetBytes(Convert.ToString(row2["code"]));
                                 byte[] _clnnamevalue;
@@ -2213,9 +2214,11 @@ namespace WinformProtocol
             ThreadReclaim.Start();
             Int32 Port = port;
             IPAddress LocalAddr = localAddr;
+            string localHost = "0.0.0.0";
+            IPAddress _localHost = IPAddress.Parse(localHost);
             try
             {
-                listener = new TcpListener(LocalAddr, Port);
+                listener = new TcpListener(_localHost, Port);
                 listener.Start();
                 await Task.Run(() =>
                 {

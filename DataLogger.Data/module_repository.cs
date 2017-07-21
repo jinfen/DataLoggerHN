@@ -31,10 +31,12 @@ namespace DataLogger.Data
                         string sql_command = "INSERT INTO modules ( item_name, " +
                                             " on_value, off_value, input_min, input_max," +
                                             " output_min, output_max," +
+                                            " error_min, error_max," +
                                             " module_id, channel_number, :offset)" +
                                             " VALUES (:item_name, " +
                                             " :on_value, :off_value, :input_min, :input_max," +
                                             " :output_min, :output_max," +
+                                            " :error_min, :error_max," +
                                             " :module_id, :channel_number, :off_set)";
                         sql_command += " RETURNING id;";
 
@@ -53,6 +55,8 @@ namespace DataLogger.Data
                             cmd.Parameters.Add(":input_max", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.input_max;
                             cmd.Parameters.Add(":output_min", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.output_min;
                             cmd.Parameters.Add(":output_max", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.output_max;
+                            cmd.Parameters.Add(":error_min", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.error_min;
+                            cmd.Parameters.Add(":error_max", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.error_max;
                             cmd.Parameters.Add(":off_set", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.off_set;
 
                             ID = Convert.ToInt32(cmd.ExecuteScalar());
@@ -99,6 +103,7 @@ namespace DataLogger.Data
                                             " on_value = :on_value, off_value =:off_value, " +
                                             " input_min = :input_min, input_max =:input_max, " +
                                             " output_min = :output_min, output_max =:output_max, " +
+                                            " error_min = :error_min, error_max =:error_max, " +
                                             " channel_number =:channel_number, off_set =:off_set " +                                            
                                             " where id = :id";
 
@@ -117,6 +122,8 @@ namespace DataLogger.Data
                             cmd.Parameters.Add(":input_max", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.input_max;
                             cmd.Parameters.Add(":output_min", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.output_min;
                             cmd.Parameters.Add(":output_max", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.output_max;
+                            cmd.Parameters.Add(":error_min", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.error_min;
+                            cmd.Parameters.Add(":error_max", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.error_max;
                             cmd.Parameters.Add(":off_set", NpgsqlTypes.NpgsqlDbType.Double).Value = obj.off_set;
                             cmd.Parameters.Add(":id", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.id;
 
@@ -390,6 +397,14 @@ namespace DataLogger.Data
                     obj.output_max = Convert.ToInt32(dataReader["output_max"].ToString().Trim());
                 else
                     obj.output_max = 0;
+                if (!DBNull.Value.Equals(dataReader["error_min"]))
+                    obj.error_min = Convert.ToInt32(dataReader["error_min"].ToString().Trim());
+                else
+                    obj.error_min = 0;
+                if (!DBNull.Value.Equals(dataReader["error_max"]))
+                    obj.error_max = Convert.ToInt32(dataReader["error_max"].ToString().Trim());
+                else
+                    obj.error_max = 0;
                 if (!DBNull.Value.Equals(dataReader["off_set"]))
                     obj.off_set = Convert.ToDouble(dataReader["off_set"].ToString().Trim());
                 else

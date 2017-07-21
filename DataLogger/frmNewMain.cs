@@ -180,6 +180,16 @@ namespace DataLogger
         public static Form1 protocol;
         public static Boolean isSamp;
         #region Form event
+        private const int CP_NOCLOSE_BUTTON = 0x200;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams myCp = base.CreateParams;
+                myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+                return myCp;
+            }
+        }
         public frmNewMain()
         {
             InitializeComponent();
@@ -657,7 +667,7 @@ namespace DataLogger
             //{
             //    DataReceived(inputData);
             //}
-            
+
             try
             {
                 //MessageBox.Show("testSAMP");
@@ -1094,7 +1104,21 @@ namespace DataLogger
                 TOC_receive_buffer = new byte[2048];
                 TOC_buffer_counter = 0;
                 //}
-
+                //module_repository _modules = new module_repository();
+                //if (objMeasuredDataGlobal.TOC > -1)
+                //{
+                //    module objToc = _modules.get_info_by_name("Toc");
+                //    if (objMeasuredDataGlobal.TOC > objToc.error_max || objMeasuredDataGlobal.TOC < objToc.error_min)
+                //    {
+                //        txtTOCValue.ForeColor = Color.Red;
+                //        txtToc.ForeColor = Color.Red;
+                //    }
+                //    else
+                //    {
+                //        txtTOCValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                //        txtToc.ForeColor = System.Drawing.Color.Black;
+                //    }
+                //}
                 updateMeasuredDataValue(objMeasuredDataGlobal);
 
             }
@@ -1210,7 +1234,21 @@ namespace DataLogger
                 TP_receive_buffer = new byte[2048];
                 TP_buffer_counter = 0;
                 //}
-
+                //module_repository _modules = new module_repository();
+                //if (objMeasuredDataGlobal.TP > -1)
+                //{
+                //    module objTp = _modules.get_info_by_name("Tp");
+                //    if (objMeasuredDataGlobal.TP > objTp.error_max || objMeasuredDataGlobal.TP < objTp.error_min)
+                //    {
+                //        txtTPValue.ForeColor = Color.Red;
+                //        txtTp.ForeColor = Color.Red;
+                //    }
+                //    else
+                //    {
+                //        txtTPValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                //        txtTp.ForeColor = System.Drawing.Color.Black;
+                //    }
+                //}
                 updateMeasuredDataValue(objMeasuredDataGlobal);
 
             }
@@ -1334,6 +1372,21 @@ namespace DataLogger
 
                 TN_receive_buffer = new byte[2048];
                 TN_buffer_counter = 0;
+                //}
+                //module_repository _modules = new module_repository();
+                //if (objMeasuredDataGlobal.TN > -1)
+                //{
+                //    module objTn = _modules.get_info_by_name("Tn");
+                //    if (objMeasuredDataGlobal.TN > objTn.error_max || objMeasuredDataGlobal.TN < objTn.error_min)
+                //    {
+                //        txtTNValue.ForeColor = Color.Red;
+                //        txtTn.ForeColor = Color.Red;
+                //    }
+                //    else
+                //    {
+                //        txtTNValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                //        txtTn.ForeColor = System.Drawing.Color.Black;
+                //    }
                 //}
                 updateMeasuredDataValue(objMeasuredDataGlobal);
             }
@@ -1510,7 +1563,7 @@ namespace DataLogger
             try
             {
                 int j = 0;
-                if (text.Length >= SAMP_PACKET_LENGTH )
+                if (text.Length >= SAMP_PACKET_LENGTH)
                 {
                     //string raw_data = Encoding.ASCII.GetString(text);
                     //Console.WriteLine("data : " + raw_data.Length);
@@ -1521,7 +1574,7 @@ namespace DataLogger
                         if (text[j] == 0x02 &&   //STX
                             text[j + 1] == 0x53 &&   //S
                             text[j + 2] == 0x41 &&   //A
-                            text[j + SAMP_PACKET_LENGTH - 1 ] == 0x0D &&   //CR
+                            text[j + SAMP_PACKET_LENGTH - 1] == 0x0D &&   //CR
                             text[j + SAMP_PACKET_LENGTH - 1 - 3] == 0x03   //ETX
                             )
                         {
@@ -1826,6 +1879,140 @@ namespace DataLogger
                                 }
                                 objMeasuredDataGlobal.MPS_status = 0;
                                 objMeasuredDataGlobal.latest_update_MPS_communication = DateTime.Now;
+                                //#region 1
+                                //module_repository _modules = new module_repository();
+                                //if (objMeasuredDataGlobal.MPS_status != INT_STATUS_COMMUNICATION_ERROR &&
+                                //    objMeasuredDataGlobal.MPS_status != INT_STATUS_INSTRUMENT_ERROR &&
+                                //    objMeasuredDataGlobal.MPS_status != INT_STATUS_EMPTY_SAMPLER_RESERVOIR)
+                                //{
+                                //    int ec = getMinValueFromDatabinding("ec");
+                                //    if (objMeasuredDataGlobal.MPS_EC >= ec
+                                //            //getMinValueFromDatabinding("ec")
+                                //            )
+                                //    {
+                                //        module objEC = _modules.get_info_by_name("Cond");
+                                //        if (objMeasuredDataGlobal.MPS_EC > objEC.error_max || objMeasuredDataGlobal.MPS_EC < objEC.error_min)
+                                //        {
+                                //            txtMPSCondValue.ForeColor = Color.Red;
+                                //            txtEc.ForeColor = Color.Red;
+                                //        }
+                                //        else
+                                //        {
+                                //            txtMPSCondValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                                //            txtEc.ForeColor = System.Drawing.Color.Black;
+                                //        }
+                                //    }
+                                //    else
+                                //    {
+                                //        txtMPSCondValue.Text = "Err";
+                                //    }
+                                //    int ph = getMinValueFromDatabinding("ph");
+                                //    if (objMeasuredDataGlobal.MPS_pH >= ph
+                                //        //getMinValueFromDatabinding("ph")
+                                //        )
+                                //    {
+                                //        module objpH = _modules.get_info_by_name("pH");
+                                //        if (objMeasuredDataGlobal.MPS_pH > objpH.error_max || objMeasuredDataGlobal.MPS_pH < objpH.error_min)
+                                //        {
+                                //            txtMPSpHValue.ForeColor = Color.Red;
+                                //            txtpH.ForeColor = Color.Red;
+                                //        }
+                                //        else
+                                //        {
+                                //            txtMPSpHValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                                //            txtpH.ForeColor = System.Drawing.Color.Black;
+                                //        }
+                                //    }
+                                //    else
+                                //    {
+                                //        txtMPSpHValue.Text = "Err";
+                                //    }
+                                //    int Do = getMinValueFromDatabinding("do");
+                                //    if (objMeasuredDataGlobal.MPS_DO >= Do
+                                //        //getMinValueFromDatabinding("do")
+                                //        )
+                                //    {
+                                //        module objDo = _modules.get_info_by_name("DO");
+                                //        if (objMeasuredDataGlobal.MPS_DO > objDo.error_max || objMeasuredDataGlobal.MPS_DO < objDo.error_min)
+                                //        {
+                                //            txtMPSDOValue.ForeColor = Color.Red;
+                                //            txtDo.ForeColor = Color.Red;
+                                //        }
+                                //        else
+                                //        {
+                                //            txtMPSDOValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                                //            txtDo.ForeColor = System.Drawing.Color.Black;
+                                //        }
+                                //    }
+                                //    else
+                                //    {
+                                //        txtMPSDOValue.Text = "Err";
+                                //    }
+                                //    int tss = getMinValueFromDatabinding("tss");
+                                //    if (objMeasuredDataGlobal.MPS_Turbidity >= tss
+                                //        //getMinValueFromDatabinding("tss")
+                                //        )
+                                //    {
+                                //        module objTss = _modules.get_info_by_name("Turb");
+                                //        if (objMeasuredDataGlobal.MPS_Turbidity > objTss.error_max || objMeasuredDataGlobal.MPS_Turbidity < objTss.error_min)
+                                //        {
+                                //            txtMPSTurbValue.ForeColor = Color.Red;
+                                //            txtTss.ForeColor = Color.Red;
+                                //        }
+                                //        else
+                                //        {
+                                //            txtMPSTurbValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                                //            txtTss.ForeColor = System.Drawing.Color.Black;
+                                //        }
+                                //    }
+                                //    else
+                                //    {
+                                //        txtMPSTurbValue.Text = "Err";
+                                //    }
+                                //    int orp = getMinValueFromDatabinding("orp");
+                                //    if (objMeasuredDataGlobal.MPS_ORP >= orp
+                                //        //getMinValueFromDatabinding("orp")
+                                //        )
+                                //    {
+                                //        module objOrp = _modules.get_info_by_name("Orp");
+                                //        if (objMeasuredDataGlobal.MPS_ORP > objOrp.error_max || objMeasuredDataGlobal.MPS_ORP < objOrp.error_min)
+                                //        {
+                                //            txtMPSORPValue.ForeColor = Color.Red;
+                                //            txtOrp.ForeColor = Color.Red;
+                                //        }
+                                //        else
+                                //        {
+                                //            txtMPSORPValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                                //            txtOrp.ForeColor = System.Drawing.Color.Black;
+                                //        }
+                                //    }
+                                //    else
+                                //    {
+                                //        txtMPSORPValue.Text = "Err";
+                                //    }
+                                //    int temp = getMinValueFromDatabinding("temp");
+                                //    if (objMeasuredDataGlobal.MPS_Temp >= temp
+                                //        //getMinValueFromDatabinding("temp")
+                                //        )
+                                //    {
+                                //        module objTemp = _modules.get_info_by_name("Temp");
+                                //        if (objMeasuredDataGlobal.MPS_Temp > objTemp.error_max || objMeasuredDataGlobal.MPS_Temp < objTemp.error_min)
+                                //        {
+                                //            txtMPSTempValue.ForeColor = Color.Red;
+                                //            txtTemp.ForeColor = Color.Red;
+                                //        }
+                                //        else
+                                //        {
+                                //            txtMPSTempValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                                //            txtTemp.ForeColor = System.Drawing.Color.Black;
+                                //        }
+                                //    }
+                                //    else
+                                //    {
+                                //        txtMPSTempValue.Text = "Err";
+                                //    }
+                                //}
+                                //#endregion 1
                                 updateMeasuredDataValue(objMeasuredDataGlobal);
                                 //if (_GROUP == 1)
                                 //{
@@ -2291,7 +2478,7 @@ namespace DataLogger
 
                             requestInfor(serialPortTOC);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             Console.WriteLine(e.StackTrace);
                         }
@@ -2353,7 +2540,7 @@ namespace DataLogger
                     catch (Exception e)
                     {
                         Console.WriteLine(e.StackTrace);
-                    }                 
+                    }
                     break;
                 default:
                     break;
@@ -2514,17 +2701,17 @@ namespace DataLogger
                 objMeasuredDataGlobal.MPS_ORP = -1;
                 objMeasuredDataGlobal.MPS_Turbidity = -1;
             }
-            objDataValue.MPS_DO = System.Math.Round(objMeasuredDataGlobal.MPS_DO,2);
+            objDataValue.MPS_DO = System.Math.Round(objMeasuredDataGlobal.MPS_DO, 2);
             objDataValue.MPS_DO_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_EC = System.Math.Round(objMeasuredDataGlobal.MPS_EC,2);
+            objDataValue.MPS_EC = System.Math.Round(objMeasuredDataGlobal.MPS_EC, 2);
             objDataValue.MPS_EC_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_ORP = System.Math.Round(objMeasuredDataGlobal.MPS_ORP,2);
+            objDataValue.MPS_ORP = System.Math.Round(objMeasuredDataGlobal.MPS_ORP, 2);
             objDataValue.MPS_ORP_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_pH = System.Math.Round(objMeasuredDataGlobal.MPS_pH,2);
+            objDataValue.MPS_pH = System.Math.Round(objMeasuredDataGlobal.MPS_pH, 2);
             objDataValue.MPS_pH_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_Temp = System.Math.Round(objMeasuredDataGlobal.MPS_Temp,2);
+            objDataValue.MPS_Temp = System.Math.Round(objMeasuredDataGlobal.MPS_Temp, 2);
             objDataValue.MPS_Temp_status = objMeasuredDataGlobal.MPS_status;
-            objDataValue.MPS_Turbidity = System.Math.Round(objMeasuredDataGlobal.MPS_Turbidity,2);
+            objDataValue.MPS_Turbidity = System.Math.Round(objMeasuredDataGlobal.MPS_Turbidity, 2);
             objDataValue.MPS_Turbidity_status = objMeasuredDataGlobal.MPS_status;
             objDataValue.MPS_status = objMeasuredDataGlobal.MPS_status;
 
@@ -2544,11 +2731,11 @@ namespace DataLogger
                 objMeasuredDataGlobal.TP_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
                 objMeasuredDataGlobal.TP = -1;
             }
-            objDataValue.TN = System.Math.Round(objMeasuredDataGlobal.TN,2);
+            objDataValue.TN = System.Math.Round(objMeasuredDataGlobal.TN, 2);
             objDataValue.TN_status = objMeasuredDataGlobal.TN_status;
-            objDataValue.TOC = System.Math.Round(objMeasuredDataGlobal.TOC,2);
+            objDataValue.TOC = System.Math.Round(objMeasuredDataGlobal.TOC, 2);
             objDataValue.TOC_status = objMeasuredDataGlobal.TOC_status;
-            objDataValue.TP = System.Math.Round(objMeasuredDataGlobal.TP,2);
+            objDataValue.TP = System.Math.Round(objMeasuredDataGlobal.TP, 2);
             objDataValue.TP_status = objMeasuredDataGlobal.TP_status;
 
             // water sampler
@@ -2902,9 +3089,10 @@ namespace DataLogger
                     }
                     conn.Close();
                     return min_value;
-                }          
+                }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Console.WriteLine(e.StackTrace);
                 Console.WriteLine(e.Message);
                 return -1;
@@ -3006,16 +3194,16 @@ namespace DataLogger
             return ret;
         }
 
-        public void dataCSV(string firts,data_value data,string path,string date)
+        public void dataCSV(string firts, data_value data, string path, string date)
         {
             using (NpgsqlDBConnection db = new NpgsqlDBConnection())
             {
                 try
                 {
-                var csv = new StringBuilder();
-                csv.Append(firts + "\t" + "");
-                csv.AppendLine();
-                //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
+                    var csv = new StringBuilder();
+                    csv.Append(firts + "\t" + "");
+                    csv.AppendLine();
+                    //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
 
                     if (db.open_connection())
                     {
@@ -3130,10 +3318,10 @@ namespace DataLogger
                 {
                     db.close_connection();
                     Console.WriteLine(e.StackTrace);
-                }          
+                }
             }
         }
-        public Boolean FTP(data_value data,DateTime datetime)
+        public Boolean FTP(data_value data, DateTime datetime)
         {
             try
             {
@@ -3250,16 +3438,17 @@ namespace DataLogger
                 //ftpClient.upload("/test/2017/data_report.csv", @"C:\Users\Admin\Desktop\data_report.csv");
                 string filePath = Path.Combine(folderPathD, newFileName);
                 ftpClient.upload(filePath, newFilePath);
-                Form1.control1.AppendTextBox("Manual/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl,1);
+                Form1.control1.AppendTextBox("Manual/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl, 1);
                 return true;
             }
             catch (Exception e)
             {
-                Form1.control1.AppendTextBox("Manual/Error " + Environment.NewLine, Form1.control1.getForm1fromControl,1);
+                Form1.control1.AppendTextBox("Manual/Error " + Environment.NewLine, Form1.control1.getForm1fromControl, 1);
                 return false;
             }
         }
-        public Boolean FTP(data_value data) {
+        public Boolean FTP(data_value data)
+        {
             string newFileName = null;
             try
             {
@@ -3292,16 +3481,17 @@ namespace DataLogger
                 string newFilePath = Path.Combine(appPath, csv, newFileName);
 
                 /// Year Folder
-                string[] simpleDirectoryYear = ftpClient.directoryListSimple(folder);            
+                string[] simpleDirectoryYear = ftpClient.directoryListSimple(folder);
                 Boolean hasFolderY = false;
                 for (int i = 0; i < simpleDirectoryYear.Count(); i++)
                 {
-                    if (simpleDirectoryYear[i].Equals(yearFolder)) {
+                    if (simpleDirectoryYear[i].Equals(yearFolder))
+                    {
                         hasFolderY = true;
                     }
                 }
-                
-                string folderPathY ;
+
+                string folderPathY;
                 if (hasFolderY == false)
                 {
                     folderPathY = Path.Combine(folder, yearFolder);
@@ -3313,7 +3503,7 @@ namespace DataLogger
                 }
                 ///
                 /// Month Folder
-                string[] simpleDirectoryMonth = ftpClient.directoryListSimple(folderPathY); 
+                string[] simpleDirectoryMonth = ftpClient.directoryListSimple(folderPathY);
                 Boolean hasFolderM = false;
                 for (int i = 0; i < simpleDirectoryYear.Count(); i++)
                 {
@@ -3376,11 +3566,12 @@ namespace DataLogger
                 //ftpClient.upload("/test/2017/data_report.csv", @"C:\Users\Admin\Desktop\data_report.csv");
                 string filePath = Path.Combine(folderPathD, newFileName);
                 ftpClient.upload(filePath, newFilePath);
-                Form1.control1.AppendTextBox("Auto/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl,1);
+                Form1.control1.AppendTextBox("Auto/Success " + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl, 1);
                 return true;
             }
-            catch (Exception e) {
-                Form1.control1.AppendTextBox("Auto/Error" + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl,1);
+            catch (Exception e)
+            {
+                Form1.control1.AppendTextBox("Auto/Error" + newFileName + Environment.NewLine, Form1.control1.getForm1fromControl, 1);
                 return false;
             }
         }
@@ -3489,7 +3680,7 @@ namespace DataLogger
 
                             }
                         }
-                        Form1.control1.AppendTextBox("Lasted/Success " + "END" + Environment.NewLine, Form1.control1.getForm1fromControl,1);
+                        Form1.control1.AppendTextBox("Lasted/Success " + "END" + Environment.NewLine, Form1.control1.getForm1fromControl, 1);
                     }
                     return true;
                 }
@@ -4177,278 +4368,379 @@ namespace DataLogger
         }
         public void updateMeasuredDataValue(measured_data obj)
         {
-            if (GlobalVar.isMaintenanceStatus)
+            try
             {
-                if (GlobalVar.maintenanceLog.mps == 1)
+                if (GlobalVar.isMaintenanceStatus)
                 {
-                    objMeasuredDataGlobal.MPS_status = INT_STATUS_MAINTENANCE;
-                    obj.MPS_status = objMeasuredDataGlobal.MPS_status;
+                    if (GlobalVar.maintenanceLog.mps == 1)
+                    {
+                        objMeasuredDataGlobal.MPS_status = INT_STATUS_MAINTENANCE;
+                        obj.MPS_status = objMeasuredDataGlobal.MPS_status;
+                    }
+                    if (GlobalVar.maintenanceLog.toc == 1)
+                    {
+                        objMeasuredDataGlobal.TOC_status = INT_STATUS_MAINTENANCE;
+                        obj.TOC_status = objMeasuredDataGlobal.TOC_status;
+                    }
+                    if (GlobalVar.maintenanceLog.tn == 1)
+                    {
+                        objMeasuredDataGlobal.TN_status = INT_STATUS_MAINTENANCE;
+                        obj.TN_status = objMeasuredDataGlobal.TN_status;
+                    }
+                    if (GlobalVar.maintenanceLog.tp == 1)
+                    {
+                        objMeasuredDataGlobal.TP_status = INT_STATUS_MAINTENANCE;
+                        obj.TP_status = objMeasuredDataGlobal.TP_status;
+                    }
                 }
-                if (GlobalVar.maintenanceLog.toc == 1)
+                // check latest update communication
+                if (DateTime.Compare(objMeasuredDataGlobal.latest_update_MPS_communication, DateTime.Now.AddSeconds(-PERIOD_CHECK_COMMUNICATION_ERROR)) < 0)
                 {
-                    objMeasuredDataGlobal.TOC_status = INT_STATUS_MAINTENANCE;
+                    objMeasuredDataGlobal.MPS_status = INT_STATUS_COMMUNICATION_ERROR;
+                    obj.MPS_status = objMeasuredDataGlobal.MPS_status;
+                    objMeasuredDataGlobal.MPS_DO = -1;
+                    objMeasuredDataGlobal.MPS_EC = -1;
+                    objMeasuredDataGlobal.MPS_pH = -1;
+                    objMeasuredDataGlobal.MPS_Temp = -1;
+                    objMeasuredDataGlobal.MPS_ORP = -1;
+                    objMeasuredDataGlobal.MPS_Turbidity = -1;
+                }
+                if (DateTime.Compare(objMeasuredDataGlobal.latest_update_TOC_communication, DateTime.Now.AddSeconds(-PERIOD_CHECK_COMMUNICATION_ERROR)) < 0)
+                {
+                    objMeasuredDataGlobal.TOC_status = INT_STATUS_COMMUNICATION_ERROR;
+                    obj.TOC = objMeasuredDataGlobal.TOC = -1;
                     obj.TOC_status = objMeasuredDataGlobal.TOC_status;
                 }
-                if (GlobalVar.maintenanceLog.tn == 1)
+                if (DateTime.Compare(objMeasuredDataGlobal.latest_update_TP_communication, DateTime.Now.AddSeconds(-PERIOD_CHECK_COMMUNICATION_ERROR)) < 0)
                 {
-                    objMeasuredDataGlobal.TN_status = INT_STATUS_MAINTENANCE;
-                    obj.TN_status = objMeasuredDataGlobal.TN_status;
-                }
-                if (GlobalVar.maintenanceLog.tp == 1)
-                {
-                    objMeasuredDataGlobal.TP_status = INT_STATUS_MAINTENANCE;
+                    objMeasuredDataGlobal.TP_status = INT_STATUS_COMMUNICATION_ERROR;
                     obj.TP_status = objMeasuredDataGlobal.TP_status;
+                    obj.TP = objMeasuredDataGlobal.TP = -1;
                 }
-            }
-            // check latest update communication
-            if (DateTime.Compare(objMeasuredDataGlobal.latest_update_MPS_communication, DateTime.Now.AddSeconds(-PERIOD_CHECK_COMMUNICATION_ERROR)) < 0)
-            {
-                objMeasuredDataGlobal.MPS_status = INT_STATUS_COMMUNICATION_ERROR;
-                obj.MPS_status = objMeasuredDataGlobal.MPS_status;
-                objMeasuredDataGlobal.MPS_DO = -1;
-                objMeasuredDataGlobal.MPS_EC = -1;
-                objMeasuredDataGlobal.MPS_pH = -1;
-                objMeasuredDataGlobal.MPS_Temp = -1;
-                objMeasuredDataGlobal.MPS_ORP = -1;
-                objMeasuredDataGlobal.MPS_Turbidity = -1;
-            }
-            if (DateTime.Compare(objMeasuredDataGlobal.latest_update_TOC_communication, DateTime.Now.AddSeconds(-PERIOD_CHECK_COMMUNICATION_ERROR)) < 0)
-            {
-                objMeasuredDataGlobal.TOC_status = INT_STATUS_COMMUNICATION_ERROR;
-                obj.TOC = objMeasuredDataGlobal.TOC = -1;
-                obj.TOC_status = objMeasuredDataGlobal.TOC_status;
-            }
-            if (DateTime.Compare(objMeasuredDataGlobal.latest_update_TP_communication, DateTime.Now.AddSeconds(-PERIOD_CHECK_COMMUNICATION_ERROR)) < 0)
-            {
-                objMeasuredDataGlobal.TP_status = INT_STATUS_COMMUNICATION_ERROR;
-                obj.TP_status = objMeasuredDataGlobal.TP_status;
-                obj.TP = objMeasuredDataGlobal.TP = -1;
-            }
-            if (DateTime.Compare(objMeasuredDataGlobal.latest_update_TN_communication, DateTime.Now.AddSeconds(-PERIOD_CHECK_COMMUNICATION_ERROR)) < 0)
-            {
-                objMeasuredDataGlobal.TN_status = INT_STATUS_COMMUNICATION_ERROR;
-                obj.TN_status = objMeasuredDataGlobal.TN_status;
-                obj.TN = objMeasuredDataGlobal.TN = -1;
-            }
+                if (DateTime.Compare(objMeasuredDataGlobal.latest_update_TN_communication, DateTime.Now.AddSeconds(-PERIOD_CHECK_COMMUNICATION_ERROR)) < 0)
+                {
+                    objMeasuredDataGlobal.TN_status = INT_STATUS_COMMUNICATION_ERROR;
+                    obj.TN_status = objMeasuredDataGlobal.TN_status;
+                    obj.TN = objMeasuredDataGlobal.TN = -1;
+                }
 
-            txtMPSCondValue.Text = "---";
-            txtMPSpHValue.Text = "---";
-            txtMPSDOValue.Text = "---";
-            txtMPSTurbValue.Text = "---";
-            txtMPSORPValue.Text = "---";
-            txtMPSTempValue.Text = "---";
+                txtMPSCondValue.Text = "---";
+                txtMPSpHValue.Text = "---";
+                txtMPSDOValue.Text = "---";
+                txtMPSTurbValue.Text = "---";
+                txtMPSORPValue.Text = "---";
+                txtMPSTempValue.Text = "---";
 
 
-
-            if (obj.MPS_status != INT_STATUS_COMMUNICATION_ERROR &&
-                obj.MPS_status != INT_STATUS_INSTRUMENT_ERROR &&
-                obj.MPS_status != INT_STATUS_EMPTY_SAMPLER_RESERVOIR)
-            {
-                int ec = getMinValueFromDatabinding("ec");
-                if (obj.MPS_EC >= ec                 
-                    //getMinValueFromDatabinding("ec")
+                module_repository _modules = new module_repository();
+                if (objMeasuredDataGlobal.MPS_status != INT_STATUS_COMMUNICATION_ERROR &&
+                    objMeasuredDataGlobal.MPS_status != INT_STATUS_INSTRUMENT_ERROR &&
+                    objMeasuredDataGlobal.MPS_status != INT_STATUS_EMPTY_SAMPLER_RESERVOIR)
+                {
+                    int ec = getMinValueFromDatabinding("ec");
+                    if (objMeasuredDataGlobal.MPS_EC >= ec
+                            //getMinValueFromDatabinding("ec")
+                            )
+                    {
+                        txtMPSCondValue.Text = obj.MPS_EC.ToString("##0.00");
+                        module objEC = _modules.get_info_by_name("Cond");
+                        if (objMeasuredDataGlobal.MPS_EC > objEC.error_max || objMeasuredDataGlobal.MPS_EC < objEC.error_min)
+                        {
+                            txtMPSCondValue.ForeColor = Color.Red;
+                            txtEc.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            txtMPSCondValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                            txtEc.ForeColor = System.Drawing.Color.Black;
+                        }
+                    }
+                    else
+                    {
+                        txtMPSCondValue.Text = "Err";
+                    }
+                    int ph = getMinValueFromDatabinding("ph");
+                    if (objMeasuredDataGlobal.MPS_pH >= ph
+                        //getMinValueFromDatabinding("ph")
                         )
-                {
-                    txtMPSCondValue.Text = obj.MPS_EC.ToString("##0.00");
+                    {
+                        txtMPSpHValue.Text = obj.MPS_pH.ToString("##0.00");
+                        module objpH = _modules.get_info_by_name("pH");
+                        if (objMeasuredDataGlobal.MPS_pH > objpH.error_max || objMeasuredDataGlobal.MPS_pH < objpH.error_min)
+                        {
+                            txtMPSpHValue.ForeColor = Color.Red;
+                            txtpH.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            txtMPSpHValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                            txtpH.ForeColor = System.Drawing.Color.Black;
+                        }
+                    }
+                    else
+                    {
+                        txtMPSpHValue.Text = "Err";
+                    }
+                    int Do = getMinValueFromDatabinding("do");
+                    if (objMeasuredDataGlobal.MPS_DO >= Do
+                        //getMinValueFromDatabinding("do")
+                        )
+                    {
+                        txtMPSDOValue.Text = obj.MPS_DO.ToString("##0.00");
+                        module objDo = _modules.get_info_by_name("DO");
+                        if (objMeasuredDataGlobal.MPS_DO > objDo.error_max || objMeasuredDataGlobal.MPS_DO < objDo.error_min)
+                        {
+                            txtMPSDOValue.ForeColor = Color.Red;
+                            txtDo.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            txtMPSDOValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                            txtDo.ForeColor = System.Drawing.Color.Black;
+                        }
+                    }
+                    else
+                    {
+                        txtMPSDOValue.Text = "Err";
+                    }
+                    int tss = getMinValueFromDatabinding("tss");
+                    if (objMeasuredDataGlobal.MPS_Turbidity >= tss
+                        //getMinValueFromDatabinding("tss")
+                        )
+                    {
+                        txtMPSTurbValue.Text = obj.MPS_Turbidity.ToString("##0.00");
+                        module objTss = _modules.get_info_by_name("Turb");
+                        if (objMeasuredDataGlobal.MPS_Turbidity > objTss.error_max || objMeasuredDataGlobal.MPS_Turbidity < objTss.error_min)
+                        {
+                            txtMPSTurbValue.ForeColor = Color.Red;
+                            txtTss.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            txtMPSTurbValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                            txtTss.ForeColor = System.Drawing.Color.Black;
+                        }
+                    }
+                    else
+                    {
+                        txtMPSTurbValue.Text = "Err";
+                    }
+                    int orp = getMinValueFromDatabinding("orp");
+                    if (objMeasuredDataGlobal.MPS_ORP >= orp
+                        //getMinValueFromDatabinding("orp")
+                        )
+                    {
+                        txtMPSORPValue.Text = obj.MPS_ORP.ToString("##0.00");
+                        module objOrp = _modules.get_info_by_name("Orp");
+                        if (objMeasuredDataGlobal.MPS_ORP > objOrp.error_max || objMeasuredDataGlobal.MPS_ORP < objOrp.error_min)
+                        {
+                            txtMPSORPValue.ForeColor = Color.Red;
+                            txtOrp.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            txtMPSORPValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                            txtOrp.ForeColor = System.Drawing.Color.Black;
+                        }
+                    }
+                    else
+                    {
+                        txtMPSORPValue.Text = "Err";
+                    }
+                    int temp = getMinValueFromDatabinding("temp");
+                    if (objMeasuredDataGlobal.MPS_Temp >= temp
+                        //getMinValueFromDatabinding("temp")
+                        )
+                    {
+                        txtMPSTempValue.Text = obj.MPS_Temp.ToString("##0.00");
+                        module objTemp = _modules.get_info_by_name("Temp");
+                        if (objMeasuredDataGlobal.MPS_Temp > objTemp.error_max || objMeasuredDataGlobal.MPS_Temp < objTemp.error_min)
+                        {
+                            txtMPSTempValue.ForeColor = Color.Red;
+                            txtTemp.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            txtMPSTempValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                            txtTemp.ForeColor = System.Drawing.Color.Black;
+                        }
+                    }
+                    else
+                    {
+                        txtMPSTempValue.Text = "Err";
+                    }
                 }
-                else
-                {
-                    txtMPSCondValue.Text = "Err";
-                }
-                int ph = getMinValueFromDatabinding("ph");
-                if (obj.MPS_pH >= ph
-                    //getMinValueFromDatabinding("ph")
-                    )
-                {
-                    txtMPSpHValue.Text = obj.MPS_pH.ToString("##0.00");
-                }
-                else
-                {
-                    txtMPSpHValue.Text = "Err";
-                }
-                int Do = getMinValueFromDatabinding("do");
-                if (obj.MPS_DO >= Do
-                    //getMinValueFromDatabinding("do")
-                    )
-                {
-                    txtMPSDOValue.Text = obj.MPS_DO.ToString("##0.00");
-                }
-                else
-                {
-                    txtMPSDOValue.Text = "Err";
-                }
-                int tss = getMinValueFromDatabinding("tss");
-                if (obj.MPS_Turbidity >= tss
-                    //getMinValueFromDatabinding("tss")
-                    )
-                {
-                    txtMPSTurbValue.Text = obj.MPS_Turbidity.ToString("##0.00");
-                }
-                else
-                {
-                    txtMPSTurbValue.Text = "Err";
-                }
-                int orp = getMinValueFromDatabinding("orp");
-                if (obj.MPS_ORP >= orp
-                    //getMinValueFromDatabinding("orp")
-                    )
-                {
-                    txtMPSORPValue.Text = obj.MPS_ORP.ToString("##0.00");
-                }
-                else
-                {
-                    txtMPSORPValue.Text = "Err";
-                }
-                int temp = getMinValueFromDatabinding("temp");
-                if (obj.MPS_Temp >= temp
-                    //getMinValueFromDatabinding("temp")
-                    )
-                {
-                    txtMPSTempValue.Text = obj.MPS_Temp.ToString("##0.00");
-                }
-                else
-                {
-                    txtMPSTempValue.Text = "Err";
-                }
-            }
 
 
-            switch (obj.MPS_status)
-            {
-                case INT_STATUS_COMMUNICATION_ERROR:
-                    this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
-                    break;
-                case INT_STATUS_INSTRUMENT_ERROR:
-                    this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
-                    break;
-                case INT_STATUS_MAINTENANCE:
-                    this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
-                    break;
-                case INT_STATUS_NORMAL:
-                    this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
-                    break;
-                case INT_STATUS_MEASURING_STOP:
-                    this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
-                    break;
-                case INT_STATUS_CALIBRATING:
-                    this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
-                    break;
-                default:
-                    break;
-            }
+                switch (obj.MPS_status)
+                {
+                    case INT_STATUS_COMMUNICATION_ERROR:
+                        this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
+                        break;
+                    case INT_STATUS_INSTRUMENT_ERROR:
+                        this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        break;
+                    case INT_STATUS_MAINTENANCE:
+                        this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
+                        break;
+                    case INT_STATUS_NORMAL:
+                        this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
+                        break;
+                    case INT_STATUS_MEASURING_STOP:
+                        this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        break;
+                    case INT_STATUS_CALIBRATING:
+                        this.picMPSStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
+                        break;
+                    default:
+                        break;
+                }
 
-            // TOC
-            if (obj.TOC > -1)
-            {
-                txtTOCValue.Text = obj.TOC.ToString("##0.00");
-                vprgTOCValue.Value = (int)(obj.TOC * 10);
-            }
-            else
-            {
-                txtTOCValue.Text = "---";
-            }
-            tooltipTOC = "";
-            switch (obj.TOC_status)
-            {
-                case INT_STATUS_COMMUNICATION_ERROR:
-                    this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
-                    break;
-                case INT_STATUS_INSTRUMENT_ERROR:
-                    this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
-                    tooltipTOC = "fault";
-                    break;
-                case INT_STATUS_MAINTENANCE:
-                    this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
-                    break;
-                case INT_STATUS_NORMAL:
-                    this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
-                    tooltipTOC = "normal";
-                    break;
-                case INT_STATUS_MEASURING_STOP:
-                    this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
-                    tooltipTOC = "stop";
-                    break;
-                case INT_STATUS_CALIBRATING:
-                    this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
-                    break;
-                default:
-                    break;
-            }
+                // TOC
+                if (objMeasuredDataGlobal.TOC > -1)
+                {
+                    module objToc = _modules.get_info_by_name("Toc");
+                    if (objMeasuredDataGlobal.TOC > objToc.error_max || objMeasuredDataGlobal.TOC < objToc.error_min)
+                    {
+                        txtTOCValue.ForeColor = Color.Red;
+                        txtToc.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        txtTOCValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                        txtToc.ForeColor = System.Drawing.Color.Black;
+                    }
+                }
+                else
+                {
+                    txtTOCValue.Text = "---";
+                }
+                tooltipTOC = "";
+                switch (obj.TOC_status)
+                {
+                    case INT_STATUS_COMMUNICATION_ERROR:
+                        this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
+                        break;
+                    case INT_STATUS_INSTRUMENT_ERROR:
+                        this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        tooltipTOC = "fault";
+                        break;
+                    case INT_STATUS_MAINTENANCE:
+                        this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
+                        break;
+                    case INT_STATUS_NORMAL:
+                        this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
+                        tooltipTOC = "normal";
+                        break;
+                    case INT_STATUS_MEASURING_STOP:
+                        this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        tooltipTOC = "stop";
+                        break;
+                    case INT_STATUS_CALIBRATING:
+                        this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
+                        break;
+                    default:
+                        break;
+                }
 
-            // TN
-            if (obj.TN > -1)
-            {
-                txtTNValue.Text = obj.TN.ToString("##0.00");
-                vprgTNValue.Value = (int)(obj.TN * 10);
-            }
-            else
-            {
-                txtTNValue.Text = "---";
-            }
-            tooltipTN = "";
-            switch (obj.TN_status)
-            {
-                case INT_STATUS_COMMUNICATION_ERROR:
-                    this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
-                    break;
-                case INT_STATUS_INSTRUMENT_ERROR:
-                    this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
-                    tooltipTN = "fault";
-                    break;
-                case INT_STATUS_MAINTENANCE:
-                    this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
-                    break;
-                case INT_STATUS_NORMAL:
-                    this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
-                    tooltipTN = "normal";
-                    break;
-                case INT_STATUS_MEASURING_STOP:
-                    this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
-                    tooltipTN = "stop";
-                    break;
-                case INT_STATUS_CALIBRATING:
-                    this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
-                    break;
-                default:
-                    break;
-            }
+                //TN
+                if (objMeasuredDataGlobal.TN > -1)
+                {
+                    module objTn = _modules.get_info_by_name("Tn");
+                    if (objMeasuredDataGlobal.TN > objTn.error_max || objMeasuredDataGlobal.TN < objTn.error_min)
+                    {
+                        txtTNValue.ForeColor = Color.Red;
+                        txtTn.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        txtTNValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                        txtTn.ForeColor = System.Drawing.Color.Black;
+                    }
+                }
+                else
+                {
+                    txtTNValue.Text = "---";
+                }
+                tooltipTN = "";
+                switch (obj.TN_status)
+                {
+                    case INT_STATUS_COMMUNICATION_ERROR:
+                        this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
+                        break;
+                    case INT_STATUS_INSTRUMENT_ERROR:
+                        this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        tooltipTN = "fault";
+                        break;
+                    case INT_STATUS_MAINTENANCE:
+                        this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
+                        break;
+                    case INT_STATUS_NORMAL:
+                        this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
+                        tooltipTN = "normal";
+                        break;
+                    case INT_STATUS_MEASURING_STOP:
+                        this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        tooltipTN = "stop";
+                        break;
+                    case INT_STATUS_CALIBRATING:
+                        this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
+                        break;
+                    default:
+                        break;
+                }
 
-            // TP
-            if (obj.TP > -1)
-            {
-                txtTPValue.Text = obj.TP.ToString("##0.000");
-                vprgTPValue.Value = (int)(obj.TP * 10);
+                // TP
+                if (objMeasuredDataGlobal.TP > -1)
+                {
+                    module objTp = _modules.get_info_by_name("Tp");
+                    if (objMeasuredDataGlobal.TP > objTp.error_max || objMeasuredDataGlobal.TP < objTp.error_min)
+                    {
+                        txtTPValue.ForeColor = Color.Red;
+                        txtTp.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        txtTPValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                        txtTp.ForeColor = System.Drawing.Color.Black;
+                    }
+                }
+                else
+                {
+                    txtTPValue.Text = "---";
+                }
+                tooltipTP = "";
+                switch (obj.TP_status)
+                {
+                    case INT_STATUS_COMMUNICATION_ERROR:
+                        this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
+                        break;
+                    case INT_STATUS_INSTRUMENT_ERROR:
+                        this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        tooltipTP = "fault";
+                        break;
+                    case INT_STATUS_MAINTENANCE:
+                        this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
+                        break;
+                    case INT_STATUS_NORMAL:
+                        this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
+                        tooltipTP = "normal";
+                        break;
+                    case INT_STATUS_MEASURING_STOP:
+                        this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        tooltipTP = "stop";
+                        break;
+                    case INT_STATUS_CALIBRATING:
+                        this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
+                        break;
+                    default:
+                        break;
+                }
             }
-            else
+            catch (Exception e)
             {
-                txtTPValue.Text = "---";
-            }
-            tooltipTP = "";
-            switch (obj.TP_status)
-            {
-                case INT_STATUS_COMMUNICATION_ERROR:
-                    this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
-                    break;
-                case INT_STATUS_INSTRUMENT_ERROR:
-                    this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
-                    tooltipTP = "fault";
-                    break;
-                case INT_STATUS_MAINTENANCE:
-                    this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
-                    break;
-                case INT_STATUS_NORMAL:
-                    this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
-                    tooltipTP = "normal";
-                    break;
-                case INT_STATUS_MEASURING_STOP:
-                    this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
-                    tooltipTP = "stop";
-                    break;
-                case INT_STATUS_CALIBRATING:
-                    this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
-                    break;
-                default:
-                    break;
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.Message);
             }
         }
         #endregion
@@ -4799,7 +5091,7 @@ namespace DataLogger
                     return;
                 }
             }
-            frmConfiguration frmConfig = new frmConfiguration(lang,this);
+            frmConfiguration frmConfig = new frmConfiguration(lang, this);
             frmConfig.ShowDialog();
             initConfig(true);
         }
@@ -6083,28 +6375,37 @@ namespace DataLogger
                             setting_repository s = new setting_repository();
                             int id = s.get_id_by_key("lasted_push");
                             DateTime lastedPush = s.get_datetime_by_id(id);
-
+                            GlobalVar.stationSettings = new station_repository().get_info();
                             /// Send File ftp			
-                            if (
-                                //main.ManualFTP(lastedPush, DateTime.Now) && 
-                                main.FTP(objLatest))
+                            /// 
+                            if (GlobalVar.stationSettings.ftpflag == 1)
                             {
-                                objLatest.push = 1;
-                                objLatest.push_time = DateTime.Now;
-                                ////setting_repository setre = new setting_repository();
-                                //setting set = new setting();
-                                //set.setting_key = "lasted_push";
-                                //set.setting_type = "";
-                                //set.setting_value = "";
-                                //set.note = "";
-                                //set.setting_datetime = objLatest.created;
-                                ////int id = setre.get_id_by_key("lasted_push");
-                                //s.update_with_id(ref set, id);
+                                if (
+                                    //main.ManualFTP(lastedPush, DateTime.Now) && 
+                                    main.FTP(objLatest))
+                                {
+                                    objLatest.push = 1;
+                                    objLatest.push_time = DateTime.Now;
+                                    ////setting_repository setre = new setting_repository();
+                                    //setting set = new setting();
+                                    //set.setting_key = "lasted_push";
+                                    //set.setting_type = "";
+                                    //set.setting_value = "";
+                                    //set.note = "";
+                                    //set.setting_datetime = objLatest.created;
+                                    ////int id = setre.get_id_by_key("lasted_push");
+                                    //s.update_with_id(ref set, id);
+                                }
+                                else
+                                {
+                                    objLatest.push = 0;
+                                    objLatest.push_time = DateTime.Now;
+                                }
                             }
-                            else
+                            else if (GlobalVar.stationSettings.ftpflag == 0)
                             {
                                 objLatest.push = 0;
-                                objLatest.push_time = DateTime.Now;
+                                objLatest.push_time = new DateTime();
                             }
                             ///
                             //// save to data value table
@@ -6130,28 +6431,37 @@ namespace DataLogger
                             setting_repository s = new setting_repository();
                             int id = s.get_id_by_key("lasted_push");
                             DateTime lastedPush = s.get_datetime_by_id(id);
-
-                            /// Send File ftp			
-                            if (
-                                //main.ManualFTP(lastedPush, DateTime.Now) && 
-                                main.FTP(objDataValue))
+                            GlobalVar.stationSettings = new station_repository().get_info();
+                            /// Send File ftp	
+                            /// 
+                            if (GlobalVar.stationSettings.ftpflag == 1)
                             {
-                                objDataValue.push = 1;
-                                objDataValue.push_time = DateTime.Now;
-                                ////setting_repository setre = new setting_repository();
-                                //setting set = new setting();
-                                //set.setting_key = "lasted_push";
-                                //set.setting_type = "";
-                                //set.setting_value = "";
-                                //set.note = "";
-                                //set.setting_datetime = objDataValue.created;
-                                ////int id = setre.get_id_by_key("lasted_push");
-                                //s.update_with_id(ref set, id);
+                                if (
+                                    //main.ManualFTP(lastedPush, DateTime.Now) && 
+                                    main.FTP(objDataValue))
+                                {
+                                    objDataValue.push = 1;
+                                    objDataValue.push_time = DateTime.Now;
+                                    ////setting_repository setre = new setting_repository();
+                                    //setting set = new setting();
+                                    //set.setting_key = "lasted_push";
+                                    //set.setting_type = "";
+                                    //set.setting_value = "";
+                                    //set.note = "";
+                                    //set.setting_datetime = objDataValue.created;
+                                    ////int id = setre.get_id_by_key("lasted_push");
+                                    //s.update_with_id(ref set, id);
+                                }
+                                else
+                                {
+                                    objDataValue.push = 0;
+                                    objDataValue.push_time = DateTime.Now;
+                                }
                             }
-                            else
+                            else if (GlobalVar.stationSettings.ftpflag == 0)
                             {
                                 objDataValue.push = 0;
-                                objDataValue.push_time = DateTime.Now;
+                                objDataValue.push_time = new DateTime();
                             }
                             ///
                             //// save to data value table
