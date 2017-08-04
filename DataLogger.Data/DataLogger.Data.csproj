@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="maintenance_log_repository.cs" />
     <Compile Include="module_repository.cs" />
+    <Compile Include="push_server_repository.cs" />
     <Compile Include="user_repository.cs" />
     <Compile Include="data_60minute_value_repository.cs" />
     <Compile Include="data_5minute_value_repository.cs" />

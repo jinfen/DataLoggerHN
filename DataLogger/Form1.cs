@@ -96,22 +96,26 @@ namespace WinformProtocol
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            try
+            {
+                //SAMPPort.DataReceived += mySerialThing_DataReceived;
+                station existedStationsSetting = new station_repository().get_info();
+                port = 3001;
+                textPort.Text = existedStationsSetting.socket_port.ToString();
+                //textPort.Enabled = false;
+                localAddr = IPAddress.Parse(Protocol.MyTcpListener.GetLocalIPAddress());
+                textIP.Text = localAddr.ToString();
+                textServerFTP.Text = existedStationsSetting.ftpserver;
+                textUserFTP.Text = existedStationsSetting.ftpusername;
+                textFolderFTP.Text = existedStationsSetting.ftpfolder;
+                btnListen.PerformClick();
 
-            //SAMPPort.DataReceived += mySerialThing_DataReceived;
-            station existedStationsSetting = new station_repository().get_info();
-            port = 3001;
-            textPort.Text = existedStationsSetting.socket_port.ToString();
-            //textPort.Enabled = false;
-            localAddr = IPAddress.Parse(Protocol.MyTcpListener.GetLocalIPAddress());
-            textIP.Text = localAddr.ToString();
-            textServerFTP.Text = existedStationsSetting.ftpserver;
-            textUserFTP.Text = existedStationsSetting.ftpusername;
-            textFolderFTP.Text = existedStationsSetting.ftpfolder;
-            btnListen.PerformClick();
-
-            this.WindowState = FormWindowState.Normal;
-            this.Hide();
-
+                this.WindowState = FormWindowState.Normal;
+                this.Hide();
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace);
+            }
             //textIP.Enabled = false;
             //textLog2.Text = "test2";
             //textLog.Text = "test1";
@@ -483,7 +487,7 @@ namespace WinformProtocol
                 if (hasFolderY == false)
                 {
                     folderPathY = Path.Combine(folder, yearFolder);
-                    ftpClient.createDirectory(folderPathY);
+                    ftpClient.CreateFTPDirectory(folderPathY);
                 }
                 else
                 {
@@ -505,7 +509,7 @@ namespace WinformProtocol
                 if (hasFolderM == false)
                 {
                     folderPathM = Path.Combine(folderPathY, monthFolder);
-                    ftpClient.createDirectory(folderPathM);
+                    ftpClient.CreateFTPDirectory(folderPathM);
                 }
                 else
                 {
@@ -527,7 +531,7 @@ namespace WinformProtocol
                 if (hasFolderD == false)
                 {
                     folderPathD = Path.Combine(folderPathM, dayFolder);
-                    ftpClient.createDirectory(folderPathD);
+                    ftpClient.CreateFTPDirectory(folderPathD);
                 }
                 else
                 {
@@ -1155,12 +1159,14 @@ namespace WinformProtocol
                     NpgsqlDataReader dr = cmd.ExecuteReader();
                     DataTable data = new DataTable();
                     data.Load(dr); // Load data phu hop trong command DUMP
+
                     string sql_command1 = "SELECT * from " + tablebinding;
                     cmd.CommandText = sql_command1;
                     dr = cmd.ExecuteReader();
                     DataTable tbcode = new DataTable();
                     byte[] databyte = new byte[BUFFER_SIZE];
                     tbcode.Load(dr); // Load bang chua mapping cac truong
+
                     string strvalue = "";
                     byte[] clnnamevalue;
                     byte[] clnnamestatus;
@@ -1211,9 +1217,9 @@ namespace WinformProtocol
                         foreach (DataRow row2 in tbcode.Rows)
                         {
                             int min_value = Convert.ToInt32(row2["min_value"]);
-                            //if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value && Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) != -1)
+                            if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value && Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) != -1)
                             //------------------------------------------------------------------------------------------------------
-                            if (true)
+                            //if (true)
                             {
                                 byte[] _code = _encoder.GetBytes(Convert.ToString(row2["code"]));
                                 byte[] _clnnamevalue;
@@ -2857,7 +2863,44 @@ namespace WinformProtocol
         /* Construct Object */
         public ftp(string hostIP, string userName, string password) { host = hostIP; user = userName; pass = password; }
 
+        public bool CreateFTPDirectory(string directory)
+        {
+
+            try
+            {
+                //create the directory
+                //FtpWebRequest requestDir = (FtpWebRequest)FtpWebRequest.Create(new Uri(directory));
+                FtpWebRequest requestDir = (FtpWebRequest)WebRequest.Create(host + "/" + directory);
+                requestDir.Method = WebRequestMethods.Ftp.MakeDirectory;
+                requestDir.Credentials = new NetworkCredential(user, pass );
+                requestDir.UsePassive = true;
+                requestDir.UseBinary = true;
+                requestDir.KeepAlive = false;
+                FtpWebResponse response = (FtpWebResponse)requestDir.GetResponse();
+                Stream ftpStream = response.GetResponseStream();
+
+                ftpStream.Close();
+                response.Close();
+
+                return true;
+            }
+            catch (WebException ex)
+            {
+                FtpWebResponse response = (FtpWebResponse)ex.Response;
+                if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                {
+                    response.Close();
+                    return true;
+                }
+                else
+                {
+                    response.Close();
+                    return false;
+                }
+            }
+        }
         /* Download File */
+
         public void download(string remoteFile, string localFile)
         {
             try

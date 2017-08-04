@@ -102,6 +102,7 @@
     <Compile Include="data_60minute_value.cs" />
     <Compile Include="data_5minute_value.cs" />
     <Compile Include="module.cs" />
+    <Compile Include="push_server.cs" />
     <Compile Include="setting.cs" />
     <Compile Include="maintenance_log.cs" />
     <Compile Include="user.cs" />
