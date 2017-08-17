@@ -140,6 +140,7 @@ namespace DataLogger
                 // set data to control from existed station setting
                 txtStationName.Text = existedStationsSetting.station_name;
                 txtStationID.Text = existedStationsSetting.station_id;
+                txtFTPStationID.Text = existedStationsSetting.ftpserver;
                 txtSocketPort.Text = existedStationsSetting.socket_port.ToString();
                 if (isOpen(existedStationsSetting.socket_port))
                 {

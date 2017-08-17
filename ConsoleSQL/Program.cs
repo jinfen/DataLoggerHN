@@ -12,7 +12,7 @@ namespace ConsoleSQL
     {
         static void Main(string[] args)
         {
-            SQL60();
+            //SQL60();
             SQL5p();
         }
         //public static Boolean update(double tn, double tp, double toc, int id, NpgsqlCommand command, NpgsqlDataReader dr, NpgsqlConnection conn)
@@ -276,7 +276,7 @@ namespace ConsoleSQL
             conn.Open();
             // Define a query
             //string analayer_query = "SELECT tn,tp,toc,new FROM analayer_5p";
-            string analayer_query = "SELECT ph,ec,mps_do,tss,orp,temp,tn,tp,toc,new FROM min5_data_yt";
+            string analayer_query = "SELECT ph,ec,mps_do,tss,orp,temp,tn,tp,toc,new FROM dn5";
             NpgsqlCommand command = new NpgsqlCommand(analayer_query, conn);
 
             // Execute the query and obtain a result set

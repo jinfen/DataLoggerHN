@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.txtFTPStationID = new System.Windows.Forms.TextBox();
             this.btnShow = new System.Windows.Forms.Button();
             this.btnSOCKET = new System.Windows.Forms.Button();
             this.txtSocketPort = new System.Windows.Forms.TextBox();
@@ -257,9 +258,16 @@
             this.textBox24 = new System.Windows.Forms.TextBox();
             this.label38 = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnRefresh = new System.Windows.Forms.Button();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.txtTocErrorMax = new System.Windows.Forms.TextBox();
+            this.txtTocErrorMin = new System.Windows.Forms.TextBox();
+            this.txtTpErrorMax = new System.Windows.Forms.TextBox();
+            this.txtTpErrorMin = new System.Windows.Forms.TextBox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.txtTnErrorMax = new System.Windows.Forms.TextBox();
+            this.txtTnErrorMin = new System.Windows.Forms.TextBox();
+            this.label49 = new System.Windows.Forms.Label();
             this.txtEcErrorMax = new System.Windows.Forms.TextBox();
             this.txtEcErrorMin = new System.Windows.Forms.TextBox();
             this.txtTssErrorMax = new System.Windows.Forms.TextBox();
@@ -280,15 +288,8 @@
             this.label47 = new System.Windows.Forms.Label();
             this.label50 = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
-            this.txtTocErrorMax = new System.Windows.Forms.TextBox();
-            this.txtTocErrorMin = new System.Windows.Forms.TextBox();
-            this.txtTpErrorMax = new System.Windows.Forms.TextBox();
-            this.txtTpErrorMin = new System.Windows.Forms.TextBox();
-            this.label41 = new System.Windows.Forms.Label();
-            this.label48 = new System.Windows.Forms.Label();
-            this.txtTnErrorMax = new System.Windows.Forms.TextBox();
-            this.txtTnErrorMin = new System.Windows.Forms.TextBox();
-            this.label49 = new System.Windows.Forms.Label();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -319,6 +320,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.txtFTPStationID);
             this.tabPage1.Controls.Add(this.btnShow);
             this.tabPage1.Controls.Add(this.btnSOCKET);
             this.tabPage1.Controls.Add(this.txtSocketPort);
@@ -335,6 +337,14 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Station";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // txtFTPStationID
+            // 
+            this.txtFTPStationID.Enabled = false;
+            this.txtFTPStationID.Location = new System.Drawing.Point(351, 63);
+            this.txtFTPStationID.Name = "txtFTPStationID";
+            this.txtFTPStationID.Size = new System.Drawing.Size(238, 20);
+            this.txtFTPStationID.TabIndex = 21;
             // 
             // btnShow
             // 
@@ -2398,43 +2408,6 @@
             this.label39.TabIndex = 355;
             this.label39.Text = "Bottle possiton";
             // 
-            // btnSave
-            // 
-            this.btnSave.BackColor = System.Drawing.Color.Transparent;
-            this.btnSave.BackgroundImage = global::DataLogger.Properties.Resources.Save_Button_1;
-            this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnSave.FlatAppearance.BorderSize = 0;
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.ForeColor = System.Drawing.SystemColors.Window;
-            this.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSave.Location = new System.Drawing.Point(536, 459);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(115, 49);
-            this.btnSave.TabIndex = 11;
-            this.btnSave.Text = "Save";
-            this.btnSave.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnSave.UseVisualStyleBackColor = false;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.BackColor = System.Drawing.Color.Transparent;
-            this.btnRefresh.BackgroundImage = global::DataLogger.Properties.Resources.Refesh_button;
-            this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnRefresh.FlatAppearance.BorderSize = 0;
-            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRefresh.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.ForeColor = System.Drawing.SystemColors.Window;
-            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefresh.Location = new System.Drawing.Point(413, 459);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(117, 49);
-            this.btnRefresh.TabIndex = 12;
-            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnRefresh.UseVisualStyleBackColor = false;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
             // tabPage7
             // 
             this.tabPage7.Controls.Add(this.txtTocErrorMax);
@@ -2474,6 +2447,76 @@
             this.tabPage7.Text = "Alarm";
             this.tabPage7.UseVisualStyleBackColor = true;
             this.tabPage7.Click += new System.EventHandler(this.tabPage7_Click);
+            // 
+            // txtTocErrorMax
+            // 
+            this.txtTocErrorMax.Location = new System.Drawing.Point(158, 258);
+            this.txtTocErrorMax.Name = "txtTocErrorMax";
+            this.txtTocErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtTocErrorMax.TabIndex = 413;
+            // 
+            // txtTocErrorMin
+            // 
+            this.txtTocErrorMin.Location = new System.Drawing.Point(82, 257);
+            this.txtTocErrorMin.Name = "txtTocErrorMin";
+            this.txtTocErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtTocErrorMin.TabIndex = 412;
+            // 
+            // txtTpErrorMax
+            // 
+            this.txtTpErrorMax.Location = new System.Drawing.Point(158, 231);
+            this.txtTpErrorMax.Name = "txtTpErrorMax";
+            this.txtTpErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtTpErrorMax.TabIndex = 411;
+            // 
+            // txtTpErrorMin
+            // 
+            this.txtTpErrorMin.Location = new System.Drawing.Point(82, 230);
+            this.txtTpErrorMin.Name = "txtTpErrorMin";
+            this.txtTpErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtTpErrorMin.TabIndex = 410;
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(18, 260);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(29, 13);
+            this.label41.TabIndex = 409;
+            this.label41.Text = "TOC";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(18, 233);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(21, 13);
+            this.label48.TabIndex = 408;
+            this.label48.Text = "TP";
+            this.label48.Click += new System.EventHandler(this.label48_Click);
+            // 
+            // txtTnErrorMax
+            // 
+            this.txtTnErrorMax.Location = new System.Drawing.Point(158, 206);
+            this.txtTnErrorMax.Name = "txtTnErrorMax";
+            this.txtTnErrorMax.Size = new System.Drawing.Size(63, 20);
+            this.txtTnErrorMax.TabIndex = 407;
+            // 
+            // txtTnErrorMin
+            // 
+            this.txtTnErrorMin.Location = new System.Drawing.Point(82, 206);
+            this.txtTnErrorMin.Name = "txtTnErrorMin";
+            this.txtTnErrorMin.Size = new System.Drawing.Size(63, 20);
+            this.txtTnErrorMin.TabIndex = 406;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(18, 209);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(22, 13);
+            this.label49.TabIndex = 405;
+            this.label49.Text = "TN";
             // 
             // txtEcErrorMax
             // 
@@ -2631,75 +2674,42 @@
             this.label51.TabIndex = 361;
             this.label51.Text = "Error min";
             // 
-            // txtTocErrorMax
+            // btnSave
             // 
-            this.txtTocErrorMax.Location = new System.Drawing.Point(158, 258);
-            this.txtTocErrorMax.Name = "txtTocErrorMax";
-            this.txtTocErrorMax.Size = new System.Drawing.Size(63, 20);
-            this.txtTocErrorMax.TabIndex = 413;
+            this.btnSave.BackColor = System.Drawing.Color.Transparent;
+            this.btnSave.BackgroundImage = global::DataLogger.Properties.Resources.Save_Button_1;
+            this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnSave.FlatAppearance.BorderSize = 0;
+            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSave.ForeColor = System.Drawing.SystemColors.Window;
+            this.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSave.Location = new System.Drawing.Point(536, 459);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(115, 49);
+            this.btnSave.TabIndex = 11;
+            this.btnSave.Text = "Save";
+            this.btnSave.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSave.UseVisualStyleBackColor = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // txtTocErrorMin
+            // btnRefresh
             // 
-            this.txtTocErrorMin.Location = new System.Drawing.Point(82, 257);
-            this.txtTocErrorMin.Name = "txtTocErrorMin";
-            this.txtTocErrorMin.Size = new System.Drawing.Size(63, 20);
-            this.txtTocErrorMin.TabIndex = 412;
-            // 
-            // txtTpErrorMax
-            // 
-            this.txtTpErrorMax.Location = new System.Drawing.Point(158, 231);
-            this.txtTpErrorMax.Name = "txtTpErrorMax";
-            this.txtTpErrorMax.Size = new System.Drawing.Size(63, 20);
-            this.txtTpErrorMax.TabIndex = 411;
-            // 
-            // txtTpErrorMin
-            // 
-            this.txtTpErrorMin.Location = new System.Drawing.Point(82, 230);
-            this.txtTpErrorMin.Name = "txtTpErrorMin";
-            this.txtTpErrorMin.Size = new System.Drawing.Size(63, 20);
-            this.txtTpErrorMin.TabIndex = 410;
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(18, 260);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(29, 13);
-            this.label41.TabIndex = 409;
-            this.label41.Text = "TOC";
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(18, 233);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(21, 13);
-            this.label48.TabIndex = 408;
-            this.label48.Text = "TP";
-            this.label48.Click += new System.EventHandler(this.label48_Click);
-            // 
-            // txtTnErrorMax
-            // 
-            this.txtTnErrorMax.Location = new System.Drawing.Point(158, 206);
-            this.txtTnErrorMax.Name = "txtTnErrorMax";
-            this.txtTnErrorMax.Size = new System.Drawing.Size(63, 20);
-            this.txtTnErrorMax.TabIndex = 407;
-            // 
-            // txtTnErrorMin
-            // 
-            this.txtTnErrorMin.Location = new System.Drawing.Point(82, 206);
-            this.txtTnErrorMin.Name = "txtTnErrorMin";
-            this.txtTnErrorMin.Size = new System.Drawing.Size(63, 20);
-            this.txtTnErrorMin.TabIndex = 406;
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(18, 209);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(22, 13);
-            this.label49.TabIndex = 405;
-            this.label49.Text = "TN";
+            this.btnRefresh.BackColor = System.Drawing.Color.Transparent;
+            this.btnRefresh.BackgroundImage = global::DataLogger.Properties.Resources.Refesh_button;
+            this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnRefresh.FlatAppearance.BorderSize = 0;
+            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRefresh.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefresh.ForeColor = System.Drawing.SystemColors.Window;
+            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.Location = new System.Drawing.Point(413, 459);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(117, 49);
+            this.btnRefresh.TabIndex = 12;
+            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnRefresh.UseVisualStyleBackColor = false;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // frmConfiguration
             // 
@@ -2997,5 +3007,6 @@
         private System.Windows.Forms.TextBox txtTnErrorMax;
         private System.Windows.Forms.TextBox txtTnErrorMin;
         private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.TextBox txtFTPStationID;
     }
 }

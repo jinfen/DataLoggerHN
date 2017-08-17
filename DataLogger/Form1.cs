@@ -359,7 +359,7 @@ namespace WinformProtocol
                             _valueListForQuery.ToArray();
                             _paramListForQuery.ToArray();
                             DataTable dt_source = null;
-                            dt_source = db5m.get_all_custom(dtpDateFrom, dtpDateTo, _paramListForQuery);
+                            dt_source = db5m.get_all_custom_FTP(dtpDateFrom, dtpDateTo, _paramListForQuery);
                             foreach (DataRow row3 in dt_source.Rows)
                             {
                                 frmNewMain newmain = new frmNewMain();
@@ -445,7 +445,9 @@ namespace WinformProtocol
             try
             {
                 GlobalVar.stationSettings = new station_repository().get_info();
-                string stationID = GlobalVar.stationSettings.station_id;
+
+                string stationID = GlobalVar.stationSettings.ftpserver;
+
                 string stationName = GlobalVar.stationSettings.station_name;
                 string server = GlobalVar.stationSettings.ftpserver;
                 string username = GlobalVar.stationSettings.ftpusername;
@@ -487,7 +489,7 @@ namespace WinformProtocol
                 if (hasFolderY == false)
                 {
                     folderPathY = Path.Combine(folder, yearFolder);
-                    ftpClient.CreateFTPDirectory(folderPathY);
+                    ftpClient.createDirectory(folderPathY);
                 }
                 else
                 {
@@ -509,7 +511,7 @@ namespace WinformProtocol
                 if (hasFolderM == false)
                 {
                     folderPathM = Path.Combine(folderPathY, monthFolder);
-                    ftpClient.CreateFTPDirectory(folderPathM);
+                    ftpClient.createDirectory(folderPathM);
                 }
                 else
                 {
@@ -531,7 +533,7 @@ namespace WinformProtocol
                 if (hasFolderD == false)
                 {
                     folderPathD = Path.Combine(folderPathM, dayFolder);
-                    ftpClient.CreateFTPDirectory(folderPathD);
+                    ftpClient.createDirectory(folderPathD);
                 }
                 else
                 {
@@ -574,7 +576,16 @@ namespace WinformProtocol
                 try
                 {
                     var csv = new StringBuilder();
-                    csv.Append(firts + "\t" + "");
+                    GlobalVar.stationSettings = new station_repository().get_info();
+                    int type = GlobalVar.stationSettings.ftpflag;
+                    if (type == 1)
+                    {
+                        csv.Append(firts + "\t" + "Nuoc Mat");
+                    }
+                    else if (type == 2)
+                    {
+                        csv.Append(firts + "\t" + "Khi Thai");
+                    }
                     csv.AppendLine();
                     //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
 
@@ -1102,24 +1113,36 @@ namespace WinformProtocol
             String measuretime;
             try
             {
-                String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
-                NpgsqlConnection conn = new NpgsqlConnection(connstring);
-                conn.Open();
-                string sql_command = "SELECT " + time + " from " + table + " order by ID desc limit 1";
-                using (NpgsqlCommand cmd = conn.CreateCommand())
+                using (NpgsqlDBConnection db = new NpgsqlDBConnection())
                 {
-                    cmd.CommandText = sql_command;
-                    NpgsqlDataReader dr = cmd.ExecuteReader();
-                    DataTable data = new DataTable();
-                    data.Load(dr); // Load 
-                    string strvalue = "";
-                    foreach (DataRow row in data.Rows)
+                    //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
+                    //NpgsqlConnection conn = new NpgsqlConnection(connstring);
+                    //conn.Open();
+                    if (db.open_connection())
                     {
-                        strvalue = Convert.ToString(row["created"]);
+                        string sql_command = "SELECT " + time + " from " + table + " order by ID desc limit 1";
+
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command;
+                            NpgsqlDataReader dr = cmd.ExecuteReader();
+                            DataTable data = new DataTable();
+                            data.Load(dr); // Load 
+                            string strvalue = "";
+                            foreach (DataRow row in data.Rows)
+                            {
+                                strvalue = Convert.ToString(row["created"]);
+                            }
+                            strvalue = DateFormat(strvalue);
+                            db.close_connection();
+                            return strvalue;
+                        }
                     }
-                    strvalue = DateFormat(strvalue);
-                    conn.Close();
-                    return strvalue;
+                    else
+                    {
+                        db.close_connection();
+                        return "ERROR";
+                    }
                 }
             }
             catch (Exception ex)
@@ -1149,145 +1172,158 @@ namespace WinformProtocol
             List<byte[]> lstData = new List<byte[]>();
             try
             {
-                String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
-                NpgsqlConnection conn = new NpgsqlConnection(connstring);
-                conn.Open();
-                string sql_command = "SELECT * from " + table + " WHERE created < " + "\'" + date2 + "\'" + " AND created > " + "\'" + date1 + "\'" + "ORDER BY created ASC";
-                using (NpgsqlCommand cmd = conn.CreateCommand())
+                //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
+                //NpgsqlConnection conn = new NpgsqlConnection(connstring);
+                //conn.Open();
+                using (NpgsqlDBConnection db = new NpgsqlDBConnection())
                 {
-                    cmd.CommandText = sql_command;
-                    NpgsqlDataReader dr = cmd.ExecuteReader();
-                    DataTable data = new DataTable();
-                    data.Load(dr); // Load data phu hop trong command DUMP
-
-                    string sql_command1 = "SELECT * from " + tablebinding;
-                    cmd.CommandText = sql_command1;
-                    dr = cmd.ExecuteReader();
-                    DataTable tbcode = new DataTable();
-                    byte[] databyte = new byte[BUFFER_SIZE];
-                    tbcode.Load(dr); // Load bang chua mapping cac truong
-
-                    string strvalue = "";
-                    byte[] clnnamevalue;
-                    byte[] clnnamestatus;
-                    byte[] code;
-                    byte[] measuretime;
-                    string[] strvalues = new string[data.Rows.Count];
-
-                    byte[] countitem1 = new byte[2];
-                    //_encoder.GetBytes(ConvertStr(tbcode.Rows.Count.ToString(), 2)).CopyTo(countitem1, 0);
-
-                    byte[] sql = null;
-                    //---------------------------------------------------------------------------------------
-                    foreach (DataRow delRow in data.Rows)
+                    if (db.open_connection())
                     {
-                        if (getNullNo(delRow, tbcode) == 0)
+                        string sql_command = "SELECT * from " + table + " WHERE created < " + "\'" + date2 + "\'" + " AND created > " + "\'" + date1 + "\'" + "ORDER BY created ASC";
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
-                            delRow.Delete();
+                            cmd.CommandText = sql_command;
+                            NpgsqlDataReader dr = cmd.ExecuteReader();
+                            DataTable data = new DataTable();
+                            data.Load(dr); // Load data phu hop trong command DUMP
 
-                        }
-                    }
-                    data.AcceptChanges();
-                    //-----------------------------------------------------------------------------------------
-                    foreach (DataRow row1 in data.Rows)  // lay moi row trong data phu hop voi DUMP command
-                    {
-                        sql = null;
-                        clnnamevalue = new byte[10];
-                        clnnamestatus = new byte[2];
-                        code = new byte[5];
+                            string sql_command1 = "SELECT * from " + tablebinding;
+                            cmd.CommandText = sql_command1;
+                            dr = cmd.ExecuteReader();
+                            DataTable tbcode = new DataTable();
+                            byte[] databyte = new byte[BUFFER_SIZE];
+                            tbcode.Load(dr); // Load bang chua mapping cac truong
 
-                        //Console.WriteLine("\n ID \n" + Convert.ToString(row1["id"]));
-                        byte[] _measuretime = _encoder.GetBytes(DateFormat(Convert.ToString(row1["created"])));
-                        measuretime = new byte[14];
-                        _measuretime.CopyTo(measuretime, 0);
+                            string strvalue = "";
+                            byte[] clnnamevalue;
+                            byte[] clnnamestatus;
+                            byte[] code;
+                            byte[] measuretime;
+                            string[] strvalues = new string[data.Rows.Count];
 
+                            byte[] countitem1 = new byte[2];
+                            //_encoder.GetBytes(ConvertStr(tbcode.Rows.Count.ToString(), 2)).CopyTo(countitem1, 0);
 
-                        //getNullNo(row1,tbcode);
-                        _encoder.GetBytes(ConvertStr(getNullNo(row1, tbcode).ToString(), 2)).CopyTo(countitem1, 0);
-
-                        if (sql == null)
-                        {
-                            sql = measuretime.Concat(countitem1).ToArray();  //Measure time + count item
-                        }
-                        else
-                        {
-                            sql = sql.Concat(measuretime).Concat(countitem1).ToArray();
-                        }
-                        //strvalue = strvalue + DateFormat(Convert.ToString(row1["created"])) + tbcode.Rows.Count.ToString() + "\\";
-                        foreach (DataRow row2 in tbcode.Rows)
-                        {
-                            int min_value = Convert.ToInt32(row2["min_value"]);
-                            if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value && Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) != -1)
-                            //------------------------------------------------------------------------------------------------------
-                            //if (true)
+                            byte[] sql = null;
+                            //---------------------------------------------------------------------------------------
+                            foreach (DataRow delRow in data.Rows)
                             {
-                                byte[] _code = _encoder.GetBytes(Convert.ToString(row2["code"]));
-                                byte[] _clnnamevalue;
-                                byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
-                                if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamestatus"])])) != 0)
+                                if (getNullNo(delRow, tbcode) == 0)
                                 {
-                                    _clnnamevalue = null;
+                                    delRow.Delete();
+
                                 }
-                                else
-                                if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) < min_value)
-                                {
-                                    _clnnamevalue = null;
-                                }
-                                else
-                                {
-                                    _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
-                                }
-
-                                //byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
-
-                                //byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
-                                //_clnnamevalue = null;
-
-                                code = new byte[5];
-                                _code.CopyTo(code, 0);
-
-                                //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamevalue"])]), 10);
-                                clnnamevalue = new byte[10];
-                                if (_clnnamevalue != null)
-                                {
-                                    _clnnamevalue.CopyTo(clnnamevalue, 10 - _clnnamevalue.Length);
-                                }
-                                //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2);
-                                //-----------------------------------------------------------
-                                //if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value)
-                                //if (true)
-                                //{
-                                //    byte[] _code = _encoder.GetBytes(Convert.ToString(row2["code"]));
-                                //    byte[] _clnnamevalue;
-                                //    byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
-                                //    _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
-                                //    //byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
-
-                                //    //byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
-                                //    //_clnnamevalue = null;
-
-                                //    code = new byte[5];
-                                //    _code.CopyTo(code, 0);
-                                //    //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamevalue"])]), 10);
-                                //    clnnamevalue = new byte[10];
-                                //    if (_clnnamevalue != null)
-                                //    {
-                                //        _clnnamevalue.CopyTo(clnnamevalue, 10 - _clnnamevalue.Length);
-                                //    }
-                                //----------------------------------------------------------------------------
-                                clnnamestatus = new byte[2];
-                                _clnnamestatus.CopyTo(clnnamestatus, 2 - _clnnamestatus.Length);
-
-                                sql = sql.Concat(code).Concat(clnnamevalue).Concat(clnnamestatus).ToArray();
-                                //----------------------------------------------------------------------------
                             }
+                            data.AcceptChanges();
+                            //-----------------------------------------------------------------------------------------
+                            foreach (DataRow row1 in data.Rows)  // lay moi row trong data phu hop voi DUMP command
+                            {
+                                sql = null;
+                                clnnamevalue = new byte[10];
+                                clnnamestatus = new byte[2];
+                                code = new byte[5];
+
+                                //Console.WriteLine("\n ID \n" + Convert.ToString(row1["id"]));
+                                byte[] _measuretime = _encoder.GetBytes(DateFormat(Convert.ToString(row1["created"])));
+                                measuretime = new byte[14];
+                                _measuretime.CopyTo(measuretime, 0);
+
+
+                                //getNullNo(row1,tbcode);
+                                _encoder.GetBytes(ConvertStr(getNullNo(row1, tbcode).ToString(), 2)).CopyTo(countitem1, 0);
+
+                                if (sql == null)
+                                {
+                                    sql = measuretime.Concat(countitem1).ToArray();  //Measure time + count item
+                                }
+                                else
+                                {
+                                    sql = sql.Concat(measuretime).Concat(countitem1).ToArray();
+                                }
+                                //strvalue = strvalue + DateFormat(Convert.ToString(row1["created"])) + tbcode.Rows.Count.ToString() + "\\";
+                                foreach (DataRow row2 in tbcode.Rows)
+                                {
+                                    int min_value = Convert.ToInt32(row2["min_value"]);
+                                    if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value && Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) != -1)
+                                    //------------------------------------------------------------------------------------------------------
+                                    //if (true)
+                                    {
+                                        byte[] _code = _encoder.GetBytes(Convert.ToString(row2["code"]));
+                                        byte[] _clnnamevalue;
+                                        byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamestatus"])])) != 0)
+                                        {
+                                            _clnnamevalue = null;
+                                        }
+                                        else
+                                        if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) < min_value)
+                                        {
+                                            _clnnamevalue = null;
+                                        }
+                                        else
+                                        {
+                                            _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
+                                        }
+
+                                        //byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
+
+                                        //byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
+                                        //_clnnamevalue = null;
+
+                                        code = new byte[5];
+                                        _code.CopyTo(code, 0);
+
+                                        //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamevalue"])]), 10);
+                                        clnnamevalue = new byte[10];
+                                        if (_clnnamevalue != null)
+                                        {
+                                            _clnnamevalue.CopyTo(clnnamevalue, 10 - _clnnamevalue.Length);
+                                        }
+                                        //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2);
+                                        //-----------------------------------------------------------
+                                        //if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value)
+                                        //if (true)
+                                        //{
+                                        //    byte[] _code = _encoder.GetBytes(Convert.ToString(row2["code"]));
+                                        //    byte[] _clnnamevalue;
+                                        //    byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
+                                        //    _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
+                                        //    //byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
+
+                                        //    //byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamestatus"])]), 2));
+                                        //    //_clnnamevalue = null;
+
+                                        //    code = new byte[5];
+                                        //    _code.CopyTo(code, 0);
+                                        //    //strvalue = strvalue + ConvertStr(Convert.ToString(row1[Convert.ToString(row2["clnnamevalue"])]), 10);
+                                        //    clnnamevalue = new byte[10];
+                                        //    if (_clnnamevalue != null)
+                                        //    {
+                                        //        _clnnamevalue.CopyTo(clnnamevalue, 10 - _clnnamevalue.Length);
+                                        //    }
+                                        //----------------------------------------------------------------------------
+                                        clnnamestatus = new byte[2];
+                                        _clnnamestatus.CopyTo(clnnamestatus, 2 - _clnnamestatus.Length);
+
+                                        sql = sql.Concat(code).Concat(clnnamevalue).Concat(clnnamestatus).ToArray();
+                                        //----------------------------------------------------------------------------
+                                    }
+                                }
+                                lstData.Add(sql);
+                            }
+
+                            db.close_connection();
+
+                            return lstData;
                         }
-                        lstData.Add(sql);
                     }
-
-                    conn.Close();
-
-                    return lstData;
+                    else
+                    {
+                        db.close_connection();
+                        byte[] rt = _encoder.GetBytes("ERROR");
+                        lstData.Add(rt);
+                        return lstData;
+                    }
                 }
             }
             catch (Exception ex)
@@ -1304,53 +1340,65 @@ namespace WinformProtocol
         {
             try
             {
-                String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
-                NpgsqlConnection conn = new NpgsqlConnection(connstring);
-                conn.Open();
-                string sql_command = "SELECT * from " + table + " order by ID desc limit 1";
-                using (NpgsqlCommand cmd = conn.CreateCommand())
+                //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
+                //NpgsqlConnection conn = new NpgsqlConnection(connstring);
+                //conn.Open();
+                using (NpgsqlDBConnection db = new NpgsqlDBConnection())
                 {
-                    cmd.CommandText = sql_command;
-                    NpgsqlDataReader dr = cmd.ExecuteReader();
-                    DataTable data = new DataTable();
-                    byte[] databyte = new byte[BUFFER_SIZE];
-                    // call load method of datatable to copy content of reader 
-                    data.Load(dr); // Load 
-
-                    string sql_command1 = "SELECT * from " + tablebinding;
-                    cmd.CommandText = sql_command1;
-                    //cmd = new NpgsqlCommand("SELECT * from " + tablebinding, conn);
-                    dr = cmd.ExecuteReader();
-                    DataTable tbcode = new DataTable();
-                    tbcode.Load(dr);
-                    string strvalue = "";
-                    byte[] countitem = new byte[2];
-                    countitem = _encoder.GetBytes(ConvertStr(tbcode.Rows.Count.ToString(), 2));
-                    //byte[] sql = new byte[(5 + 10 + 2) * tbcode.Rows.Count + 2];
-                    byte[] sql = countitem;
-                    //sql = sql.Concat(countitem).ToArray();
-                    byte[] clnnamevalue;
-                    byte[] clnnamestatus;
-                    byte[] code;
-                    foreach (DataRow row in tbcode.Rows)
+                    if (db.open_connection())
                     {
-                        clnnamevalue = new byte[10];
-                        clnnamestatus = new byte[2];
-                        code = new byte[5];
-                        byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(Convert.ToString(data.Rows[0][Convert.ToString(row["clnnamevalue"])]), 10));
-                        byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(data.Rows[0][Convert.ToString(row["clnnamestatus"])]), 2));
-                        byte[] _code = _encoder.GetBytes(Convert.ToString(row["code"]));
-                        //strvalue = strvalue + Convert.ToString(row["code"]);
-                        code = new byte[5];
-                        _code.CopyTo(code, 0);
-                        clnnamevalue = new byte[10];
-                        _clnnamevalue.CopyTo(clnnamevalue, 10 - _clnnamevalue.Length);
-                        clnnamestatus = new byte[2];
-                        _clnnamestatus.CopyTo(clnnamestatus, 2 - _clnnamestatus.Length);
-                        sql = sql.Concat(code).Concat(clnnamevalue).Concat(clnnamestatus).ToArray();
+                        string sql_command = "SELECT * from " + table + " order by ID desc limit 1";
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command;
+                            NpgsqlDataReader dr = cmd.ExecuteReader();
+                            DataTable data = new DataTable();
+                            byte[] databyte = new byte[BUFFER_SIZE];
+                            // call load method of datatable to copy content of reader 
+                            data.Load(dr); // Load 
+
+                            string sql_command1 = "SELECT * from " + tablebinding;
+                            cmd.CommandText = sql_command1;
+                            //cmd = new NpgsqlCommand("SELECT * from " + tablebinding, conn);
+                            dr = cmd.ExecuteReader();
+                            DataTable tbcode = new DataTable();
+                            tbcode.Load(dr);
+                            string strvalue = "";
+                            byte[] countitem = new byte[2];
+                            countitem = _encoder.GetBytes(ConvertStr(tbcode.Rows.Count.ToString(), 2));
+                            //byte[] sql = new byte[(5 + 10 + 2) * tbcode.Rows.Count + 2];
+                            byte[] sql = countitem;
+                            //sql = sql.Concat(countitem).ToArray();
+                            byte[] clnnamevalue;
+                            byte[] clnnamestatus;
+                            byte[] code;
+                            foreach (DataRow row in tbcode.Rows)
+                            {
+                                clnnamevalue = new byte[10];
+                                clnnamestatus = new byte[2];
+                                code = new byte[5];
+                                byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(Convert.ToString(data.Rows[0][Convert.ToString(row["clnnamevalue"])]), 10));
+                                byte[] _clnnamestatus = _encoder.GetBytes(ConvertStr(Convert.ToString(data.Rows[0][Convert.ToString(row["clnnamestatus"])]), 2));
+                                byte[] _code = _encoder.GetBytes(Convert.ToString(row["code"]));
+                                //strvalue = strvalue + Convert.ToString(row["code"]);
+                                code = new byte[5];
+                                _code.CopyTo(code, 0);
+                                clnnamevalue = new byte[10];
+                                _clnnamevalue.CopyTo(clnnamevalue, 10 - _clnnamevalue.Length);
+                                clnnamestatus = new byte[2];
+                                _clnnamestatus.CopyTo(clnnamestatus, 2 - _clnnamestatus.Length);
+                                sql = sql.Concat(code).Concat(clnnamevalue).Concat(clnnamestatus).ToArray();
+                            }
+                            db.close_connection();
+                            return sql;
+                        }
                     }
-                    conn.Close();
-                    return sql;
+                    else
+                    {
+                        db.close_connection();
+                        byte[] rt = _encoder.GetBytes("ERROR");
+                        return rt;
+                    }
                 }
             }
             catch (Exception ex)
@@ -1365,17 +1413,27 @@ namespace WinformProtocol
         {
             try
             {
-                String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
-                NpgsqlConnection conn = new NpgsqlConnection(connstring);
-                conn.Open();
-                newpass = Crypto.HashPassword(newpass);
-                string sql_command = "UPDATE auth SET password = " + "\'" + newpass + "\'" + " WHERE user_name = " + "\'" + username + "\'";
-                //NpgsqlCommand cmd = new NpgsqlCommand("UPDATE auth SET password = " + "\'" + newpass + "\'" + " WHERE user_name = " + "\'" + username + "\'", conn);
-                using (NpgsqlCommand cmd = conn.CreateCommand())
+                //String connstring = "Server = localhost;Port = 5432; User Id = postgres;Password = 123;Database = DataLoggerDB";
+                //NpgsqlConnection conn = new NpgsqlConnection(connstring);
+                //conn.Open();
+                using (NpgsqlDBConnection db = new NpgsqlDBConnection())
                 {
-                    cmd.CommandText = sql_command;
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
+                    if (db.open_connection())
+                    {
+                        newpass = Crypto.HashPassword(newpass);
+                        string sql_command = "UPDATE auth SET password = " + "\'" + newpass + "\'" + " WHERE user_name = " + "\'" + username + "\'";
+                        //NpgsqlCommand cmd = new NpgsqlCommand("UPDATE auth SET password = " + "\'" + newpass + "\'" + " WHERE user_name = " + "\'" + username + "\'", conn);
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command;
+                            cmd.ExecuteNonQuery();
+                            db.close_connection();
+                        }
+                    }
+                    else
+                    {
+                        db.close_connection();
+                    }
                 }
             }
             catch (Exception ex)
@@ -2863,42 +2921,42 @@ namespace WinformProtocol
         /* Construct Object */
         public ftp(string hostIP, string userName, string password) { host = hostIP; user = userName; pass = password; }
 
-        public bool CreateFTPDirectory(string directory)
-        {
+        //public bool CreateFTPDirectory(string directory)
+        //{
 
-            try
-            {
-                //create the directory
-                //FtpWebRequest requestDir = (FtpWebRequest)FtpWebRequest.Create(new Uri(directory));
-                FtpWebRequest requestDir = (FtpWebRequest)WebRequest.Create(host + "/" + directory);
-                requestDir.Method = WebRequestMethods.Ftp.MakeDirectory;
-                requestDir.Credentials = new NetworkCredential(user, pass );
-                requestDir.UsePassive = true;
-                requestDir.UseBinary = true;
-                requestDir.KeepAlive = false;
-                FtpWebResponse response = (FtpWebResponse)requestDir.GetResponse();
-                Stream ftpStream = response.GetResponseStream();
+        //    try
+        //    {
+        //        //create the directory
+        //        //FtpWebRequest requestDir = (FtpWebRequest)FtpWebRequest.Create(new Uri(directory));
+        //        FtpWebRequest requestDir = (FtpWebRequest)WebRequest.Create(host + "/" + directory);
+        //        requestDir.Method = WebRequestMethods.Ftp.MakeDirectory;
+        //        requestDir.Credentials = new NetworkCredential(user, pass );
+        //        requestDir.UsePassive = true;
+        //        requestDir.UseBinary = true;
+        //        requestDir.KeepAlive = false;
+        //        FtpWebResponse response = (FtpWebResponse)requestDir.GetResponse();
+        //        Stream ftpStream = response.GetResponseStream();
 
-                ftpStream.Close();
-                response.Close();
+        //        ftpStream.Close();
+        //        response.Close();
 
-                return true;
-            }
-            catch (WebException ex)
-            {
-                FtpWebResponse response = (FtpWebResponse)ex.Response;
-                if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
-                {
-                    response.Close();
-                    return true;
-                }
-                else
-                {
-                    response.Close();
-                    return false;
-                }
-            }
-        }
+        //        return true;
+        //    }
+        //    catch (WebException ex)
+        //    {
+        //        FtpWebResponse response = (FtpWebResponse)ex.Response;
+        //        if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+        //        {
+        //            response.Close();
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            response.Close();
+        //            return false;
+        //        }
+        //    }
+        //}
         /* Download File */
 
         public void download(string remoteFile, string localFile)
@@ -2958,6 +3016,7 @@ namespace WinformProtocol
                 ftpRequest.UsePassive = true;
                 ftpRequest.KeepAlive = true;
                 /* Specify the Type of FTP Request */
+                ftpRequest.UsePassive = false;
                 ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
                 /* Establish Return Communication with the FTP Server */
                 ftpStream = ftpRequest.GetRequestStream();
@@ -3146,16 +3205,17 @@ namespace WinformProtocol
             try
             {
                 /* Create an FTP Request */
-                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(host + "/" + directory);
+                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(host + directory);
                 /* Log in to the FTP Server with the User Name and Password Provided */
                 ftpRequest.Credentials = new NetworkCredential(user, pass);
                 /* When in doubt, use these options */
                 ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = true;
+                ftpRequest.UsePassive = false;
                 ftpRequest.KeepAlive = true;
                 /* Specify the Type of FTP Request */
                 ftpRequest.Method = WebRequestMethods.Ftp.ListDirectory;
                 /* Establish Return Communication with the FTP Server */
+                //ftpRequest.UsePassive = false;
                 ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
                 /* Establish Return Communication with the FTP Server */
                 ftpStream = ftpResponse.GetResponseStream();
@@ -3165,7 +3225,10 @@ namespace WinformProtocol
                 string directoryRaw = null;
                 /* Read Each Line of the Response and Append a Pipe to Each Line for Easy Parsing */
                 try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } }
-                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
                 if (directoryRaw != null)
                 {
                     directoryRaw = directoryRaw.Remove(directoryRaw.ToString().LastIndexOf('|'), 1);
@@ -3180,10 +3243,23 @@ namespace WinformProtocol
                 ftpResponse.Close();
                 ftpRequest = null;
                 /* Return the Directory Listing as a string Array by Parsing 'directoryRaw' with the Delimiter you Append (I use | in This Example) */
-                try { string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList; }
-                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                try
+                {
+                    string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    Form1.control1.AppendTextBox(ex.StackTrace, Form1.control1.getForm1fromControl, 1);
+                    Form1.control1.AppendTextBox(ex.Message, Form1.control1.getForm1fromControl, 1);
+                }
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Form1.control1.AppendTextBox(ex.StackTrace, Form1.control1.getForm1fromControl, 1);
+                Form1.control1.AppendTextBox(ex.Message, Form1.control1.getForm1fromControl, 1);
+            }
             /* Return an Empty string Array if an Exception Occurs */
             return null;
         }

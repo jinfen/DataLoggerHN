@@ -119,6 +119,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataLogger.Data\DataLogger.Data.csproj">
+      <Project>{217EBB00-B4D9-4C92-804F-CDA2AAF72EAA}</Project>
+      <Name>DataLogger.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Entities\DataLogger.Entities.csproj">
       <Project>{a0bf8886-67ee-4244-910d-222b14267b69}</Project>
       <Name>DataLogger.Entities</Name>

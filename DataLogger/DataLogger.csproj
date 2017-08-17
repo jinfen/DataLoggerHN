@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{35C4E477-4350-4800-8A21-3D4E87322BC4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DataLogger</RootNamespace>
     <AssemblyName>DataLogger</AssemblyName>
@@ -420,7 +420,9 @@
       <LastGenOutput>Res.fa.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="data\monthly_report_template.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

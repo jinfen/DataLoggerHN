@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLogger", "DataLogger\DataLogger.csproj", "{35C4E477-4350-4800-8A21-3D4E87322BC4}"
 EndProject
@@ -29,6 +29,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinformProtocol", "WinformProtocol\WinformProtocol.csproj", "{A1123B9F-A6B2-4425-935D-C30F3B3D8DF5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSQL", "ConsoleSQL\ConsoleSQL.csproj", "{77F52FC8-E82A-4A70-9200-E910C9E1E5D1}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setup", "setup\setup.vdproj", "{4E48EDC0-FE84-4480-BB25-4EFD66C27068}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -355,6 +357,21 @@ Global
 		{77F52FC8-E82A-4A70-9200-E910C9E1E5D1}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{77F52FC8-E82A-4A70-9200-E910C9E1E5D1}.SingleImage|x86.ActiveCfg = Release|Any CPU
 		{77F52FC8-E82A-4A70-9200-E910C9E1E5D1}.SingleImage|x86.Build.0 = Release|Any CPU
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.CD_ROM|Any CPU.ActiveCfg = Release
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.CD_ROM|Mixed Platforms.ActiveCfg = Release
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.CD_ROM|x86.ActiveCfg = Release
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.Debug|Any CPU.ActiveCfg = Debug
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.Debug|x86.ActiveCfg = Debug
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.DVD-5|Any CPU.ActiveCfg = Debug
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.DVD-5|Mixed Platforms.ActiveCfg = Debug
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.DVD-5|x86.ActiveCfg = Debug
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.Release|Any CPU.ActiveCfg = Release
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.Release|Mixed Platforms.ActiveCfg = Release
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.Release|x86.ActiveCfg = Release
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.SingleImage|Any CPU.ActiveCfg = Release
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.SingleImage|Mixed Platforms.ActiveCfg = Release
+		{4E48EDC0-FE84-4480-BB25-4EFD66C27068}.SingleImage|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
