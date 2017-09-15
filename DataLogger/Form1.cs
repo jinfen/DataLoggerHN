@@ -608,14 +608,14 @@ namespace WinformProtocol
                                     case "ph":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_pH)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "ph" + "\t" + String.Format("{0:0.00}", data.MPS_pH) + "\t" + "");
+                                            csv.Append(date + "\t" + "pH" + "\t" + String.Format("{0:0.00}", data.MPS_pH) + "\t" + "");
                                             csv.AppendLine();
                                         }
                                         break;
                                     case "ec":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_EC)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "ec" + "\t" + String.Format("{0:0.00}", data.MPS_EC) + "\t" + "uS/cm");
+                                            csv.Append(date + "\t" + "EC" + "\t" + String.Format("{0:0.00}", data.MPS_EC) + "\t" + "uS/cm");
 
                                             csv.AppendLine();
                                         }
@@ -623,7 +623,7 @@ namespace WinformProtocol
                                     case "do":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_DO)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "do" + "\t" + String.Format("{0:0.00}", data.MPS_DO) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "DO" + "\t" + String.Format("{0:0.00}", data.MPS_DO) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
@@ -631,7 +631,7 @@ namespace WinformProtocol
                                     case "tss":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Turbidity)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "tss" + "\t" + String.Format("{0:0.00}", data.MPS_Turbidity) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "TSS" + "\t" + String.Format("{0:0.00}", data.MPS_Turbidity) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
@@ -639,7 +639,7 @@ namespace WinformProtocol
                                     case "orp":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_ORP)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "orp" + "\t" + String.Format("{0:0.00}", data.MPS_ORP) + "\t" + "mV");
+                                            csv.Append(date + "\t" + "ORP" + "\t" + String.Format("{0:0.00}", data.MPS_ORP) + "\t" + "mV");
 
                                             csv.AppendLine();
                                         }
@@ -647,7 +647,7 @@ namespace WinformProtocol
                                     case "temp":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Temp)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "temp" + "\t" + String.Format("{0:0.00}", data.MPS_Temp) + "\t" + "oC");
+                                            csv.Append(date + "\t" + "Temp" + "\t" + String.Format("{0:0.00}", data.MPS_Temp) + "\t" + "oC");
 
                                             csv.AppendLine();
                                         }
@@ -663,15 +663,15 @@ namespace WinformProtocol
                                     case "tn":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.TN)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "tn" + "\t" + String.Format("{0:0.00}", data.TN) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "TN" + "\t" + String.Format("{0:0.00}", data.TN) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
                                         break;
                                     case "tp":
-                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.TP)) >= min_value)
+                                        if (Convert.ToDouble(String.Format("{0:0.000}", data.TP)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "tp" + "\t" + String.Format("{0:0.00}", data.TP) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "TP" + "\t" + String.Format("{0:0.000}", data.TP) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
@@ -679,7 +679,7 @@ namespace WinformProtocol
                                     case "toc":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.TOC)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "toc" + "\t" + String.Format("{0:0.00}", data.TOC) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "TOC" + "\t" + String.Format("{0:0.00}", data.TOC) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
@@ -1223,6 +1223,8 @@ namespace WinformProtocol
                                 clnnamestatus = new byte[2];
                                 code = new byte[5];
 
+                                int idRow1 = Convert.ToInt32(row1["id"]);
+                                string datetimeRow1 = Convert.ToString(row1["created"]);
                                 //Console.WriteLine("\n ID \n" + Convert.ToString(row1["id"]));
                                 byte[] _measuretime = _encoder.GetBytes(DateFormat(Convert.ToString(row1["created"])));
                                 measuretime = new byte[14];
@@ -1243,7 +1245,72 @@ namespace WinformProtocol
                                 //strvalue = strvalue + DateFormat(Convert.ToString(row1["created"])) + tbcode.Rows.Count.ToString() + "\\";
                                 foreach (DataRow row2 in tbcode.Rows)
                                 {
+                                    int flag = 0;
+                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
+                                    {
+                                        string beforeTn = compareAnalyzer("tn", idRow1, datetimeRow1);
+                                        string Tn = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                                        if (beforeTn != null)
+                                        {
+                                            if (beforeTn.Equals(Tn))
+                                            {
+                                                flag = 1;
+                                                //row2.Delete();
+                                                //tbcode.AcceptChanges();
+                                                //break;
+                                            }
+                                            else
+                                            {
+                                            }
+                                        }
+                                    }
+                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("tp"))
+                                    {
+                                        string beforeTp = compareAnalyzerTP("tp", idRow1, datetimeRow1);
+                                        string Tp = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.000");
+                                        if (beforeTp != null)
+                                        {
+                                            if (beforeTp.Equals(Tp))
+                                            {
+                                                flag = 1;
+                                                //row2.Delete();
+                                                //tbcode.AcceptChanges();
+                                                //break;
+                                            }
+                                            else
+                                            {
+                                            }
+                                        }
+                                    }
+                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("toc"))
+                                    {
+                                        string beforeToc = compareAnalyzer("toc", idRow1, datetimeRow1);
+                                        string Toc = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                                        if (beforeToc != null)
+                                        {
+                                            if (beforeToc.Equals(Toc))
+                                            {
+                                                flag = 1;
+                                                //row2.Delete();
+                                                //tbcode.AcceptChanges();
+                                                //break;
+                                            }
+                                            else
+                                            {
+                                            }
+                                        }
+                                    }
+                                    if (flag == 1)
+                                    {
+                                        row2.Delete();
+                                        //tbcode.AcceptChanges();
+                                    }
+                                }
+                                tbcode.AcceptChanges();
+                                foreach (DataRow row2 in tbcode.Rows)
+                                {
                                     int min_value = Convert.ToInt32(row2["min_value"]);
+
                                     if (Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) >= min_value && Convert.ToDouble(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])])) != -1)
                                     //------------------------------------------------------------------------------------------------------
                                     //if (true)
@@ -1407,6 +1474,80 @@ namespace WinformProtocol
                 Console.WriteLine("\nMessage ---\n{0}", ex.StackTrace);
                 byte[] rt = _encoder.GetBytes("ERROR");
                 return rt;
+            }
+        }
+        public static string compareAnalyzer(string table, int id ,string date)
+        {
+            try
+            {
+                using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+                {
+                    if (db.open_connection())
+                    {
+                        //string sql_command1 = "SELECT " + time + " from " + table + " order by ID desc limit 1";
+                        string sql_command = "SELECT * FROM data_5minute_values WHERE created <" + "\'" + date + "\'" + "ORDER BY created DESC LIMIT 1";
+
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command;
+                            NpgsqlDataReader dr = cmd.ExecuteReader();
+                            DataTable data = new DataTable();
+                            data.Load(dr); // Load 
+                            string strvalue = "";
+                            DataRow row = data.Rows[0];
+                            strvalue = Convert.ToDouble(row[table]).ToString("##0.00");
+                            db.close_connection();
+                            return strvalue;
+                        }
+                    }
+                    else
+                    {
+                        db.close_connection();
+                        return null;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return null;
+            }
+        }
+        public static string compareAnalyzerTP(string table, int id ,string date)
+        {
+            try
+            {
+                using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+                {
+                    if (db.open_connection())
+                    {
+                        //string sql_command1 = "SELECT " + time + " from " + table + " order by ID desc limit 1";
+                        string sql_command = "SELECT * FROM data_5minute_values WHERE created <" + "\'" + date + "\'" + "ORDER BY created DESC LIMIT 1";
+
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command;
+                            NpgsqlDataReader dr = cmd.ExecuteReader();
+                            DataTable data = new DataTable();
+                            data.Load(dr); // Load 
+                            string strvalue = "";
+                            DataRow row = data.Rows[0];
+                            strvalue = Convert.ToDouble(row[table]).ToString("##0.000");
+                            db.close_connection();
+                            return strvalue;
+                        }
+                    }
+                    else
+                    {
+                        db.close_connection();
+                        return null;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return null;
             }
         }
         public static void UpdateData(String username, String newpass)
@@ -3132,28 +3273,30 @@ namespace WinformProtocol
                 ftpRequest.Credentials = new NetworkCredential(user, pass);
                 /* When in doubt, use these options */
                 ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = true;
+                ftpRequest.UsePassive = false;
                 ftpRequest.KeepAlive = true;
                 /* Specify the Type of FTP Request */
                 ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp;
                 /* Establish Return Communication with the FTP Server */
-                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-                /* Establish Return Communication with the FTP Server */
-                ftpStream = ftpResponse.GetResponseStream();
-                /* Get the FTP Server's Response Stream */
-                StreamReader ftpReader = new StreamReader(ftpStream);
-                /* Store the Raw Response */
-                string fileInfo = null;
-                /* Read the Full Response Stream */
-                try { fileInfo = ftpReader.ReadToEnd(); }
-                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-                /* Resource Cleanup */
-                ftpReader.Close();
-                ftpStream.Close();
-                ftpResponse.Close();
-                ftpRequest = null;
-                /* Return File Created Date Time */
-                return fileInfo;
+                using (ftpResponse = (FtpWebResponse)ftpRequest.GetResponse())
+                {
+                    /* Establish Return Communication with the FTP Server */
+                    ftpStream = ftpResponse.GetResponseStream();
+                    /* Get the FTP Server's Response Stream */
+                    StreamReader ftpReader = new StreamReader(ftpStream);
+                    /* Store the Raw Response */
+                    string fileInfo = null;
+                    /* Read the Full Response Stream */
+                    try { fileInfo = ftpReader.ReadToEnd(); }
+                    catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                    /* Resource Cleanup */
+                    ftpReader.Close();
+                    ftpStream.Close();
+                    ftpResponse.Close();
+                    ftpRequest = null;
+                    /* Return File Created Date Time */
+                    return fileInfo;
+                }             
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
             /* Return an Empty string Array if an Exception Occurs */
@@ -3210,15 +3353,16 @@ namespace WinformProtocol
                 ftpRequest.Credentials = new NetworkCredential(user, pass);
                 /* When in doubt, use these options */
                 ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = false;
+                ftpRequest.UsePassive = true;
                 ftpRequest.KeepAlive = true;
                 /* Specify the Type of FTP Request */
                 ftpRequest.Method = WebRequestMethods.Ftp.ListDirectory;
                 /* Establish Return Communication with the FTP Server */
                 //ftpRequest.UsePassive = false;
-                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-                /* Establish Return Communication with the FTP Server */
-                ftpStream = ftpResponse.GetResponseStream();
+                using (ftpResponse = (FtpWebResponse)ftpRequest.GetResponse())
+                {
+                    /* Establish Return Communication with the FTP Server */
+                    ftpStream = ftpResponse.GetResponseStream();
                 /* Get the FTP Server's Response Stream */
                 StreamReader ftpReader = new StreamReader(ftpStream);
                 /* Store the Raw Response */
@@ -3243,15 +3387,16 @@ namespace WinformProtocol
                 ftpResponse.Close();
                 ftpRequest = null;
                 /* Return the Directory Listing as a string Array by Parsing 'directoryRaw' with the Delimiter you Append (I use | in This Example) */
-                try
-                {
-                    string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    Form1.control1.AppendTextBox(ex.StackTrace, Form1.control1.getForm1fromControl, 1);
-                    Form1.control1.AppendTextBox(ex.Message, Form1.control1.getForm1fromControl, 1);
+                    try
+                    {
+                        string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        Form1.control1.AppendTextBox(ex.StackTrace, Form1.control1.getForm1fromControl, 1);
+                        Form1.control1.AppendTextBox(ex.Message, Form1.control1.getForm1fromControl, 1);
+                    }
                 }
             }
             catch (Exception ex)

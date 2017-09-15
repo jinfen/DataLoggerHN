@@ -2736,7 +2736,7 @@ namespace DataLogger
             objDataValue.TN_status = objMeasuredDataGlobal.TN_status;
             objDataValue.TOC = System.Math.Round(objMeasuredDataGlobal.TOC, 2);
             objDataValue.TOC_status = objMeasuredDataGlobal.TOC_status;
-            objDataValue.TP = System.Math.Round(objMeasuredDataGlobal.TP, 2);
+            objDataValue.TP = System.Math.Round(objMeasuredDataGlobal.TP, 3);
             objDataValue.TP_status = objMeasuredDataGlobal.TP_status;
 
             // water sampler
@@ -3370,6 +3370,73 @@ namespace DataLogger
                             dr = cmd.ExecuteReader();
                             DataTable tbcode = new DataTable();
                             tbcode.Load(dr); // Load bang chua mapping cac truong
+
+                            foreach (DataRow row2 in tbcode.Rows)
+                            {
+                                int flag = 0;
+                                if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
+                                {
+                                    string beforeTn = WinformProtocol.Control.compareAnalyzer("tn", 1, data.created.ToString());
+                                    string Tn = data.TN.ToString("##0.00");
+                                    if (beforeTn != null)
+                                    {
+                                        if (beforeTn.Equals(Tn))
+                                        {
+                                            flag = 1;
+                                            //row2.Delete();
+                                            //tbcode.AcceptChanges();
+                                            //break;
+                                        }
+                                        else
+                                        {
+                                        }
+                                    }
+                                }
+                                if (Convert.ToString(row2["clnnamevalue"]).Equals("tp"))
+                                {
+                                    string beforeTp = WinformProtocol.Control.compareAnalyzerTP("tp", 1, data.created.ToString());
+                                    string Tp = data.TP.ToString("##0.000");
+                                    if (beforeTp != null)
+                                    {
+                                        if (beforeTp.Equals(Tp))
+                                        {
+                                            flag = 1;
+                                            //row2.Delete();
+                                            //tbcode.AcceptChanges();
+                                            //break;
+                                        }
+                                        else
+                                        {
+                                        }
+                                    }
+                                }
+                                if (Convert.ToString(row2["clnnamevalue"]).Equals("toc"))
+                                {
+                                    string beforeToc = WinformProtocol.Control.compareAnalyzer("toc", 1, data.created.ToString());
+                                    string Toc = data.TOC.ToString("##0.00");
+                                    if (beforeToc != null)
+                                    {
+                                        if (beforeToc.Equals(Toc))
+                                        {
+                                            flag = 1;
+                                            //row2.Delete();
+                                            //tbcode.AcceptChanges();
+                                            //break;
+                                        }
+                                        else
+                                        {
+                                        }
+                                    }
+                                }
+                                if (flag == 1)
+                                {
+                                    row2.Delete();
+                                    //tbcode.AcceptChanges();
+                                }
+                            }
+                            tbcode.AcceptChanges();
+
+
                             int countNull = 0;
                             foreach (DataRow row2 in tbcode.Rows)
                             {
@@ -3380,7 +3447,7 @@ namespace DataLogger
                                     case "ph":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_pH)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "ph" + "\t" + String.Format("{0:0.00}", data.MPS_pH) + "\t" + "");
+                                            csv.Append(date + "\t" + "pH" + "\t" + String.Format("{0:0.00}", data.MPS_pH) + "\t" + "");
                                             csv.AppendLine();
                                         }
                                         countNull++;
@@ -3388,7 +3455,7 @@ namespace DataLogger
                                     case "ec":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_EC)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "ec" + "\t" + String.Format("{0:0.00}", data.MPS_EC) + "\t" + "uS/cm");
+                                            csv.Append(date + "\t" + "EC" + "\t" + String.Format("{0:0.00}", data.MPS_EC) + "\t" + "uS/cm");
 
                                             csv.AppendLine();
                                         }
@@ -3397,7 +3464,7 @@ namespace DataLogger
                                     case "do":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_DO)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "do" + "\t" + String.Format("{0:0.00}", data.MPS_DO) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "DO" + "\t" + String.Format("{0:0.00}", data.MPS_DO) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
@@ -3406,7 +3473,7 @@ namespace DataLogger
                                     case "tss":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Turbidity)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "tss" + "\t" + String.Format("{0:0.00}", data.MPS_Turbidity) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "TSS" + "\t" + String.Format("{0:0.00}", data.MPS_Turbidity) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
@@ -3415,7 +3482,7 @@ namespace DataLogger
                                     case "orp":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_ORP)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "orp" + "\t" + String.Format("{0:0.00}", data.MPS_ORP) + "\t" + "mV");
+                                            csv.Append(date + "\t" + "ORP" + "\t" + String.Format("{0:0.00}", data.MPS_ORP) + "\t" + "mV");
 
                                             csv.AppendLine();
                                         }
@@ -3424,7 +3491,7 @@ namespace DataLogger
                                     case "temp":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.MPS_Temp)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "temp" + "\t" + String.Format("{0:0.00}", data.MPS_Temp) + "\t" + "oC");
+                                            csv.Append(date + "\t" + "Temp" + "\t" + String.Format("{0:0.00}", data.MPS_Temp) + "\t" + "oC");
 
                                             csv.AppendLine();
                                         }
@@ -3442,16 +3509,16 @@ namespace DataLogger
                                     case "tn":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.TN)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "tn" + "\t" + String.Format("{0:0.00}", data.TN) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "TN" + "\t" + String.Format("{0:0.00}", data.TN) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
                                         countNull++;
                                         break;
                                     case "tp":
-                                        if (Convert.ToDouble(String.Format("{0:0.00}", data.TP)) >= min_value)
+                                        if (Convert.ToDouble(String.Format("{0:0.000}", data.TP)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "tp" + "\t" + String.Format("{0:0.00}", data.TP) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "TP" + "\t" + String.Format("{0:0.000}", data.TP) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
@@ -3460,7 +3527,7 @@ namespace DataLogger
                                     case "toc":
                                         if (Convert.ToDouble(String.Format("{0:0.00}", data.TOC)) >= min_value)
                                         {
-                                            csv.Append(date + "\t" + "toc" + "\t" + String.Format("{0:0.00}", data.TOC) + "\t" + "mg/L");
+                                            csv.Append(date + "\t" + "TOC" + "\t" + String.Format("{0:0.00}", data.TOC) + "\t" + "mg/L");
 
                                             csv.AppendLine();
                                         }
@@ -3636,7 +3703,7 @@ namespace DataLogger
                 string password = push_server.ftp_pwd;
                 string folder = push_server.ftp_folder;
 
-                DateTime s = DateTime.Now;
+                DateTime s = data.created;
                 String datetimeS = s.ToString("yyyyMMddHHmmss");
                 string date = datetimeS.Substring(0, 4) + datetimeS.Substring(4, 2) + datetimeS.Substring(6, 2) + datetimeS.Substring(8, 2) + datetimeS.Substring(10, 2) + datetimeS.Substring(12, 2);
                 //server = " \@" " + server + "\"" ;
@@ -3671,12 +3738,12 @@ namespace DataLogger
                 string folderPathY;
                 if (hasFolderY == false)
                 {
-                    folderPathY = Path.Combine(folder, yearFolder);
+                    folderPathY = folder + "//" + yearFolder;
                     ftpClient.createDirectory(folderPathY);
                 }
                 else
                 {
-                    folderPathY = Path.Combine(folder, yearFolder);
+                    folderPathY = folder + "//" + yearFolder;
                 }
                 ///
                 /// Month Folder
@@ -3693,12 +3760,12 @@ namespace DataLogger
                 string folderPathM;
                 if (hasFolderM == false)
                 {
-                    folderPathM = Path.Combine(folderPathY, monthFolder);
+                    folderPathM = folderPathY + "//" + monthFolder;
                     ftpClient.createDirectory(folderPathM);
                 }
                 else
                 {
-                    folderPathM = Path.Combine(folderPathY, monthFolder);
+                    folderPathM = folderPathY + "//" + monthFolder;
                 }
                 /// 
                 /// Day Folder
@@ -3715,12 +3782,12 @@ namespace DataLogger
                 string folderPathD;
                 if (hasFolderD == false)
                 {
-                    folderPathD = Path.Combine(folderPathM, dayFolder);
+                    folderPathD = folderPathM + "//" + dayFolder;
                     ftpClient.createDirectory(folderPathD);
                 }
                 else
                 {
-                    folderPathD = Path.Combine(folderPathM, dayFolder);
+                    folderPathD = folderPathM + "//" + dayFolder;
                 }
                 /// 
                 if (!Directory.Exists(newFolderPath))
@@ -3807,9 +3874,11 @@ namespace DataLogger
                                 //Type listType = typeof(string).MakeGenericType(new Type[] { elementType });
                                 //object list = Activator.CreateInstance(listType);
                                 int id = Int32.Parse(Convert.ToString(row3["id"]));
+                                int push = Int32.Parse(Convert.ToString(row3["push"]));
                                 int countNullParam = 0;
                                 DateTime created = (DateTime)row3["created"];
                                 data.created = created;
+                                data.push = push;
 
                                 for (int i = 0; i < _paramListForQuery.Count; i++)
                                 {
@@ -3941,14 +4010,18 @@ namespace DataLogger
                                     set.ftp_folder = push_server.ftp_folder;
                                     set.ftp_flag = push_server.ftp_flag;
                                     set.ftp_lasted = data.created;
-                                    //int id = setre.get_id_by_key("lasted_push");
-                                    s.update_with_id(ref set, idLasted);
+                                    if (dtpDateFrom < created && created < dtpDateTo)
+                                    {
+                                        //int id = setre.get_id_by_key("lasted_push");
+                                        s.update_with_id(ref set, idLasted);
+                                    }
                                 }
                                 else
                                 {
                                     if (FTP(push_server,data, created))
                                     {
                                         db5m.updatePush(id, 1, DateTime.Now);
+
                                         //control1.AppendTextLog1Box();
                                         push_server_repository s = new push_server_repository();
                                         int idLasted = push_server.id;
@@ -3960,7 +4033,10 @@ namespace DataLogger
                                         set.ftp_flag = push_server.ftp_flag;
                                         set.ftp_lasted = data.created;
                                         //int id = setre.get_id_by_key("lasted_push");
-                                        s.update_with_id(ref set, idLasted);
+                                        if (dtpDateFrom < created && created < dtpDateTo)
+                                        {
+                                            s.update_with_id(ref set, idLasted);
+                                        }
                                     }
                                     else
                                     {
@@ -4993,7 +5069,7 @@ namespace DataLogger
                     //getMinValueFromDatabinding("tp")
                     )
                 { 
-                    txtTPValue.Text = obj.TP.ToString("##0.00");
+                    txtTPValue.Text = obj.TP.ToString("##0.000");
                     module objTp = _modules.get_info_by_name("Tp");
                     if (objMeasuredDataGlobal.TP > objTp.error_max || objMeasuredDataGlobal.TP < objTp.error_min)
                     {
@@ -6748,7 +6824,7 @@ namespace DataLogger
                             /// 
                             foreach (push_server push_server in listUser)
                             {
-                                if (GlobalVar.stationSettings.ftpflag == 1)
+                                if (push_server.ftp_flag == 1)
                                 {
                                     if (main.iSAllMinValue(objDataValue))
                                     {

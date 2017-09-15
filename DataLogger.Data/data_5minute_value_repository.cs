@@ -1080,16 +1080,16 @@ namespace DataLogger.Data
                     if (db.open_connection())
                     {
 
-                        string sql_command = @"(SELECT created, id, stored_date, stored_hour, stored_minute
+                        string sql_command = @"(SELECT created, id, stored_date, stored_hour, stored_minute, push
                                                         {custom_param}
                                                FROM data_5minute_values
                                                WHERE created BETWEEN  :date_from  AND  :date_to 
                                                ORDER BY created ASC)
                                                UNION
-                                               (SELECT created, id, stored_date, stored_hour, stored_minute
+                                               (SELECT created, id, stored_date, stored_hour, stored_minute, push
                                                         {custom_param}
                                                FROM data_5minute_values
-                                               WHERE push = 1
+                                               WHERE push != 1
                                                ORDER BY created ASC)
                                                ORDER BY created ASC
                                                 ";

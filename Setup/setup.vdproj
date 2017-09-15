@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_068BA27B57031B8E60C1F502BF91ED8E"
+        "OwnerKey" = "8:_84700FBBD2222B20BF8482B52183E2A2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0854EF57F5EF35F626732CB4AA2081A2"
         "OwnerKey" = "8:_4B51D316CDC942DAAA148E25B605D9DA"
         "MsmSig" = "8:_UNDEFINED"
@@ -95,12 +101,6 @@
         {
         "MsmKey" = "8:_2BEB26343E143D1EB97EAE1F68EF031E"
         "OwnerKey" = "8:_4B51D316CDC942DAAA148E25B605D9DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_31EDCD0924615EA9F48AB93F2D8FE79A"
-        "OwnerKey" = "8:_84700FBBD2222B20BF8482B52183E2A2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -274,12 +274,6 @@
         "Entry"
         {
         "MsmKey" = "8:_7982169927C564A1D7088F903C7B740B"
-        "OwnerKey" = "8:_31EDCD0924615EA9F48AB93F2D8FE79A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7982169927C564A1D7088F903C7B740B"
         "OwnerKey" = "8:_4B51D316CDC942DAAA148E25B605D9DA"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -293,12 +287,6 @@
         {
         "MsmKey" = "8:_7E0A7A9B377E7882AE8C9EE43B72D9CE"
         "OwnerKey" = "8:_068BA27B57031B8E60C1F502BF91ED8E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7E0A7A9B377E7882AE8C9EE43B72D9CE"
-        "OwnerKey" = "8:_31EDCD0924615EA9F48AB93F2D8FE79A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -353,24 +341,6 @@
         {
         "MsmKey" = "8:_8BB20E59468CA889329B8DE7F571BF59"
         "OwnerKey" = "8:_4B51D316CDC942DAAA148E25B605D9DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8FAAEC6284517029DC9773A66E5F8F8F"
-        "OwnerKey" = "8:_068BA27B57031B8E60C1F502BF91ED8E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8FAAEC6284517029DC9773A66E5F8F8F"
-        "OwnerKey" = "8:_84700FBBD2222B20BF8482B52183E2A2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8FAAEC6284517029DC9773A66E5F8F8F"
-        "OwnerKey" = "8:_31EDCD0924615EA9F48AB93F2D8FE79A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -585,6 +555,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FEC86AC563C6A1732C30394BFF9D66CA"
+        "OwnerKey" = "8:_84700FBBD2222B20BF8482B52183E2A2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FEC86AC563C6A1732C30394BFF9D66CA"
+        "OwnerKey" = "8:_068BA27B57031B8E60C1F502BF91ED8E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FEDCB087604BEA09B5E6198DFA7EC48F"
         "OwnerKey" = "8:_4B51D316CDC942DAAA148E25B605D9DA"
         "MsmSig" = "8:_UNDEFINED"
@@ -599,18 +581,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_F33AA9547F13728F1258E5946CEBC261"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_31EDCD0924615EA9F48AB93F2D8FE79A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8FAAEC6284517029DC9773A66E5F8F8F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1402,37 +1372,6 @@
                     }
                 }
             "SourcePath" = "8:System.Text.Encoding.Extensions.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33895892B5F64F30B677CD8CD7FF5069"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_31EDCD0924615EA9F48AB93F2D8FE79A"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DataLogger.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_31EDCD0924615EA9F48AB93F2D8FE79A"
-                    {
-                    "Name" = "8:DataLogger.Data.DLL"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:DataLogger.Data.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_33895892B5F64F30B677CD8CD7FF5069"
@@ -2363,37 +2302,6 @@
                     }
                 }
             "SourcePath" = "8:System.ServiceModel.Security.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_33895892B5F64F30B677CD8CD7FF5069"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8FAAEC6284517029DC9773A66E5F8F8F"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DataLogger.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_8FAAEC6284517029DC9773A66E5F8F8F"
-                    {
-                    "Name" = "8:DataLogger.Entities.DLL"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:DataLogger.Entities.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_33895892B5F64F30B677CD8CD7FF5069"
@@ -3347,7 +3255,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Datalogger"
         "ProductCode" = "8:{8E7564EA-377D-4B51-AD84-1A3B3194803D}"
-        "PackageCode" = "8:{EADB8FFA-D0C0-4D99-BDC8-C8F0420E5F08}"
+        "PackageCode" = "8:{AFFF5EC0-8716-4DF0-B11B-B6FD77DC2F23}"
         "UpgradeCode" = "8:{51865465-C816-4684-937E-4EFA5DAAECDF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
