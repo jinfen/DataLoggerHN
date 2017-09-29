@@ -2636,6 +2636,7 @@ namespace DataLogger
         }
 
         public static int countingIndex5Minute = 0;
+        int test = 0;
         private void tmrThreadingTimerFor5Minute_TimerCallback(object state)
         {
             if (is_close_form)
@@ -2757,6 +2758,9 @@ namespace DataLogger
             //// save to data value table
             if (new data_value_repository().add(ref objDataValue) > 0)
             {
+                
+                //test++;
+                //objDataValue.TP = test;
                 // ok --> add to 5 _minute data
                 data_value objAdd5Minute = objCalCulationDataValue5Minute.addNewObjFor5Minute(objDataValue);
                 if (objAdd5Minute != null)
@@ -3856,6 +3860,7 @@ namespace DataLogger
                             //get data from db 
                             DataTable dt_source = null;
                             dt_source = db5m.get_all_custom_FTP(dtpDateFrom, dtpDateTo, _paramListForQuery);
+
                             ////---------------------------------------------------------------------------------------
                             //foreach (DataRow delRow in dt_source.Rows)
                             //{
@@ -6400,7 +6405,7 @@ namespace DataLogger
                     {
                         // ok
                         // calculate and add to database
-                        objDataValue = new data_value();
+                            objDataValue = new data_value();
                         // station status
                         objDataValue.module_Door = listDataValue[0].module_Door;
                         objDataValue.module_Fire = listDataValue[0].module_Fire;
@@ -6465,6 +6470,37 @@ namespace DataLogger
                         int countingTPCal = 1;
                         int countingTOCCal = 1;
                         int countingWaterSampler = 1;
+
+                        for (int i = 0; i < count; i++)
+                        {
+                            //double beforeTP = listDataValue[i].TP;
+                            //if (listDataValue[i].TP != listDataValue[i - 1].TP)
+                            //{
+                            //    for (int j = 0; j < i; j++)
+                            //    {
+                            //        listDataValue[j].TP = beforeTP;
+                            //    }
+                            //}
+                            //double beforeTN = listDataValue[i].TN;
+                            //if (listDataValue[i].TN != listDataValue[i - 1].TN)
+                            //{
+                            //    for (int j = 0; j < i; j++)
+                            //    {
+                            //        listDataValue[j].TN = beforeTN;
+                            //    }
+                            //}
+                            //double beforeTOC = listDataValue[i].TOC;
+                            //if (listDataValue[i].TOC != listDataValue[i - 1].TOC)
+                            //{
+                            //    for (int j = 0; j < i; j++)
+                            //    {
+                            //        listDataValue[j].TOC = beforeTOC;
+                            //    }
+                            //}
+                            listDataValue[i].TN = listDataValue[count - 1].TN;
+                            listDataValue[i].TP = listDataValue[count - 1].TP;
+                            listDataValue[i].TOC = listDataValue[count - 1].TOC;
+                        }
 
                         for (int i = 1; i < count; i++)
                         {
@@ -6594,15 +6630,18 @@ namespace DataLogger
                         }
                         if (updateTNFlag)
                         {
-                            objDataValue.TN = (double)objDataValue.TN / (double)countingTNCal;
+                            //objDataValue.TN = (double)objDataValue.TN / (double)countingTNCal;
+                            objDataValue.TN = listDataValue[count-1].TN;
                         }
                         if (updateTPFlag)
                         {
-                            objDataValue.TP = (double)objDataValue.TP / (double)countingTPCal;
+                            //objDataValue.TP = (double)objDataValue.TP / (double)countingTPCal;
+                            objDataValue.TP = listDataValue[count-1].TP;
                         }
                         if (updateTOCFlag)
                         {
-                            objDataValue.TOC = (double)objDataValue.TOC / (double)countingTOCCal;
+                            //objDataValue.TOC = (double)objDataValue.TOC / (double)countingTOCCal;
+                            objDataValue.TOC = listDataValue[count-1].TOC;
                         }// Station status
                         if (objDataValue.module_Temperature > 0)
                         {
@@ -6677,7 +6716,8 @@ namespace DataLogger
                             if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL &&
                                 objLatest.TN_status == CommonInfo.INT_STATUS_NORMAL)
                             {
-                                objLatest.TN = (objDataValue.TN + objLatest.TN) / 2;
+                                //objLatest.TN = (objDataValue.TN + objLatest.TN) / 2;
+                                objLatest.TN = objDataValue.TN;
                             }
                             else
                             {
@@ -6693,7 +6733,8 @@ namespace DataLogger
                             if (objDataValue.TP_status == CommonInfo.INT_STATUS_NORMAL &&
                                 objLatest.TP_status == CommonInfo.INT_STATUS_NORMAL)
                             {
-                                objLatest.TP = (objDataValue.TP + objLatest.TP) / 2;
+                                //objLatest.TP = (objDataValue.TP + objLatest.TP) / 2;
+                                objLatest.TP = objDataValue.TP;
                             }
                             else
                             {
@@ -6707,7 +6748,8 @@ namespace DataLogger
                             if (objDataValue.TOC_status == CommonInfo.INT_STATUS_NORMAL &&
                                 objLatest.TOC_status == CommonInfo.INT_STATUS_NORMAL)
                             {
-                                objLatest.TOC = (objDataValue.TOC + objLatest.TOC) / 2;
+                                //objLatest.TOC = (objDataValue.TOC + objLatest.TOC) / 2;
+                                objLatest.TOC = objDataValue.TOC;
                             }
                             else
                             {

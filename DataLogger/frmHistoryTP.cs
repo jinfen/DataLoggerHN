@@ -225,7 +225,7 @@ namespace DataLogger
                     //viewrow["Date"] = (Convert.ToDateTime((row["stored_date"].ToString().Split(' '))[0])).ToString("dd/MM/yyyy");
                     viewrow["Time"] = ((int)row["stored_hour"]).ToString("00") + ":" + ((int)row["stored_minute"]).ToString("00") + ":00";
 
-                    viewrow["TP"] = row["TP"];
+                    viewrow["TP"] = String.Format("{0:0.000}", row["tp"]);
 
                     viewrow["Status_Val"] = row["TP_status"];
 
@@ -308,7 +308,7 @@ namespace DataLogger
                         DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
 
                         viewrow["StoredDate"] = _rdate;
-                        viewrow["TP"] = row["TP"];
+                        viewrow["TP"] = String.Format("{0:0.000}", row["tp"]);
 
                         dt_view.Rows.Add(viewrow);
                     }

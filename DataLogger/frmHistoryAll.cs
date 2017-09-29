@@ -875,7 +875,7 @@ namespace DataLogger
                         viewrow["Time"] = time;
 
                         viewrow["TN"] = String.Format("{0:0.00}", row["tn"]);
-                        viewrow["TP"] = String.Format("{0:0.00}", row["tp"]);
+                        viewrow["TP"] = String.Format("{0:0.000}", row["tp"]);
                         viewrow["TOC"] = String.Format("{0:0.00}", row["toc"]);
 
                         viewrow["TN_Status"] = row["TN_Status"];
@@ -1014,7 +1014,7 @@ namespace DataLogger
 
                         viewrow["CreatedDate"] = _rdate;
                         viewrow["TN"] = String.Format("{0:0.00}", row["tn"]);
-                        viewrow["TP"] = String.Format("{0:0.00}", row["tp"]);
+                        viewrow["TP"] = String.Format("{0:0.000}", row["tp"]);
                         viewrow["TOC"] = String.Format("{0:0.00}", row["toc"]);
 
                         viewrow["TN_Status"] = row["TN_Status"];
@@ -1749,7 +1749,14 @@ namespace DataLogger
 
                     foreach (ParamInfo item in DataLoggerParam.PARAMETER_LIST.Where(p => p.Selected))
                     {
-                        viewrow[item.NameDisplay] = String.Format("{0:0.00}", row[item.NameDB]);
+                        if (item.NameDB.Equals("tp"))
+                        {
+                            viewrow[item.NameDisplay] = String.Format("{0:0.000}", row[item.NameDB]);
+                        }
+                        else
+                        {
+                            viewrow[item.NameDisplay] = String.Format("{0:0.00}", row[item.NameDB]);
+                        }
 
                         if (item.HasStatus)
                             viewrow[item.StatusNameVisible] = row[item.StatusNameDB];

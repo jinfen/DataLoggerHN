@@ -1208,7 +1208,76 @@ namespace WinformProtocol
                             //---------------------------------------------------------------------------------------
                             foreach (DataRow delRow in data.Rows)
                             {
-                                if (getNullNo(delRow, tbcode) == 0)
+                                int iddelRow = Convert.ToInt32(delRow["id"]);
+                                string datetimedelRow = Convert.ToString(delRow["created"]);
+                                DataTable fixtbcode = new DataTable();
+                                fixtbcode = tbcode.Copy();
+                                foreach (DataRow row2 in fixtbcode.Rows)
+                                {
+                                    int flag = 0;
+                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
+                                    {
+                                        string beforeTn = compareAnalyzer("tn", iddelRow, datetimedelRow);
+                                        string Tn = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                                        if (beforeTn != null)
+                                        {
+                                            if (beforeTn.Equals(Tn))
+                                            {
+                                                flag = 1;
+                                                //row2.Delete();
+                                                //tbcode.AcceptChanges();
+                                                //break;
+                                            }
+                                            else
+                                            {
+                                            }
+                                        }
+                                    }
+                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("tp"))
+                                    {
+                                        string beforeTp = compareAnalyzerTP("tp", iddelRow, datetimedelRow);
+                                        string Tp = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.000");
+                                        if (beforeTp != null)
+                                        {
+                                            if (beforeTp.Equals(Tp))
+                                            {
+                                                flag = 1;
+                                                //row2.Delete();
+                                                //tbcode.AcceptChanges();
+                                                //break;
+                                            }
+                                            else
+                                            {
+                                            }
+                                        }
+                                    }
+                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("toc"))
+                                    {
+                                        string beforeToc = compareAnalyzer("toc", iddelRow, datetimedelRow);
+                                        string Toc = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                                        if (beforeToc != null)
+                                        {
+                                            if (beforeToc.Equals(Toc))
+                                            {
+                                                flag = 1;
+                                                //row2.Delete();
+                                                //tbcode.AcceptChanges();
+                                                //break;
+                                            }
+                                            else
+                                            {
+                                            }
+                                        }
+                                    }
+                                    if (flag == 1)
+                                    {
+                                        row2.Delete();
+                                        //tbcode.AcceptChanges();
+                                    }
+                                }
+                                fixtbcode.AcceptChanges();
+
+                                if (getNullNo(delRow, fixtbcode) == 0)
                                 {
                                     delRow.Delete();
 
@@ -1223,6 +1292,9 @@ namespace WinformProtocol
                                 clnnamestatus = new byte[2];
                                 code = new byte[5];
 
+                                DataTable fixtbcode = new DataTable();
+                                fixtbcode = tbcode.Copy();
+
                                 int idRow1 = Convert.ToInt32(row1["id"]);
                                 string datetimeRow1 = Convert.ToString(row1["created"]);
                                 //Console.WriteLine("\n ID \n" + Convert.ToString(row1["id"]));
@@ -1232,7 +1304,7 @@ namespace WinformProtocol
 
 
                                 //getNullNo(row1,tbcode);
-                                _encoder.GetBytes(ConvertStr(getNullNo(row1, tbcode).ToString(), 2)).CopyTo(countitem1, 0);
+                                _encoder.GetBytes(ConvertStr(getNullNo(row1, fixtbcode).ToString(), 2)).CopyTo(countitem1, 0);
 
                                 if (sql == null)
                                 {
@@ -1243,7 +1315,7 @@ namespace WinformProtocol
                                     sql = sql.Concat(measuretime).Concat(countitem1).ToArray();
                                 }
                                 //strvalue = strvalue + DateFormat(Convert.ToString(row1["created"])) + tbcode.Rows.Count.ToString() + "\\";
-                                foreach (DataRow row2 in tbcode.Rows)
+                                foreach (DataRow row2 in fixtbcode.Rows)
                                 {
                                     int flag = 0;
                                     if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
@@ -1306,8 +1378,8 @@ namespace WinformProtocol
                                         //tbcode.AcceptChanges();
                                     }
                                 }
-                                tbcode.AcceptChanges();
-                                foreach (DataRow row2 in tbcode.Rows)
+                                fixtbcode.AcceptChanges();
+                                foreach (DataRow row2 in fixtbcode.Rows)
                                 {
                                     int min_value = Convert.ToInt32(row2["min_value"]);
 
@@ -1330,6 +1402,10 @@ namespace WinformProtocol
                                         else
                                         {
                                             _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
+                                            if (row2["clnnamevalue"].Equals("tp"))
+                                            {
+                                                _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.000}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));
+                                            }
                                         }
 
                                         //byte[] _clnnamevalue = _encoder.GetBytes(ConvertStr(String.Format("{0:0.00}", row1[Convert.ToString(row2["clnnamevalue"])]), 10));

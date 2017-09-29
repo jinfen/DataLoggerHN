@@ -893,6 +893,13 @@ namespace DataLogger.Data
                                                ORDER BY created ASC
                                                 ";
 
+                        string custom_param = "";
+                        if (custom_param_list != null && custom_param_list.Count > 0)
+                        {
+                            custom_param = " , " + string.Join(",", custom_param_list);
+                        }
+                        sql_command = sql_command.Replace("{custom_param}", custom_param);
+
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
 
