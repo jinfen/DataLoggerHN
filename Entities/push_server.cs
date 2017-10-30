@@ -15,7 +15,7 @@ namespace DataLogger.Entities
         public string ftp_folder { get; set; }
         public int ftp_flag { get; set; }
         public DateTime ftp_lasted { get; set; }
-
+        public DateTime ftp_lasted_manual { get; set; }
         public push_server()
         {
             id = -1;
@@ -25,6 +25,7 @@ namespace DataLogger.Entities
             ftp_folder = "";
             ftp_flag = -1;
             ftp_lasted = new DateTime();
+            ftp_lasted_manual = new DateTime();
         }
     }
 }

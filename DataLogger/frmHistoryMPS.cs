@@ -209,7 +209,7 @@ namespace DataLogger
                 dt_view.Columns.Add("MPS_pH");
                 dt_view.Columns.Add("MPS_EC");
                 dt_view.Columns.Add("MPS_DO");
-                dt_view.Columns.Add("MPS_Turbidity");
+                dt_view.Columns.Add("MPS_TSS");
                 dt_view.Columns.Add("MPS_ORP");
                 dt_view.Columns.Add("MPS_Temp");
 
@@ -234,7 +234,7 @@ namespace DataLogger
                     viewrow["MPS_pH"] = row["mps_ph"];
                     viewrow["MPS_EC"] = row["mps_ec"];
                     viewrow["MPS_DO"] = row["mps_do"];
-                    viewrow["MPS_Turbidity"] = row["mps_turbidity"];
+                    viewrow["MPS_TSS"] = row["mps_turbidity"];
                     viewrow["MPS_ORP"] = row["mps_orp"];
                     viewrow["MPS_Temp"] = row["mps_temp"];
 
@@ -270,46 +270,64 @@ namespace DataLogger
                             row.Cells["Status"].Value = (System.Drawing.Image)Properties.Resources.Fault_status_x16;
                         }
                     }
-                    if (row.Cells["MPS_pH"].Value != null)
+                    foreach (var item in GlobalVar.moduleSettings)
                     {
-                        if (Convert.ToDouble(row.Cells["MPS_pH"].Value) < 0)
+                        switch (item.item_name)
                         {
-                            row.Cells["MPS_pH"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_EC"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_EC"].Value) < 0)
-                        {
-                            row.Cells["MPS_EC"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_DO"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_DO"].Value) < 0)
-                        {
-                            row.Cells["MPS_DO"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_Turbidity"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_Turbidity"].Value) < 0)
-                        {
-                            row.Cells["MPS_Turbidity"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_ORP"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_ORP"].Value) < 0)
-                        {
-                            row.Cells["MPS_ORP"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_Temp"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_Temp"].Value) < 0)
-                        {
-                            row.Cells["MPS_Temp"].Value = "---";
+                            case "pH":
+                                if (row.Cells["MPS_pH"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_pH"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_pH"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "Orp":
+                                if (row.Cells["MPS_ORP"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_ORP"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_ORP"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "Temp":
+                                if (row.Cells["MPS_Temp"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_Temp"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_Temp"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "DO":
+                                if (row.Cells["MPS_DO"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_DO"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_DO"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "Turb":
+                                if (row.Cells["MPS_TSS"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_TSS"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_TSS"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "Cond":
+                                if (row.Cells["MPS_EC"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_EC"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_EC"].Value = "---";
+                                    }
+                                }
+                                break;
                         }
                     }
                 }

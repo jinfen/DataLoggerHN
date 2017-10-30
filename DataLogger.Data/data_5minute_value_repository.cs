@@ -1080,6 +1080,24 @@ namespace DataLogger.Data
                     if (db.open_connection())
                     {
 
+                        //string sql_command = @"(SELECT created, id, stored_date, stored_hour, stored_minute, push
+                        //                                {custom_param}
+                        //                       FROM data_5minute_values
+                        //                       WHERE created BETWEEN  :date_from  AND  :date_to 
+                        //                       ORDER BY created ASC)
+                        //                       UNION
+                        //                       (SELECT created, id, stored_date, stored_hour, stored_minute, push
+                        //                                {custom_param}
+                        //                       FROM data_5minute_values
+                        //                       WHERE push != 1 AND push !=2
+                        //                       ORDER BY created ASC)
+                        //                       ORDER BY created ASC
+                        //                        ";
+                        //string custom_param = "";
+                        //if (custom_param_list != null && custom_param_list.Count > 0)
+                        //{
+                        //    custom_param = " , " + string.Join(",", custom_param_list);
+                        //}
                         string sql_command = @"(SELECT created, id, stored_date, stored_hour, stored_minute, push
                                                         {custom_param}
                                                FROM data_5minute_values
@@ -1089,15 +1107,22 @@ namespace DataLogger.Data
                                                (SELECT created, id, stored_date, stored_hour, stored_minute, push
                                                         {custom_param}
                                                FROM data_5minute_values
-                                               WHERE push != 1
+                                               WHERE push != 1 AND push !=2
                                                ORDER BY created ASC)
                                                ORDER BY created ASC
                                                 ";
+
                         string custom_param = "";
                         if (custom_param_list != null && custom_param_list.Count > 0)
                         {
                             custom_param = " , " + string.Join(",", custom_param_list);
                         }
+                        List<string> custom_param_list_status = custom_param_list.Select(s => s + "_status").ToList();
+                        if (custom_param_list != null && custom_param_list_status.Count > 0)
+                        {
+                            custom_param = custom_param + " , " + string.Join(",", custom_param_list_status);
+                        }
+
                         sql_command = sql_command.Replace("{custom_param}", custom_param);
                         DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
                         DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
@@ -1139,7 +1164,82 @@ namespace DataLogger.Data
                 { db.close_connection(); }
             }
         }
+        public DataTable get_all_custom_FTP_new(DateTime datetime_from, DateTime datetime_to, List<string> custom_param_list)
+        {
+            DataTable dt = new DataTable();
+            using (NpgsqlDBConnection db = new NpgsqlDBConnection())
+            {
+                try
+                {
+                    if (db.open_connection())
+                    {
 
+                        string sql_command = @"(SELECT created, id, stored_date, stored_hour, stored_minute, push
+                                                        {custom_param}
+                                               FROM data_5minute_values
+                                               WHERE created BETWEEN  :date_from  AND  :date_to 
+                                               ORDER BY created ASC)
+                                               UNION
+                                               (SELECT created, id, stored_date, stored_hour, stored_minute, push
+                                                        {custom_param}
+                                               FROM data_5minute_values
+                                               WHERE push != 1
+                                               ORDER BY created ASC)
+                                               ORDER BY created ASC
+                                                ";
+
+                        string custom_param = "";
+                        if (custom_param_list != null && custom_param_list.Count > 0)
+                        {
+                            custom_param = " , " + string.Join(",", custom_param_list);
+                        }
+                        List<string> custom_param_list_status = custom_param_list.Select(s => s + "_status").ToList();
+                        if (custom_param_list != null && custom_param_list_status.Count > 0)
+                        {
+                            custom_param = custom_param + " , " + string.Join(",", custom_param_list_status);
+                        }
+
+                        sql_command = sql_command.Replace("{custom_param}", custom_param);
+                        DateTime d_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day); // datetime_from.ToString("yyyy-MM-dd");
+                        DateTime d_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day); // datetime_to.ToString("yyyy-MM-dd");
+
+                        DateTime date_from = new DateTime(datetime_from.Year, datetime_from.Month, datetime_from.Day, datetime_from.Hour, datetime_from.Minute, datetime_from.Second);
+                        DateTime date_to = new DateTime(datetime_to.Year, datetime_to.Month, datetime_to.Day, datetime_to.Hour, datetime_to.Minute, datetime_to.Second);
+
+                        using (NpgsqlCommand cmd = db._conn.CreateCommand())
+                        {
+                            cmd.CommandText = sql_command;
+
+                            cmd.Parameters.Add(":date_from", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_from;
+                            cmd.Parameters.Add(":date_to", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = date_to;
+
+                            NpgsqlDataReader reader = cmd.ExecuteReader();
+
+                            dt.Load(reader);
+
+                            reader.Close();
+                            db.close_connection();
+                            return dt;
+                        }
+                    }
+                    else
+                    {
+                        db.close_connection();
+                        return null;
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (db != null)
+                    {
+                        db.close_connection();
+                    }
+                    return null;
+                }
+                finally
+                { db.close_connection(); }
+            }
+        }
         /// <summary>
         ///
         /// </summary>

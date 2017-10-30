@@ -555,6 +555,7 @@ namespace DataLogger
         /// <param name="_timeType"></param>
         private void reloadViewDataMPS(DataViewType _viewType, DataTimeType _timeType)
         {
+            GlobalVar.moduleSettings = new module_repository().get_all();
             if (_viewType == DataViewType.List)
             {
                 chtData.Visible = false;
@@ -641,47 +642,66 @@ namespace DataLogger
                         {
                             row.Cells["Status"].Value = (System.Drawing.Image)Properties.Resources.Fault_status_x16;
                         }
-                    }
-                    if (row.Cells["MPS_pH"].Value != null)
+                    }                  
+
+                    foreach (var item in GlobalVar.moduleSettings)
                     {
-                        if (Convert.ToDouble(row.Cells["MPS_pH"].Value) < 0)
+                        switch (item.item_name)
                         {
-                            row.Cells["MPS_pH"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_EC"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_EC"].Value) < 0)
-                        {
-                            row.Cells["MPS_EC"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_DO"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_DO"].Value) < 0)
-                        {
-                            row.Cells["MPS_DO"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_TSS"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_TSS"].Value) < 0)
-                        {
-                            row.Cells["MPS_TSS"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_ORP"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_ORP"].Value) < 0)
-                        {
-                            row.Cells["MPS_ORP"].Value = "---";
-                        }
-                    }
-                    if (row.Cells["MPS_Temp"].Value != null)
-                    {
-                        if (Convert.ToDouble(row.Cells["MPS_Temp"].Value) < 0)
-                        {
-                            row.Cells["MPS_Temp"].Value = "---";
+                            case "pH":
+                                if (row.Cells["MPS_pH"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_pH"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_pH"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "Orp":
+                                if (row.Cells["MPS_ORP"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_ORP"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_ORP"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "Temp":
+                                if (row.Cells["MPS_Temp"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_Temp"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_Temp"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "DO":
+                                if (row.Cells["MPS_DO"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_DO"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_DO"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "Turb":
+                                if (row.Cells["MPS_TSS"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_TSS"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_TSS"].Value = "---";
+                                    }
+                                }
+                                break;
+                            case "Cond":
+                                if (row.Cells["MPS_EC"].Value != null)
+                                {
+                                    if (Convert.ToDouble(row.Cells["MPS_EC"].Value) < item.output_min)
+                                    {
+                                        row.Cells["MPS_EC"].Value = "---";
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -1686,6 +1706,7 @@ namespace DataLogger
         private void reloadViewDataCustom(DataViewType _viewType, DataTimeType _timeType)
         {
             DataLoggerParam.PARAMETER_LIST.ForEach(p => p.Selected = false);
+            GlobalVar.moduleSettings = new module_repository().get_all();
 
             foreach (Object item in checkedListBoxParameters.CheckedItems)
             {
@@ -1812,7 +1833,14 @@ namespace DataLogger
                         // lọc giá trị âm
                         if (Convert.ToDouble(row.Cells[item.NameDisplay].Value) < 0)
                         {
-                            row.Cells[item.NameDisplay].Value = "---";
+                            if (item.NameDB.Equals("mps_orp") && Convert.ToDouble(row.Cells[item.NameDisplay].Value) != -1)
+                            {
+
+                            }
+                            else
+                            {
+                                row.Cells[item.NameDisplay].Value = "---";
+                            }
                         }
                         else
                         {
@@ -1965,6 +1993,68 @@ namespace DataLogger
                             }
                             row.Cells[item.NameDisplay].Value = displayValueTemp;
                         }
+                        //
+                        //foreach (var item1 in GlobalVar.moduleSettings)
+                        //{
+                        //    switch (item1.item_name)
+                        //    {
+                        //        case "pH":
+                        //            if (row.Cells["MPS_pH"].Value != null)
+                        //            {
+                        //                if (Convert.ToDouble(row.Cells["MPS_pH"].Value) < item1.output_min)
+                        //                {
+                        //                    row.Cells["MPS_pH"].Value = "---";
+                        //                }
+                        //            }
+                        //            break;
+                        //        case "Orp":
+                        //            if (row.Cells["MPS_ORP"].Value != null)
+                        //            {
+                        //                if (Convert.ToDouble(row.Cells["MPS_ORP"].Value) < item1.output_min)
+                        //                {
+                        //                    row.Cells["MPS_ORP"].Value = "---";
+                        //                }
+                        //            }
+                        //            break;
+                        //        case "Temp":
+                        //            if (row.Cells["MPS_Temp"].Value != null)
+                        //            {
+                        //                if (Convert.ToDouble(row.Cells["MPS_Temp"].Value) < item1.output_min)
+                        //                {
+                        //                    row.Cells["MPS_Temp"].Value = "---";
+                        //                }
+                        //            }
+                        //            break;
+                        //        case "DO":
+                        //            if (row.Cells["MPS_DO"].Value != null)
+                        //            {
+                        //                if (Convert.ToDouble(row.Cells["MPS_DO"].Value) < item1.output_min)
+                        //                {
+                        //                    row.Cells["MPS_DO"].Value = "---";
+                        //                }
+                        //            }
+                        //            break;
+                        //        case "Turb":
+                        //            if (row.Cells["MPS_TSS"].Value != null)
+                        //            {
+                        //                if (Convert.ToDouble(row.Cells["MPS_TSS"].Value) < item1.output_min)
+                        //                {
+                        //                    row.Cells["MPS_TSS"].Value = "---";
+                        //                }
+                        //            }
+                        //            break;
+                        //        case "Cond":
+                        //            if (row.Cells["MPS_EC"].Value != null)
+                        //            {
+                        //                if (Convert.ToDouble(row.Cells["MPS_EC"].Value) < item1.output_min)
+                        //                {
+                        //                    row.Cells["MPS_EC"].Value = "---";
+                        //                }
+                        //            }
+                        //            break;
+                        //    }
+                        //}
+                        //
                     }
                 }
 

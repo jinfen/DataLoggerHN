@@ -22,9 +22,9 @@ namespace DataLogger.Data
                     if (db.open_connection())
                     {
                         string sql_command = "INSERT INTO push_server ( ftp_ip, " +
-                                            " ftp_username, ftp_pwd, ftp_folder, ftp_flag, ftp_lasted)" +
+                                            " ftp_username, ftp_pwd, ftp_folder, ftp_flag, ftp_lasted, ftp_lasted_manual)" +
                                             " VALUES (:ftp_ip, " +
-                                            " :ftp_username, :ftp_pwd, :ftp_folder, :ftp_flag, :ftp_lasted)";
+                                            " :ftp_username, :ftp_pwd, :ftp_folder, :ftp_flag, :ftp_lasted, :ftp_lasted_manual)";
                         sql_command += " RETURNING id;";
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
@@ -37,6 +37,7 @@ namespace DataLogger.Data
                             cmd.Parameters.Add(":ftp_folder", NpgsqlTypes.NpgsqlDbType.Varchar).Value = obj.ftp_folder;
                             cmd.Parameters.Add(":ftp_flag", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.ftp_flag;
                             cmd.Parameters.Add(":ftp_lasted", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = obj.ftp_lasted;
+                            cmd.Parameters.Add(":ftp_lasted_manual", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = obj.ftp_lasted_manual;
 
                             ID = Convert.ToInt32(cmd.ExecuteScalar());
                             obj.id = ID;
@@ -75,9 +76,10 @@ namespace DataLogger.Data
                         string sql_command = "UPDATE push_server set  " +
                                             " ftp_ip = :ftp_ip, ftp_username =:ftp_username, " +
                                             " ftp_pwd =:ftp_pwd, " +
-                                            " ftp_folder = :ftp_folder " +
-                                            " ftp_flag = :ftp_flag " +
-                                            " ftp_lasted = :ftp_lasted " +
+                                            " ftp_folder = :ftp_folder, " +
+                                            " ftp_flag = :ftp_flag, " +
+                                            " ftp_lasted = :ftp_lasted, " +
+                                            " ftp_lasted_manual = :ftp_lasted_manual " +
                                             " where id = :id";
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
@@ -90,6 +92,7 @@ namespace DataLogger.Data
                             cmd.Parameters.Add(":ftp_flag", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.ftp_flag;
                             cmd.Parameters.Add(":ftp_folder", NpgsqlTypes.NpgsqlDbType.Varchar).Value = obj.ftp_folder;
                             cmd.Parameters.Add(":ftp_lasted", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = obj.ftp_lasted;
+                            cmd.Parameters.Add(":ftp_lasted_manual", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = obj.ftp_lasted_manual;
                             cmd.Parameters.Add(":id", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.id;
 
                             cmd.ExecuteNonQuery();
@@ -130,7 +133,8 @@ namespace DataLogger.Data
                                             " ftp_pwd =:ftp_pwd, " +
                                             " ftp_folder = :ftp_folder, " +
                                             " ftp_flag = :ftp_flag, " +
-                                            " ftp_lasted = :ftp_lasted " +
+                                            " ftp_lasted = :ftp_lasted, " +
+                                            " ftp_lasted_manual = :ftp_lasted_manual " +
                                             " where id = :id";
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
@@ -143,6 +147,7 @@ namespace DataLogger.Data
                             cmd.Parameters.Add(":ftp_flag", NpgsqlTypes.NpgsqlDbType.Integer).Value = obj.ftp_flag;
                             cmd.Parameters.Add(":ftp_folder", NpgsqlTypes.NpgsqlDbType.Varchar).Value = obj.ftp_folder;
                             cmd.Parameters.Add(":ftp_lasted", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = obj.ftp_lasted;
+                            cmd.Parameters.Add(":ftp_lasted_manual", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = obj.ftp_lasted_manual;
                             cmd.Parameters.Add(":id", NpgsqlTypes.NpgsqlDbType.Integer).Value = id;
 
                             cmd.ExecuteNonQuery();
@@ -462,6 +467,11 @@ namespace DataLogger.Data
                     obj.ftp_lasted = Convert.ToDateTime(dataReader["ftp_lasted"].ToString().Trim());
                 else
                     obj.ftp_lasted = new DateTime();
+
+                if (!DBNull.Value.Equals(dataReader["ftp_lasted_manual"]))
+                    obj.ftp_lasted_manual = Convert.ToDateTime(dataReader["ftp_lasted_manual"].ToString().Trim());
+                else
+                    obj.ftp_lasted_manual = new DateTime();
             }
             catch (Exception ex)
             {

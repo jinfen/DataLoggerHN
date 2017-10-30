@@ -44,7 +44,7 @@ namespace DataLogger
         DataTable dt = new DataTable();
 
         module_repository _modules = new module_repository();
-
+        public static int current_push_id = 0;
         public static Form1 protocol;
         public frmConfiguration()
         {
@@ -82,6 +82,34 @@ namespace DataLogger
         private void frmConfiguration_Load(object sender, EventArgs e)
         {
             refreshDataForControl();
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("ip", typeof(string));
+            dt.Columns.Add("username", typeof(string));
+            dt.Columns.Add("password", typeof(string));
+            dt.Columns.Add("folder", typeof(string));
+            dt.Columns.Add("lasted value", typeof(DateTime));
+            dt.Columns.Add("flag", typeof(int));
+
+            loadPushInfo();
+        }
+        private void loadPushInfo()
+        {
+            try
+            {
+                dt.Clear();
+                // load all
+                IEnumerable<push_server> list = new push_server_repository().get_all();
+                foreach (push_server item in list)
+                {
+                    dt.Rows.Add(item.id, item.ftp_ip, item.ftp_username, item.ftp_pwd,
+                        item.ftp_folder, item.ftp_lasted_manual, item.ftp_flag);
+                }
+                dgvData.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private bool isOpen(int port)
         {
@@ -140,8 +168,12 @@ namespace DataLogger
                 // set data to control from existed station setting
                 txtStationName.Text = existedStationsSetting.station_name;
                 txtStationID.Text = existedStationsSetting.station_id;
-                txtFTPStationID.Text = existedStationsSetting.ftpserver;
+                txtFTPStationID.Text = existedStationsSetting.ftppassword;
                 txtSocketPort.Text = existedStationsSetting.socket_port.ToString();
+                textID1.Text = existedStationsSetting.ftpserver;
+                textID2.Text = existedStationsSetting.ftpusername;
+
+
                 if (isOpen(existedStationsSetting.socket_port))
                 {
                     this.btnSOCKET.Image = global::DataLogger.Properties.Resources.ON_switch_96x25;
@@ -584,6 +616,8 @@ namespace DataLogger
                 objStationSetting.station_name = txtStationName.Text;
                 objStationSetting.station_id = txtStationID.Text;
                 objStationSetting.socket_port = Convert.ToInt32(txtSocketPort.Text.Trim());
+                objStationSetting.ftpserver = textID1.Text;
+                objStationSetting.ftpusername = textID2.Text;
                 //MessageBox.Show("1");
                 objStationSetting.sampler_comport = cbSampler.Text;
                 objStationSetting.module_comport = cbModule.Text;
@@ -1231,6 +1265,105 @@ namespace DataLogger
         private void label48_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            push_server objPush = new push_server();
+
+            dt.Rows[dgvData.CurrentCell.RowIndex]["ip"] = txtIP.Text;
+            dt.Rows[dgvData.CurrentCell.RowIndex]["username"] = txtUsername.Text;
+            dt.Rows[dgvData.CurrentCell.RowIndex]["password"] = textPwd.Text;
+            dt.Rows[dgvData.CurrentCell.RowIndex]["folder"] = txtFolder.Text;
+            dt.Rows[dgvData.CurrentCell.RowIndex]["lasted value"] = dtpLastedValue.Value;
+            dt.Rows[dgvData.CurrentCell.RowIndex]["flag"] = cbFlag.Text;
+
+            dgvData.DataSource = dt;
+
+            objPush.id = current_push_id;
+            objPush.ftp_ip = txtIP.Text;
+            objPush.ftp_folder = txtFolder.Text;
+            objPush.ftp_username = txtUsername.Text;
+            objPush.ftp_pwd = textPwd.Text;
+            objPush.ftp_flag = Convert.ToInt32(cbFlag.Text);
+            objPush.ftp_lasted_manual = dtpLastedValue.Value;
+
+            if (new push_server_repository().update_with_id(ref objPush, current_push_id) > 0)
+            {
+                // ok
+                MessageBox.Show(lang.getText("successfully"));
+            }
+            else
+            {
+
+                // fail
+                MessageBox.Show(lang.getText("fail"));
+                return;
+            }
+            loadPushInfo();
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (new push_server_repository().delete(current_push_id))
+            {
+                // ok
+                MessageBox.Show(lang.getText("successfully"));
+            }
+            else
+            {
+
+                // fail
+                MessageBox.Show(lang.getText("fail"));
+                return;
+            }
+            dt.Rows.RemoveAt(dgvData.CurrentCell.RowIndex);
+            dgvData.DataSource = dt;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            push_server objPush = new push_server();
+            push_server_repository s = new push_server_repository();
+
+            try
+            {
+                objPush.ftp_ip = txtIP.Text;
+                objPush.ftp_folder = txtFolder.Text;
+                objPush.ftp_username = txtUsername.Text;
+                objPush.ftp_pwd = textPwd.Text;
+                objPush.ftp_flag = Convert.ToInt32(cbFlag.Text);
+                objPush.ftp_lasted_manual = dtpLastedValue.Value;
+
+                if (s.add(ref objPush) > 0)
+                {
+                    // ok
+                }
+                else
+                {
+
+                    // fail
+
+                }
+                loadPushInfo();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void dgvData_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            current_push_id = Convert.ToInt32(dgvData.CurrentRow.Cells[0].Value);
+
+            txtIP.Text = Convert.ToString(dgvData.CurrentRow.Cells[1].Value);
+            txtFolder.Text = Convert.ToString(dgvData.CurrentRow.Cells[4].Value);
+            txtUsername.Text = Convert.ToString(dgvData.CurrentRow.Cells[2].Value);
+            textPwd.Text = Convert.ToString(dgvData.CurrentRow.Cells[3].Value);
+            cbFlag.Text = Convert.ToString(dgvData.CurrentRow.Cells[6].Value);
+            //dtpLastedValue.Value = DateTime.ParseExact(Convert.ToString(dgvData.CurrentRow.Cells[5].Value), "MM/dd/yyyy HH:mm:ss tt", System.Globalization.CultureInfo.InvariantCulture);
+            dtpLastedValue.Value = DateTime.ParseExact(Convert.ToString(dgvData.CurrentRow.Cells[5].Value), "M/d/yyyy h:m:s tt", new CultureInfo("en-US"), DateTimeStyles.None);
         }
     }
 }

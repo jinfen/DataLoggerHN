@@ -30,6 +30,10 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.textID2 = new System.Windows.Forms.TextBox();
+            this.label59 = new System.Windows.Forms.Label();
+            this.textID1 = new System.Windows.Forms.TextBox();
+            this.label58 = new System.Windows.Forms.Label();
             this.txtFTPStationID = new System.Windows.Forms.TextBox();
             this.btnShow = new System.Windows.Forms.Button();
             this.btnSOCKET = new System.Windows.Forms.Button();
@@ -288,8 +292,27 @@
             this.label47 = new System.Windows.Forms.Label();
             this.label50 = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.dgvData = new System.Windows.Forms.DataGridView();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textPwd = new System.Windows.Forms.TextBox();
+            this.label57 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.txtFolder = new System.Windows.Forms.TextBox();
+            this.label56 = new System.Windows.Forms.Label();
+            this.dtpLastedValue = new System.Windows.Forms.DateTimePicker();
+            this.label52 = new System.Windows.Forms.Label();
+            this.txtUsername = new System.Windows.Forms.TextBox();
+            this.txtIP = new System.Windows.Forms.TextBox();
+            this.label53 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.cbFlag = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -298,6 +321,10 @@
             this.tabPage4.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -311,6 +338,7 @@
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage7);
+            this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Location = new System.Drawing.Point(9, 10);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
@@ -320,6 +348,10 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.textID2);
+            this.tabPage1.Controls.Add(this.label59);
+            this.tabPage1.Controls.Add(this.textID1);
+            this.tabPage1.Controls.Add(this.label58);
             this.tabPage1.Controls.Add(this.txtFTPStationID);
             this.tabPage1.Controls.Add(this.btnShow);
             this.tabPage1.Controls.Add(this.btnSOCKET);
@@ -338,17 +370,49 @@
             this.tabPage1.Text = "Station";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // textID2
+            // 
+            this.textID2.Location = new System.Drawing.Point(399, 101);
+            this.textID2.Name = "textID2";
+            this.textID2.Size = new System.Drawing.Size(235, 20);
+            this.textID2.TabIndex = 25;
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.Location = new System.Drawing.Point(354, 104);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(24, 13);
+            this.label59.TabIndex = 24;
+            this.label59.Text = "ID2";
+            // 
+            // textID1
+            // 
+            this.textID1.Location = new System.Drawing.Point(88, 101);
+            this.textID1.Name = "textID1";
+            this.textID1.Size = new System.Drawing.Size(165, 20);
+            this.textID1.TabIndex = 23;
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(13, 104);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(24, 13);
+            this.label58.TabIndex = 22;
+            this.label58.Text = "ID1";
+            // 
             // txtFTPStationID
             // 
             this.txtFTPStationID.Enabled = false;
-            this.txtFTPStationID.Location = new System.Drawing.Point(351, 63);
+            this.txtFTPStationID.Location = new System.Drawing.Point(399, 63);
             this.txtFTPStationID.Name = "txtFTPStationID";
             this.txtFTPStationID.Size = new System.Drawing.Size(238, 20);
             this.txtFTPStationID.TabIndex = 21;
             // 
             // btnShow
             // 
-            this.btnShow.Location = new System.Drawing.Point(363, 113);
+            this.btnShow.Location = new System.Drawing.Point(363, 164);
             this.btnShow.Name = "btnShow";
             this.btnShow.Size = new System.Drawing.Size(75, 23);
             this.btnShow.TabIndex = 20;
@@ -364,7 +428,7 @@
             this.btnSOCKET.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSOCKET.ForeColor = System.Drawing.SystemColors.Window;
             this.btnSOCKET.Image = global::DataLogger.Properties.Resources.ON_switch_96x25;
-            this.btnSOCKET.Location = new System.Drawing.Point(245, 102);
+            this.btnSOCKET.Location = new System.Drawing.Point(245, 153);
             this.btnSOCKET.Name = "btnSOCKET";
             this.btnSOCKET.Size = new System.Drawing.Size(81, 40);
             this.btnSOCKET.TabIndex = 19;
@@ -373,7 +437,7 @@
             // 
             // txtSocketPort
             // 
-            this.txtSocketPort.Location = new System.Drawing.Point(88, 113);
+            this.txtSocketPort.Location = new System.Drawing.Point(88, 164);
             this.txtSocketPort.Name = "txtSocketPort";
             this.txtSocketPort.Size = new System.Drawing.Size(118, 20);
             this.txtSocketPort.TabIndex = 18;
@@ -395,7 +459,7 @@
             // lblSocketPort
             // 
             this.lblSocketPort.AutoSize = true;
-            this.lblSocketPort.Location = new System.Drawing.Point(13, 116);
+            this.lblSocketPort.Location = new System.Drawing.Point(13, 167);
             this.lblSocketPort.Name = "lblSocketPort";
             this.lblSocketPort.Size = new System.Drawing.Size(62, 13);
             this.lblSocketPort.TabIndex = 15;
@@ -2674,6 +2738,214 @@
             this.label51.TabIndex = 361;
             this.label51.Text = "Error min";
             // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.panel1);
+            this.tabPage8.Controls.Add(this.groupBox1);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(654, 412);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "Push Config";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.BackgroundImage = global::DataLogger.Properties.Resources.Control;
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel1.Controls.Add(this.dgvData);
+            this.panel1.Location = new System.Drawing.Point(16, 148);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(611, 238);
+            this.panel1.TabIndex = 7;
+            // 
+            // dgvData
+            // 
+            this.dgvData.AllowUserToOrderColumns = true;
+            this.dgvData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvData.BackgroundColor = System.Drawing.Color.White;
+            this.dgvData.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvData.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvData.Location = new System.Drawing.Point(11, 14);
+            this.dgvData.Name = "dgvData";
+            this.dgvData.Size = new System.Drawing.Size(590, 208);
+            this.dgvData.TabIndex = 2;
+            this.dgvData.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvData_CellClick);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.cbFlag);
+            this.groupBox1.Controls.Add(this.button2);
+            this.groupBox1.Controls.Add(this.btnDelete);
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.textPwd);
+            this.groupBox1.Controls.Add(this.label57);
+            this.groupBox1.Controls.Add(this.label54);
+            this.groupBox1.Controls.Add(this.txtFolder);
+            this.groupBox1.Controls.Add(this.label56);
+            this.groupBox1.Controls.Add(this.dtpLastedValue);
+            this.groupBox1.Controls.Add(this.label52);
+            this.groupBox1.Controls.Add(this.txtUsername);
+            this.groupBox1.Controls.Add(this.txtIP);
+            this.groupBox1.Controls.Add(this.label53);
+            this.groupBox1.Controls.Add(this.label55);
+            this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(53)))), ((int)(((byte)(56)))));
+            this.groupBox1.Location = new System.Drawing.Point(15, 16);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(612, 108);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "FTP Info";
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.Transparent;
+            this.button2.BackgroundImage = global::DataLogger.Properties.Resources._0;
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("Times New Roman", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(83)))), ((int)(((byte)(98)))));
+            this.button2.Location = new System.Drawing.Point(544, 75);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(42, 23);
+            this.button2.TabIndex = 61;
+            this.button2.Text = "Add";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.BackColor = System.Drawing.Color.Transparent;
+            this.btnDelete.BackgroundImage = global::DataLogger.Properties.Resources._0;
+            this.btnDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnDelete.FlatAppearance.BorderSize = 0;
+            this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDelete.Font = new System.Drawing.Font("Times New Roman", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDelete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(83)))), ((int)(((byte)(98)))));
+            this.btnDelete.Location = new System.Drawing.Point(480, 75);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(58, 23);
+            this.btnDelete.TabIndex = 60;
+            this.btnDelete.Text = "Delete selected User";
+            this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.BackgroundImage = global::DataLogger.Properties.Resources._0;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Times New Roman", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(83)))), ((int)(((byte)(98)))));
+            this.button1.Location = new System.Drawing.Point(432, 75);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(42, 23);
+            this.button1.TabIndex = 59;
+            this.button1.Text = "Save";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // textPwd
+            // 
+            this.textPwd.Location = new System.Drawing.Point(290, 47);
+            this.textPwd.Name = "textPwd";
+            this.textPwd.Size = new System.Drawing.Size(121, 21);
+            this.textPwd.TabIndex = 58;
+            // 
+            // label57
+            // 
+            this.label57.Location = new System.Drawing.Point(213, 47);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(57, 20);
+            this.label57.TabIndex = 57;
+            this.label57.Text = "Password";
+            this.label57.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label54
+            // 
+            this.label54.Location = new System.Drawing.Point(213, 23);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(57, 20);
+            this.label54.TabIndex = 1;
+            this.label54.Text = "Folder";
+            this.label54.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // txtFolder
+            // 
+            this.txtFolder.Location = new System.Drawing.Point(290, 23);
+            this.txtFolder.Name = "txtFolder";
+            this.txtFolder.Size = new System.Drawing.Size(236, 21);
+            this.txtFolder.TabIndex = 5;
+            // 
+            // label56
+            // 
+            this.label56.Location = new System.Drawing.Point(213, 75);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(68, 20);
+            this.label56.TabIndex = 56;
+            this.label56.Text = "Lasted Value";
+            this.label56.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // dtpLastedValue
+            // 
+            this.dtpLastedValue.CustomFormat = "dd/MM/yyyy HH:mm";
+            this.dtpLastedValue.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpLastedValue.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpLastedValue.Location = new System.Drawing.Point(290, 73);
+            this.dtpLastedValue.MaxDate = new System.DateTime(2100, 12, 31, 0, 0, 0, 0);
+            this.dtpLastedValue.MinDate = new System.DateTime(2000, 1, 1, 0, 0, 0, 0);
+            this.dtpLastedValue.Name = "dtpLastedValue";
+            this.dtpLastedValue.Size = new System.Drawing.Size(121, 21);
+            this.dtpLastedValue.TabIndex = 55;
+            this.dtpLastedValue.Value = new System.DateTime(2015, 10, 22, 0, 0, 0, 0);
+            // 
+            // label52
+            // 
+            this.label52.Location = new System.Drawing.Point(6, 76);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(65, 20);
+            this.label52.TabIndex = 8;
+            this.label52.Text = "Flag";
+            this.label52.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // txtUsername
+            // 
+            this.txtUsername.Location = new System.Drawing.Point(82, 47);
+            this.txtUsername.Name = "txtUsername";
+            this.txtUsername.Size = new System.Drawing.Size(121, 21);
+            this.txtUsername.TabIndex = 6;
+            // 
+            // txtIP
+            // 
+            this.txtIP.Location = new System.Drawing.Point(82, 22);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.Size = new System.Drawing.Size(121, 21);
+            this.txtIP.TabIndex = 2;
+            // 
+            // label53
+            // 
+            this.label53.Location = new System.Drawing.Point(6, 47);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(65, 20);
+            this.label53.TabIndex = 2;
+            this.label53.Text = "Username";
+            this.label53.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label55
+            // 
+            this.label55.Location = new System.Drawing.Point(6, 22);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(65, 20);
+            this.label55.TabIndex = 0;
+            this.label55.Text = "IP";
+            this.label55.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // btnSave
             // 
             this.btnSave.BackColor = System.Drawing.Color.Transparent;
@@ -2711,6 +2983,13 @@
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // cbFlag
+            // 
+            this.cbFlag.Location = new System.Drawing.Point(82, 75);
+            this.cbFlag.Name = "cbFlag";
+            this.cbFlag.Size = new System.Drawing.Size(121, 21);
+            this.cbFlag.TabIndex = 62;
+            // 
             // frmConfiguration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2740,6 +3019,11 @@
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
+            this.tabPage8.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvData)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3008,5 +3292,28 @@
         private System.Windows.Forms.TextBox txtTnErrorMin;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.TextBox txtFTPStationID;
+        private System.Windows.Forms.TabPage tabPage8;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.DataGridView dgvData;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textPwd;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.TextBox txtFolder;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.DateTimePicker dtpLastedValue;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.TextBox txtUsername;
+        private System.Windows.Forms.TextBox txtIP;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.TextBox textID2;
+        private System.Windows.Forms.Label label59;
+        private System.Windows.Forms.TextBox textID1;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.TextBox cbFlag;
     }
 }

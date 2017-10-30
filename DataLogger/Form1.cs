@@ -1205,95 +1205,168 @@ namespace WinformProtocol
                             //_encoder.GetBytes(ConvertStr(tbcode.Rows.Count.ToString(), 2)).CopyTo(countitem1, 0);
 
                             byte[] sql = null;
+
+                            //---------------------------------------------------------------------------------------
+                            //foreach (DataRow delRow in data.Rows)
+                            //{
+                            //    int iddelRow = Convert.ToInt32(delRow["id"]);
+                            //    string datetimedelRow = Convert.ToString(delRow["created"]);
+                            //    DataTable fixtbcode = new DataTable();
+                            //    fixtbcode = tbcode.Copy(); // bang databinding
+                            //    foreach (DataRow row2 in fixtbcode.Rows)
+                            //    {
+                            //        int flag = 0;
+                            //        if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
+                            //        {
+                            //            string beforeTn = compareAnalyzer("tn", iddelRow, datetimedelRow);
+                            //            string Tn = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                            //            if (beforeTn != null)
+                            //            {
+                            //                if (beforeTn.Equals(Tn))
+                            //                {
+                            //                    flag = 1;
+                            //                }
+                            //                else
+                            //                {
+                            //                }
+                            //            }
+                            //        }
+                            //        if (Convert.ToString(row2["clnnamevalue"]).Equals("tp"))
+                            //        {
+                            //            string beforeTp = compareAnalyzerTP("tp", iddelRow, datetimedelRow);
+                            //            string Tp = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.000");
+                            //            if (beforeTp != null)
+                            //            {
+                            //                if (beforeTp.Equals(Tp))
+                            //                {
+                            //                    flag = 1;
+                            //                }
+                            //                else
+                            //                {
+                            //                }
+                            //            }
+                            //        }
+                            //        if (Convert.ToString(row2["clnnamevalue"]).Equals("toc"))
+                            //        {
+                            //            string beforeToc = compareAnalyzer("toc", iddelRow, datetimedelRow);
+                            //            string Toc = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                            //            if (beforeToc != null)
+                            //            {
+                            //                if (beforeToc.Equals(Toc))
+                            //                {
+                            //                    flag = 1;
+                            //                }
+                            //                else
+                            //                {
+                            //                }
+                            //            }
+                            //        }
+                            //        if (flag == 1)
+                            //        {
+                            //            row2.Delete();
+                            //        }
+                            //    }
+                            //    fixtbcode.AcceptChanges(); // loc gia tri analyzer , xoa trong databinding
+
+                            //    if (getNullNo(delRow, fixtbcode) == 0) //Loc gia tri khac ngoai analyzer. Xoa row trong dataDUMP dc neu toan bo null
+                            //    {
+                            //        delRow.Delete();
+
+                            //    }
+                            //}
+                            //data.AcceptChanges();
+
+
                             //---------------------------------------------------------------------------------------
                             foreach (DataRow delRow in data.Rows)
                             {
-                                int iddelRow = Convert.ToInt32(delRow["id"]);
-                                string datetimedelRow = Convert.ToString(delRow["created"]);
-                                DataTable fixtbcode = new DataTable();
-                                fixtbcode = tbcode.Copy();
-                                foreach (DataRow row2 in fixtbcode.Rows)
-                                {
-                                    int flag = 0;
-                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
-                                    {
-                                        string beforeTn = compareAnalyzer("tn", iddelRow, datetimedelRow);
-                                        string Tn = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
-                                        if (beforeTn != null)
-                                        {
-                                            if (beforeTn.Equals(Tn))
-                                            {
-                                                flag = 1;
-                                                //row2.Delete();
-                                                //tbcode.AcceptChanges();
-                                                //break;
-                                            }
-                                            else
-                                            {
-                                            }
-                                        }
-                                    }
-                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("tp"))
-                                    {
-                                        string beforeTp = compareAnalyzerTP("tp", iddelRow, datetimedelRow);
-                                        string Tp = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.000");
-                                        if (beforeTp != null)
-                                        {
-                                            if (beforeTp.Equals(Tp))
-                                            {
-                                                flag = 1;
-                                                //row2.Delete();
-                                                //tbcode.AcceptChanges();
-                                                //break;
-                                            }
-                                            else
-                                            {
-                                            }
-                                        }
-                                    }
-                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("toc"))
-                                    {
-                                        string beforeToc = compareAnalyzer("toc", iddelRow, datetimedelRow);
-                                        string Toc = Convert.ToDouble(delRow[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
-                                        if (beforeToc != null)
-                                        {
-                                            if (beforeToc.Equals(Toc))
-                                            {
-                                                flag = 1;
-                                                //row2.Delete();
-                                                //tbcode.AcceptChanges();
-                                                //break;
-                                            }
-                                            else
-                                            {
-                                            }
-                                        }
-                                    }
-                                    if (flag == 1)
-                                    {
-                                        row2.Delete();
-                                        //tbcode.AcceptChanges();
-                                    }
-                                }
-                                fixtbcode.AcceptChanges();
-
-                                if (getNullNo(delRow, fixtbcode) == 0)
+                                if (getNullNo(delRow, tbcode) == 0)
                                 {
                                     delRow.Delete();
-
                                 }
                             }
                             data.AcceptChanges();
                             //-----------------------------------------------------------------------------------------
+
                             foreach (DataRow row1 in data.Rows)  // lay moi row trong data phu hop voi DUMP command
                             {
+                                ///
+                                int iddelRow = Convert.ToInt32(row1["id"]);
+                                string datetimedelRow = Convert.ToString(row1["created"]);
+                                ///
+                                //DataTable fixtbcode = new DataTable();
+                                //fixtbcode = tbcode.Copy(); // bang databinding
+                                //foreach (DataRow row2 in fixtbcode.Rows)
+                                //{
+                                //    int flag = 0;
+                                //    if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
+                                //    {
+                                //        int min_value_tn = Convert.ToInt32(row2["min_value"]);
+                                //        string beforeTn = compareAnalyzer("tn", iddelRow, datetimedelRow);
+                                //        string Tn = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                                //        if (beforeTn != null)
+                                //        {
+                                //            if (beforeTn.Equals(Tn) || Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]) == -1 || Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]) < min_value_tn)
+                                //            {
+                                //                flag = 1;
+                                //            }
+                                //            else
+                                //            {
+                                //            }
+                                //        }
+                                //    }
+                                //    if (Convert.ToString(row2["clnnamevalue"]).Equals("tp"))
+                                //    {
+                                //        int min_value_tp = Convert.ToInt32(row2["min_value"]);
+                                //        string beforeTp = compareAnalyzerTP("tp", iddelRow, datetimedelRow);
+                                //        string Tp = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.000");
+                                //        if (beforeTp != null)
+                                //        {
+                                //            if (beforeTp.Equals(Tp) || Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]) == -1 || Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]) < min_value_tp)
+                                //            {
+                                //                flag = 1;
+                                //            }
+                                //            else
+                                //            {
+                                //            }
+                                //        }
+                                //    }
+                                //    if (Convert.ToString(row2["clnnamevalue"]).Equals("toc"))
+                                //    {
+                                //        int min_value_toc = Convert.ToInt32(row2["min_value"]);
+                                //        string beforeToc = compareAnalyzer("toc", iddelRow, datetimedelRow);
+                                //        string Toc = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                                //        if (beforeToc != null)
+                                //        {
+                                //            if (beforeToc.Equals(Toc) || Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]) == -1 || Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]) < min_value_toc)
+                                //            {
+                                //                flag = 1;
+                                //            }
+                                //            else
+                                //            {
+                                //            }
+                                //        }
+                                //    }
+                                //    if (flag == 1)
+                                //    {
+                                //        row2.Delete();
+                                //    }
+                                //}
+                                //fixtbcode.AcceptChanges(); // loc gia tri analyzer , xoa trong databinding
+                                ///
+                                //if (getNullNo(row1, fixtbcode) == 0) //Loc gia tri khac ngoai analyzer. Xoa row trong dataDUMP dc neu toan bo null
+                                //{
+                                //    //row1.Delete();
+                                //    continue;
+                                //}
+                                ////
                                 sql = null;
                                 clnnamevalue = new byte[10];
                                 clnnamestatus = new byte[2];
                                 code = new byte[5];
 
-                                DataTable fixtbcode = new DataTable();
-                                fixtbcode = tbcode.Copy();
+                                //DataTable fixtbcode = new DataTable();
+                                //fixtbcode = tbcode.Copy();
 
                                 int idRow1 = Convert.ToInt32(row1["id"]);
                                 string datetimeRow1 = Convert.ToString(row1["created"]);
@@ -1304,8 +1377,8 @@ namespace WinformProtocol
 
 
                                 //getNullNo(row1,tbcode);
-                                _encoder.GetBytes(ConvertStr(getNullNo(row1, fixtbcode).ToString(), 2)).CopyTo(countitem1, 0);
-
+                                _encoder.GetBytes(ConvertStr(getNullNo(row1, tbcode).ToString(), 2)).CopyTo(countitem1, 0);
+                                //_encoder.GetBytes(ConvertStr(getNullNo(row1, fixtbcode).ToString(), 2)).CopyTo(countitem1, 0);
                                 if (sql == null)
                                 {
                                     sql = measuretime.Concat(countitem1).ToArray();  //Measure time + count item
@@ -1315,71 +1388,74 @@ namespace WinformProtocol
                                     sql = sql.Concat(measuretime).Concat(countitem1).ToArray();
                                 }
                                 //strvalue = strvalue + DateFormat(Convert.ToString(row1["created"])) + tbcode.Rows.Count.ToString() + "\\";
-                                foreach (DataRow row2 in fixtbcode.Rows)
-                                {
-                                    int flag = 0;
-                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
-                                    {
-                                        string beforeTn = compareAnalyzer("tn", idRow1, datetimeRow1);
-                                        string Tn = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
-                                        if (beforeTn != null)
-                                        {
-                                            if (beforeTn.Equals(Tn))
-                                            {
-                                                flag = 1;
-                                                //row2.Delete();
-                                                //tbcode.AcceptChanges();
-                                                //break;
-                                            }
-                                            else
-                                            {
-                                            }
-                                        }
-                                    }
-                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("tp"))
-                                    {
-                                        string beforeTp = compareAnalyzerTP("tp", idRow1, datetimeRow1);
-                                        string Tp = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.000");
-                                        if (beforeTp != null)
-                                        {
-                                            if (beforeTp.Equals(Tp))
-                                            {
-                                                flag = 1;
-                                                //row2.Delete();
-                                                //tbcode.AcceptChanges();
-                                                //break;
-                                            }
-                                            else
-                                            {
-                                            }
-                                        }
-                                    }
-                                    if (Convert.ToString(row2["clnnamevalue"]).Equals("toc"))
-                                    {
-                                        string beforeToc = compareAnalyzer("toc", idRow1, datetimeRow1);
-                                        string Toc = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
-                                        if (beforeToc != null)
-                                        {
-                                            if (beforeToc.Equals(Toc))
-                                            {
-                                                flag = 1;
-                                                //row2.Delete();
-                                                //tbcode.AcceptChanges();
-                                                //break;
-                                            }
-                                            else
-                                            {
-                                            }
-                                        }
-                                    }
-                                    if (flag == 1)
-                                    {
-                                        row2.Delete();
-                                        //tbcode.AcceptChanges();
-                                    }
-                                }
-                                fixtbcode.AcceptChanges();
-                                foreach (DataRow row2 in fixtbcode.Rows)
+                                ///
+                                //foreach (DataRow row2 in tbcode.Rows)
+                                //{
+                                //    int flag = 0;
+                                //    if (Convert.ToString(row2["clnnamevalue"]).Equals("tn"))
+                                //    {
+                                //        string beforeTn = compareAnalyzer("tn", idRow1, datetimeRow1);
+                                //        string Tn = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                                //        if (beforeTn != null)
+                                //        {
+                                //            if (beforeTn.Equals(Tn))
+                                //            {
+                                //                flag = 1;
+                                //                //row2.Delete();
+                                //                //tbcode.AcceptChanges();
+                                //                //break;
+                                //            }
+                                //            else
+                                //            {
+                                //            }
+                                //        }
+                                //    }
+                                //    if (Convert.ToString(row2["clnnamevalue"]).Equals("tp"))
+                                //    {
+                                //        string beforeTp = compareAnalyzerTP("tp", idRow1, datetimeRow1);
+                                //        string Tp = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.000");
+                                //        if (beforeTp != null)
+                                //        {
+                                //            if (beforeTp.Equals(Tp))
+                                //            {
+                                //                flag = 1;
+                                //                //row2.Delete();
+                                //                //tbcode.AcceptChanges();
+                                //                //break;
+                                //            }
+                                //            else
+                                //            {
+                                //            }
+                                //        }
+                                //    }
+                                //    if (Convert.ToString(row2["clnnamevalue"]).Equals("toc"))
+                                //    {
+                                //        string beforeToc = compareAnalyzer("toc", idRow1, datetimeRow1);
+                                //        string Toc = Convert.ToDouble(row1[Convert.ToString(row2["clnnamevalue"])]).ToString("##0.00");
+                                //        if (beforeToc != null)
+                                //        {
+                                //            if (beforeToc.Equals(Toc))
+                                //            {
+                                //                flag = 1;
+                                //                //row2.Delete();
+                                //                //tbcode.AcceptChanges();
+                                //                //break;
+                                //            }
+                                //            else
+                                //            {
+                                //            }
+                                //        }
+                                //    }
+                                //    if (flag == 1)
+                                //    {
+                                //        row2.Delete();
+                                //        //tbcode.AcceptChanges();
+                                //    }
+                                //}
+                                //tbcode.AcceptChanges();
+                                ////
+                                foreach (DataRow row2 in tbcode.Rows)
+                                //foreach (DataRow row2 in fixtbcode.Rows)
                                 {
                                     int min_value = Convert.ToInt32(row2["min_value"]);
 
@@ -1561,7 +1637,7 @@ namespace WinformProtocol
                     if (db.open_connection())
                     {
                         //string sql_command1 = "SELECT " + time + " from " + table + " order by ID desc limit 1";
-                        string sql_command = "SELECT * FROM data_5minute_values WHERE created <" + "\'" + date + "\'" + "ORDER BY created DESC LIMIT 1";
+                        string sql_command = "SELECT * FROM data_5minute_values WHERE created <" + "\'" + date + "\'" + " AND " + table +" != -1"+ "ORDER BY created DESC";
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {
@@ -1598,7 +1674,7 @@ namespace WinformProtocol
                     if (db.open_connection())
                     {
                         //string sql_command1 = "SELECT " + time + " from " + table + " order by ID desc limit 1";
-                        string sql_command = "SELECT * FROM data_5minute_values WHERE created <" + "\'" + date + "\'" + "ORDER BY created DESC LIMIT 1";
+                        string sql_command = "SELECT * FROM data_5minute_values WHERE created <" + "\'" + date + "\'" + " AND " + table + " != -1"+"ORDER BY created DESC LIMIT 1";
 
                         using (NpgsqlCommand cmd = db._conn.CreateCommand())
                         {

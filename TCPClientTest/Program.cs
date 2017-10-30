@@ -77,8 +77,12 @@ class TcpClientTest
 
 
                     byte[] _CommandSAMP = new byte[57];
-                    _encoder.GetBytes("3463BBEF64" + "20170523151212" + "DUMPM" + "20170912134000" + "20170912191500").CopyTo(_CommandSAMP, 0);
+                    _encoder.GetBytes("3463BBEF64" + "20170523151212" + "DUMPM" + "20170915044500" + "20170915051000").CopyTo(_CommandSAMP, 0);
+                    //2017-09-29 05:45:39
+                    //2017-09-29 06:05:39.381931
 
+                    //2017-09-15 04:45:47.306668
+                    //2017 - 09 - 15 05:10:01.374836
                     byte[] _ETX = new byte[1];
                     (new byte[] { 0x03 }).CopyTo(_ETX, 0);
 
