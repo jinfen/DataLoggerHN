@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label60 = new System.Windows.Forms.Label();
             this.textID2 = new System.Windows.Forms.TextBox();
             this.label59 = new System.Windows.Forms.Label();
             this.textID1 = new System.Windows.Forms.TextBox();
@@ -296,6 +297,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.dgvData = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbFlag = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -312,7 +314,6 @@
             this.label55 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.cbFlag = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -348,6 +349,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label60);
             this.tabPage1.Controls.Add(this.textID2);
             this.tabPage1.Controls.Add(this.label59);
             this.tabPage1.Controls.Add(this.textID1);
@@ -370,27 +372,36 @@
             this.tabPage1.Text = "Station";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Location = new System.Drawing.Point(331, 66);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(87, 13);
+            this.label60.TabIndex = 26;
+            this.label60.Text = "Station ID - Push";
+            // 
             // textID2
             // 
-            this.textID2.Location = new System.Drawing.Point(399, 101);
+            this.textID2.Location = new System.Drawing.Point(438, 101);
             this.textID2.Name = "textID2";
-            this.textID2.Size = new System.Drawing.Size(235, 20);
+            this.textID2.Size = new System.Drawing.Size(196, 20);
             this.textID2.TabIndex = 25;
             // 
             // label59
             // 
             this.label59.AutoSize = true;
-            this.label59.Location = new System.Drawing.Point(354, 104);
+            this.label59.Location = new System.Drawing.Point(342, 104);
             this.label59.Name = "label59";
-            this.label59.Size = new System.Drawing.Size(24, 13);
+            this.label59.Size = new System.Drawing.Size(76, 13);
             this.label59.TabIndex = 24;
-            this.label59.Text = "ID2";
+            this.label59.Text = "Department ID";
             // 
             // textID1
             // 
-            this.textID1.Location = new System.Drawing.Point(88, 101);
+            this.textID1.Location = new System.Drawing.Point(104, 101);
             this.textID1.Name = "textID1";
-            this.textID1.Size = new System.Drawing.Size(165, 20);
+            this.textID1.Size = new System.Drawing.Size(196, 20);
             this.textID1.TabIndex = 23;
             // 
             // label58
@@ -398,21 +409,20 @@
             this.label58.AutoSize = true;
             this.label58.Location = new System.Drawing.Point(13, 104);
             this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(24, 13);
+            this.label58.Size = new System.Drawing.Size(63, 13);
             this.label58.TabIndex = 22;
-            this.label58.Text = "ID1";
+            this.label58.Text = "Province ID";
             // 
             // txtFTPStationID
             // 
-            this.txtFTPStationID.Enabled = false;
-            this.txtFTPStationID.Location = new System.Drawing.Point(399, 63);
+            this.txtFTPStationID.Location = new System.Drawing.Point(438, 63);
             this.txtFTPStationID.Name = "txtFTPStationID";
-            this.txtFTPStationID.Size = new System.Drawing.Size(238, 20);
+            this.txtFTPStationID.Size = new System.Drawing.Size(196, 20);
             this.txtFTPStationID.TabIndex = 21;
             // 
             // btnShow
             // 
-            this.btnShow.Location = new System.Drawing.Point(363, 164);
+            this.btnShow.Location = new System.Drawing.Point(314, 164);
             this.btnShow.Name = "btnShow";
             this.btnShow.Size = new System.Drawing.Size(75, 23);
             this.btnShow.TabIndex = 20;
@@ -428,7 +438,7 @@
             this.btnSOCKET.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSOCKET.ForeColor = System.Drawing.SystemColors.Window;
             this.btnSOCKET.Image = global::DataLogger.Properties.Resources.ON_switch_96x25;
-            this.btnSOCKET.Location = new System.Drawing.Point(245, 153);
+            this.btnSOCKET.Location = new System.Drawing.Point(219, 155);
             this.btnSOCKET.Name = "btnSOCKET";
             this.btnSOCKET.Size = new System.Drawing.Size(81, 40);
             this.btnSOCKET.TabIndex = 19;
@@ -444,14 +454,14 @@
             // 
             // txtStationID
             // 
-            this.txtStationID.Location = new System.Drawing.Point(88, 63);
+            this.txtStationID.Location = new System.Drawing.Point(104, 59);
             this.txtStationID.Name = "txtStationID";
-            this.txtStationID.Size = new System.Drawing.Size(238, 20);
+            this.txtStationID.Size = new System.Drawing.Size(196, 20);
             this.txtStationID.TabIndex = 17;
             // 
             // txtStationName
             // 
-            this.txtStationName.Location = new System.Drawing.Point(88, 21);
+            this.txtStationName.Location = new System.Drawing.Point(104, 21);
             this.txtStationName.Name = "txtStationName";
             this.txtStationName.Size = new System.Drawing.Size(118, 20);
             this.txtStationName.TabIndex = 16;
@@ -467,12 +477,12 @@
             // 
             // lblStationID
             // 
-            this.lblStationID.AutoSize = true;
-            this.lblStationID.Location = new System.Drawing.Point(13, 66);
+            this.lblStationID.Location = new System.Drawing.Point(5, 62);
             this.lblStationID.Name = "lblStationID";
-            this.lblStationID.Size = new System.Drawing.Size(54, 13);
+            this.lblStationID.Size = new System.Drawing.Size(93, 13);
             this.lblStationID.TabIndex = 14;
-            this.lblStationID.Text = "Station ID";
+            this.lblStationID.Text = "Station ID - Pull";
+            this.lblStationID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblStationName
             // 
@@ -2800,6 +2810,13 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "FTP Info";
             // 
+            // cbFlag
+            // 
+            this.cbFlag.Location = new System.Drawing.Point(82, 75);
+            this.cbFlag.Name = "cbFlag";
+            this.cbFlag.Size = new System.Drawing.Size(121, 21);
+            this.cbFlag.TabIndex = 62;
+            // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.Transparent;
@@ -2982,13 +2999,6 @@
             this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // cbFlag
-            // 
-            this.cbFlag.Location = new System.Drawing.Point(82, 75);
-            this.cbFlag.Name = "cbFlag";
-            this.cbFlag.Size = new System.Drawing.Size(121, 21);
-            this.cbFlag.TabIndex = 62;
             // 
             // frmConfiguration
             // 
@@ -3315,5 +3325,6 @@
         private System.Windows.Forms.TextBox textID1;
         private System.Windows.Forms.Label label58;
         private System.Windows.Forms.TextBox cbFlag;
+        private System.Windows.Forms.Label label60;
     }
 }

@@ -428,7 +428,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, toc, toc_status
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, toc, toc_status
                                                FROM data_5minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR
@@ -503,7 +503,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, tn, tn_status
+                        string sql_command = @"SELECT created, stored_date, stored_hour, stored_minute, tn, tn_status
                                                FROM data_5minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR
@@ -578,7 +578,7 @@ namespace DataLogger.Data
                 {
                     if (db.open_connection())
                     {
-                        string sql_command = @"SELECT stored_date, stored_hour, stored_minute, tp, tp_status
+                        string sql_command = @"SELECT created,stored_date, stored_hour, stored_minute, tp, tp_status
                                                FROM data_5minute_values
                                                WHERE (:d_from < stored_date AND stored_date < :d_to)
                                                      OR

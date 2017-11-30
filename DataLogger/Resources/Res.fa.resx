@@ -511,7 +511,7 @@
     <value>Station name</value>
   </data>
   <data name="station_id" xml:space="preserve">
-    <value>Station ID</value>
+    <value>Station ID - Pull</value>
   </data>
   <data name="socket_port" xml:space="preserve">
     <value>Socket port</value>

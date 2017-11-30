@@ -3333,7 +3333,9 @@ namespace WinformProtocol
                 ftpStream.Close();
                 ftpRequest = null;
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) {
+                //Console.WriteLine(ex.ToString());
+            }
             return;
         }
 
@@ -3410,7 +3412,9 @@ namespace WinformProtocol
                 ftpResponse.Close();
                 ftpRequest = null;
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) {
+                //Console.WriteLine(ex.ToString());
+            }
             return;
         }
 

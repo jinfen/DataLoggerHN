@@ -616,6 +616,7 @@ namespace DataLogger
                 objStationSetting.station_name = txtStationName.Text;
                 objStationSetting.station_id = txtStationID.Text;
                 objStationSetting.socket_port = Convert.ToInt32(txtSocketPort.Text.Trim());
+                objStationSetting.ftppassword = txtFTPStationID.Text;
                 objStationSetting.ftpserver = textID1.Text;
                 objStationSetting.ftpusername = textID2.Text;
                 //MessageBox.Show("1");

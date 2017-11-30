@@ -218,7 +218,7 @@ namespace DataLogger
             //tmrThreadingTimerFor60Minute.Change(0, 3000);
             tmrThreadingTimerFor60Minute.Change(0, 240000);
             tmrThreadingTimerForFTP = new System.Timers.Timer();
-            tmrThreadingTimerForFTP.Interval = 1000 * 60 * 3;
+            tmrThreadingTimerForFTP.Interval = 1000 * 60 * 10;
             tmrThreadingTimerForFTP.Elapsed += tmrThreadingTimerForFTP_TimerCallback;
             tmrThreadingTimerForFTP.AutoReset = false;
             tmrThreadingTimerForFTP.Start();
@@ -326,9 +326,9 @@ namespace DataLogger
                 txtMPSTurbValue.Text = "---";
                 txtMPSCondValue.Text = "---";
 
-                txtTOCValue.Text = "---";
-                txtTPValue.Text = "---";
-                this.txtTNValue.Text = "---";
+                txtTOCValue.Text = "--";
+                txtTPValue.Text = "--";
+                txtTNValue.Text = "--";
 
                 if (language_code == "en")
                 {
@@ -1052,7 +1052,7 @@ namespace DataLogger
                             Double dValue = Convert.ToDouble(strValue);
                             objMeasuredDataGlobal.TOC = dValue;
                             //Console.WriteLine("dValue " + dValue);
-                            txtTOCValue.Text = dValue.ToString("##0.00");
+                            //txtTOCValue.Text = dValue.ToString("##0.00");
                             int status = 0;
                             //strAdditionInfor = strAdditionInfor.ToLower();
                             //if (strAdditionInfor.Contains("error"))
@@ -2739,10 +2739,13 @@ namespace DataLogger
                 objMeasuredDataGlobal.TP = -1;
             }
             objDataValue.TN = System.Math.Round(objMeasuredDataGlobal.TN, 2);
+            //Console.WriteLine("TN1 :" + objDataValue.TN);
             objDataValue.TN_status = objMeasuredDataGlobal.TN_status;
             objDataValue.TOC = System.Math.Round(objMeasuredDataGlobal.TOC, 2);
+            //Console.WriteLine("TOC1 :" + objDataValue.TOC);
             objDataValue.TOC_status = objMeasuredDataGlobal.TOC_status;
             objDataValue.TP = System.Math.Round(objMeasuredDataGlobal.TP, 3);
+            //Console.WriteLine("TP1 :" + objDataValue.TP);
             objDataValue.TP_status = objMeasuredDataGlobal.TP_status;
 
             // water sampler
@@ -2767,7 +2770,7 @@ namespace DataLogger
                 //test++;
                 //objDataValue.TP = test;
                 // ok --> add to 5 _minute data
-                data_value objAdd5Minute = objCalCulationDataValue5Minute.addNewObjFor5Minute(objDataValue);
+                data_value objAdd5Minute = objCalCulationDataValue5Minute.addNewObjFor5Minute(this,objDataValue);
                 if (objAdd5Minute != null)
                 {
                     // add to 60 _minute data
@@ -3557,7 +3560,7 @@ namespace DataLogger
                                                 value = "NULL";
                                             }
 
-                                            csv.Append("pH" + "\t" + value + "\t" + "" + "\t" + date + "\t" + status);
+                                            csv.Append("pH" + "\t" + value + "\t" + "---" + "\t" + date + "\t" + status);
                                             csv.AppendLine();
                                         }
                                         //countNull++;
@@ -5603,41 +5606,73 @@ namespace DataLogger
                         break;
                 }
 
-                // TOC
-                int toc = getMinValueFromDatabinding("toc");
-                if (objMeasuredDataGlobal.TOC >= toc
-                    //getMinValueFromDatabinding("toc")
-                    )
-                {
-                    txtTOCValue.Text = obj.TOC.ToString("##0.00");
-                    module objToc = _modules.get_info_by_name("Toc");
-                    if (objMeasuredDataGlobal.TOC > objToc.error_max || objMeasuredDataGlobal.TOC < objToc.error_min)
-                    {
-                        txtTOCValue.ForeColor = Color.Red;
-                        txtToc.ForeColor = Color.Red;
-                    }
-                    else
-                    {
-                        txtTOCValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
-                        txtToc.ForeColor = System.Drawing.Color.Black;
-                    }
-                }
-                else
-                {
-                    txtTOCValue.Text = "---";
-                }
+                //////////////////////////////////////////////////////////////////////////TOC
+                //int toc = getMinValueFromDatabinding("toc");
+                //if (objMeasuredDataGlobal.TOC >= toc
+                //    //getMinValueFromDatabinding("toc")
+                //    )
+                //{
+                //    string Toc = WinformProtocol.Control.compareAnalyzer("toc", 1, DateTime.Now.ToString());
+                //    double beforeToc = Convert.ToDouble(Toc);
+
+                //    if (Toc != null)
+                //    {
+                //        if (beforeToc == obj.TOC)
+                //        {
+                //            txtTOCValue.Text = "---";
+                //        }
+                //        else
+                //        {
+                //            txtTOCValue.Text = obj.TOC.ToString();
+                //            module objToc = _modules.get_info_by_name("Toc");
+                //            if (objMeasuredDataGlobal.TOC > objToc.error_max || objMeasuredDataGlobal.TOC < objToc.error_min)
+                //            {
+                //                txtTOCValue.ForeColor = Color.Red;
+                //                txtToc.ForeColor = Color.Red;
+                //            }
+                //            else
+                //            {
+                //                txtTOCValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                //                txtToc.ForeColor = System.Drawing.Color.Black;
+                //            }
+                //        }
+                //    }
+                //    else
+                //    {
+                //        txtTOCValue.Text = "-";
+                //    }
+                //    //    txtTOCValue.Text = obj.TOC.ToString("##0.00");
+                //    //    module objToc = _modules.get_info_by_name("Toc");
+                //    //    if (objMeasuredDataGlobal.TOC > objToc.error_max || objMeasuredDataGlobal.TOC < objToc.error_min)
+                //    //    {
+                //    //        txtTOCValue.ForeColor = Color.Red;
+                //    //        txtToc.ForeColor = Color.Red;
+                //    //    }
+                //    //    else
+                //    //    {
+                //    //        txtTOCValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                //    //        txtToc.ForeColor = System.Drawing.Color.Black;
+                //    //    }
+                //}
+                //else
+                //{
+                //    txtTOCValue.Text = "---";
+                //}
                 tooltipTOC = "";
                 switch (obj.TOC_status)
                 {
                     case INT_STATUS_COMMUNICATION_ERROR:
                         this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
+                        //txtTOCValue.Text = "---";
                         break;
                     case INT_STATUS_INSTRUMENT_ERROR:
                         this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        //txtTOCValue.Text = "---";
                         tooltipTOC = "fault";
                         break;
                     case INT_STATUS_MAINTENANCE:
                         this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
+                        //txtTOCValue.Text = "---";
                         break;
                     case INT_STATUS_NORMAL:
                         this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
@@ -5645,50 +5680,99 @@ namespace DataLogger
                         break;
                     case INT_STATUS_MEASURING_STOP:
                         this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        //txtTOCValue.Text = "---";
                         tooltipTOC = "stop";
                         break;
                     case INT_STATUS_CALIBRATING:
                         this.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
+                        //txtTOCValue.Text = "---";
                         break;
                     default:
                         break;
                 }
 
-                //TN
-                int tn = getMinValueFromDatabinding("tn");
-                if (objMeasuredDataGlobal.TN >= tn
-                    //getMinValueFromDatabinding("tn")
-                    )
-                {
-                    txtTNValue.Text = obj.TN.ToString("##0.00");
-                    module objTn = _modules.get_info_by_name("Tn");
-                    if (objMeasuredDataGlobal.TN > objTn.error_max || objMeasuredDataGlobal.TN < objTn.error_min)
-                    {
-                        txtTNValue.ForeColor = Color.Red;
-                        txtTn.ForeColor = Color.Red;
-                    }
-                    else
-                    {
-                        txtTNValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
-                        txtTn.ForeColor = System.Drawing.Color.Black;
-                    }
-                }
-                else
-                {
-                    txtTNValue.Text = "---";
-                }
+                //string Toc = WinformProtocol.Control.compareAnalyzer("toc", 1, DateTime.Now.ToString());
+                //double beforeToc = Convert.ToDouble(Toc);
+
+                //if (Toc != null)
+                //{
+                //    if (beforeToc == obj.TOC)
+                //    {
+                //        txtTOCValue.Text = "---";
+                //    }
+                //    else
+                //    {
+                //        txtTOCValue.Text = obj.TOC.ToString();
+                //    }
+                //}
+                ///////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////TN
+                //int tn = getMinValueFromDatabinding("tn");
+                //if (objMeasuredDataGlobal.TN >= tn
+                //    //getMinValueFromDatabinding("toc")
+                //    )
+                //{
+                //    string Tn = WinformProtocol.Control.compareAnalyzer("tn", 1, DateTime.Now.ToString());
+                //    double beforeTn = Convert.ToDouble(Tn);
+
+                //    if (Tn != null)
+                //    {
+                //        if (beforeTn == obj.TN)
+                //        {
+                //            txtTNValue.Text = "---";
+                //        }
+                //        else
+                //        {
+                //            txtTNValue.Text = obj.TN.ToString();
+                //            module objTn = _modules.get_info_by_name("Tn");
+                //            if (objMeasuredDataGlobal.TN > objTn.error_max || objMeasuredDataGlobal.TN < objTn.error_min)
+                //            {
+                //                txtTNValue.ForeColor = Color.Red;
+                //                txtTn.ForeColor = Color.Red;
+                //            }
+                //            else
+                //            {
+                //                txtTNValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                //                txtTn.ForeColor = System.Drawing.Color.Black;
+                //            }
+                //        }
+                //    }
+                //    else
+                //    {
+                //        txtTNValue.Text = "-";
+                //    }
+                //    //    txtTOCValue.Text = obj.TOC.ToString("##0.00");
+                //    //    module objToc = _modules.get_info_by_name("Toc");
+                //    //    if (objMeasuredDataGlobal.TOC > objToc.error_max || objMeasuredDataGlobal.TOC < objToc.error_min)
+                //    //    {
+                //    //        txtTOCValue.ForeColor = Color.Red;
+                //    //        txtToc.ForeColor = Color.Red;
+                //    //    }
+                //    //    else
+                //    //    {
+                //    //        txtTOCValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                //    //        txtToc.ForeColor = System.Drawing.Color.Black;
+                //    //    }
+                //}
+                //else
+                //{
+                //    txtTOCValue.Text = "---";
+                //}
                 tooltipTN = "";
                 switch (obj.TN_status)
                 {
                     case INT_STATUS_COMMUNICATION_ERROR:
                         this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
+                        //txtTNValue.Text = "---";
                         break;
                     case INT_STATUS_INSTRUMENT_ERROR:
                         this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        //txtTNValue.Text = "---";
                         tooltipTN = "fault";
                         break;
                     case INT_STATUS_MAINTENANCE:
                         this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
+                        //txtTNValue.Text = "---";
                         break;
                     case INT_STATUS_NORMAL:
                         this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
@@ -5696,50 +5780,82 @@ namespace DataLogger
                         break;
                     case INT_STATUS_MEASURING_STOP:
                         this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        //txtTNValue.Text = "---";
                         tooltipTN = "stop";
                         break;
                     case INT_STATUS_CALIBRATING:
                         this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
+                        //txtTNValue.Text = "---";
                         break;
                     default:
                         break;
                 }
 
-                // TP
-                int tp = getMinValueFromDatabinding("tp");
-                if (objMeasuredDataGlobal.TP >= tp
-                    //getMinValueFromDatabinding("tp")
-                    )
-                { 
-                    txtTPValue.Text = obj.TP.ToString("##0.000");
-                    module objTp = _modules.get_info_by_name("Tp");
-                    if (objMeasuredDataGlobal.TP > objTp.error_max || objMeasuredDataGlobal.TP < objTp.error_min)
-                    {
-                        txtTPValue.ForeColor = Color.Red;
-                        txtTp.ForeColor = Color.Red;
-                    }
-                    else
-                    {
-                        txtTPValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
-                        txtTp.ForeColor = System.Drawing.Color.Black;
-                    }
-                }
-                else
-                {
-                    txtTPValue.Text = "---";
-                }
-                tooltipTP = "";
+                //string Tn = WinformProtocol.Control.compareAnalyzer("tn", 1, DateTime.Now.ToString());
+                //double beforeTn = Convert.ToDouble(Tn);
+
+                //if (Tn != null)
+                //{
+                //    if (beforeTn == obj.TN)
+                //    {
+                //        txtTNValue.Text = "---";
+                //    }
+                //    else
+                //    {
+                //    }
+                //}
+                //////////////////////////////////////////////////////////////////////////
+                //////////////////////////////////////////////// TP
+                //int tp = getMinValueFromDatabinding("tp");
+                //if (objMeasuredDataGlobal.TP >= tp
+                //    //getMinValueFromDatabinding("toc")
+                //    )
+                //{
+                //    string Tp = WinformProtocol.Control.compareAnalyzerTP("tp", 1, DateTime.Now.ToString());
+                //    double beforeTp = Convert.ToDouble(Tp);
+
+                //    if (Tp != null)
+                //    {
+                //        if (beforeTp == obj.TP)
+                //        {
+                //            txtTPValue.Text = "---";
+                //        }
+                //        else
+                //        {
+                //            txtTPValue.Text = obj.TP.ToString();
+                //            module objTp = _modules.get_info_by_name("Tp");
+                //            if (objMeasuredDataGlobal.TP > objTp.error_max || objMeasuredDataGlobal.TP < objTp.error_min)
+                //            {
+                //                txtTPValue.ForeColor = Color.Red;
+                //                txtTp.ForeColor = Color.Red;
+                //            }
+                //            else
+                //            {
+                //                txtTPValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(160)))), ((int)(((byte)(186)))));
+                //                txtTp.ForeColor = System.Drawing.Color.Black;
+                //            }
+                //        }
+                //    }
+                //    else
+                //    {
+                //        txtTPValue.Text = "-";
+                //    }
+                //}
+                    tooltipTP = "";
                 switch (obj.TP_status)
                 {
                     case INT_STATUS_COMMUNICATION_ERROR:
                         this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Communication_Fault_status;
+                        //txtTPValue.Text = "---";
                         break;
                     case INT_STATUS_INSTRUMENT_ERROR:
                         this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        //txtTPValue.Text = "---";
                         tooltipTP = "fault";
                         break;
                     case INT_STATUS_MAINTENANCE:
                         this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Maintenance_status;
+                        //txtTPValue.Text = "---";
                         break;
                     case INT_STATUS_NORMAL:
                         this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Normal_status;
@@ -5747,14 +5863,32 @@ namespace DataLogger
                         break;
                     case INT_STATUS_MEASURING_STOP:
                         this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
+                        //txtTPValue.Text = "---";
                         tooltipTP = "stop";
                         break;
                     case INT_STATUS_CALIBRATING:
                         this.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Calibration_status;
+                        //txtTPValue.Text = "---";
                         break;
                     default:
                         break;
                 }
+
+                //string Tp = WinformProtocol.Control.compareAnalyzerTP("tp", 1, DateTime.Now.ToString());
+                //double beforeTp = Convert.ToDouble(Tp);
+
+                //if (Tp != null)
+                //{
+                //    if (beforeTp == obj.TP)
+                //    {
+                //        txtTPValue.Text = "---";
+                //    }
+                //    else
+                //    {
+                //    }
+                //}
+                ////////////////////////////////////////////////////////////////////////////
+
             }
             catch (Exception e)
             {
@@ -6193,7 +6327,7 @@ namespace DataLogger
         }
         private data_value calculateImmediately5Minute()
         {
-            data_value obj = objCalCulationDataValue5Minute.addNewObjFor5Minute(null, true);
+            data_value obj = objCalCulationDataValue5Minute.addNewObjFor5Minute(this,null, true);
 
             if (obj == null)
             {
@@ -7003,7 +7137,7 @@ namespace DataLogger
             min_minute = DateTime.Now.Minute;
             max_minute = DateTime.Now.Minute;
         }
-        public data_value addNewObjFor5Minute(data_value obj, bool isImmediatelyCalculation = false)
+        public data_value addNewObjFor5Minute(frmNewMain main, data_value obj, bool isImmediatelyCalculation = false)
         {
             // checking execute transaction
             int tempHour = 0;
@@ -7137,6 +7271,7 @@ namespace DataLogger
                             listDataValue[i].TN = listDataValue[count - 1].TN;
                             listDataValue[i].TP = listDataValue[count - 1].TP;
                             listDataValue[i].TOC = listDataValue[count - 1].TOC;
+                            //tat ca gia tri trong 5 min nay = gia tri cuoi cung do duoc cua thoi diem 5 mmin
                         }
 
                         for (int i = 1; i < count; i++)
@@ -7181,9 +7316,12 @@ namespace DataLogger
                             }
 
                             // TN
+                            //neu co it nhat 1 gia tri "error" ca thoi diem 5 min do tinh la "error"
+                            //neu tat ca deu "normal" gia tri TN = tong tat ca TN do duoc trong 5 min
                             if (updateTNFlag)
                             {
                                 objDataValue.TN_status = listDataValue[i].TN_status;
+
                                 if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL)
                                 {
                                     objDataValue.TN = objDataValue.TN + listDataValue[i].TN;
@@ -7269,11 +7407,14 @@ namespace DataLogger
                         {
                             //objDataValue.TN = (double)objDataValue.TN / (double)countingTNCal;
                             objDataValue.TN = listDataValue[count-1].TN;
+                            //Neu tat ca gia tri deu "normal" thi : tat ca gia tri trong 5 min nay = gia tri cuoi cung do duoc cua thoi diem 5 mmin
                         }
                         if (updateTPFlag)
                         {
                             //objDataValue.TP = (double)objDataValue.TP / (double)countingTPCal;
+                            //Console.WriteLine("true tp");
                             objDataValue.TP = listDataValue[count-1].TP;
+                            //Console.WriteLine(objDataValue.TP);
                         }
                         if (updateTOCFlag)
                         {
@@ -7292,7 +7433,7 @@ namespace DataLogger
                             objDataValue.bottle_position = objDataValue.bottle_position
                                / countingWaterSampler;
                         }
-                        frmNewMain main = new frmNewMain();
+                        //frmNewMain main = new frmNewMain();
                         // get latest to check before add
                         objLatest = new data_5minute_value_repository().get_latest_info();
                         if (objLatest != null &&
@@ -7304,7 +7445,7 @@ namespace DataLogger
                         {
                             // update to
                             // MPS
-
+                            Console.WriteLine("true tp vao if :" + objDataValue.TP);
                             if (objLatest.MPS_status == CommonInfo.INT_STATUS_NORMAL &&
                                 objDataValue.MPS_status == CommonInfo.INT_STATUS_NORMAL)
                             {
@@ -7350,19 +7491,18 @@ namespace DataLogger
 
                             }
                             // TN
-                            if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL &&
-                                objLatest.TN_status == CommonInfo.INT_STATUS_NORMAL)
+                            if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL)
                             {
                                 //objLatest.TN = (objDataValue.TN + objLatest.TN) / 2;
                                 objLatest.TN = objDataValue.TN;
+                                objLatest.TN_status = CommonInfo.INT_STATUS_NORMAL;
+
+
                             }
                             else
                             {
                                 objLatest.TN = -1;
-                                if (objDataValue.TN_status != CommonInfo.INT_STATUS_NORMAL)
-                                {
-                                    objLatest.TN_status = objDataValue.TN_status;
-                                }
+                                objLatest.TN_status = objDataValue.TN_status;
                             }
 
                             string Tn = WinformProtocol.Control.compareAnalyzer("tn", 1, objLatest.created.ToString());
@@ -7372,30 +7512,45 @@ namespace DataLogger
                             {
                                 if (beforeTn == objLatest.TN)
                                 {
+
+                                    main.txtTNValue.Text = "---";
+                                    main.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                    //this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
                                     objLatest.TN = -1;
                                     objLatest.TN_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
+                                    
                                 }
-                                else
+                                else if (objLatest.TN_status == CommonInfo.INT_STATUS_COMMUNICATION_ERROR)
                                 {
+                                    main.txtTNValue.Text = "---";
+                                    main.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
                                 }
+                                else if (objLatest.TN_status == CommonInfo.INT_STATUS_NORMAL)
+                                {
+                                    main.txtTNValue.Text = objLatest.TN.ToString();
+                                    main.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                }
+
                             }
-                            Console.WriteLine("tn :" + Tn);
+                            else
+                            {
+                                main.txtTPValue.Text = "-";
+                            }
                             Console.WriteLine("beforeTn :" + beforeTn);
                             Console.WriteLine("objLatest.TN :" + objLatest.TN);
+
                             // TP
-                            if (objDataValue.TP_status == CommonInfo.INT_STATUS_NORMAL &&
-                                objLatest.TP_status == CommonInfo.INT_STATUS_NORMAL)
+                            if (objDataValue.TP_status == CommonInfo.INT_STATUS_NORMAL)
                             {
-                                //objLatest.TP = (objDataValue.TP + objLatest.TP) / 2;
+                                //objLatest.TN = (objDataValue.TN + objLatest.TN) / 2;
                                 objLatest.TP = objDataValue.TP;
+                                objLatest.TP_status = CommonInfo.INT_STATUS_NORMAL;
+
                             }
                             else
                             {
                                 objLatest.TP = -1;
-                                if (objDataValue.TP_status != CommonInfo.INT_STATUS_NORMAL)
-                                {
-                                    objLatest.TP_status = objDataValue.TP_status;
-                                }
+                                objLatest.TP_status = objDataValue.TP_status;
                             }
 
                             string Tp = WinformProtocol.Control.compareAnalyzerTP("tp", 1, objLatest.created.ToString());
@@ -7405,43 +7560,79 @@ namespace DataLogger
                             {
                                 if (beforeTp == objLatest.TP)
                                 {
+
+                                    main.txtTPValue.Text = "---";
+                                    main.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                    //this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
                                     objLatest.TP = -1;
                                     objLatest.TP_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
+
                                 }
-                                else
+                                else if (objLatest.TP_status == CommonInfo.INT_STATUS_COMMUNICATION_ERROR)
                                 {
+                                    main.txtTPValue.Text = "---";
+                                    main.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
                                 }
+                                else if (objLatest.TP_status == CommonInfo.INT_STATUS_NORMAL)
+                                {
+                                    main.txtTPValue.Text = objLatest.TP.ToString();
+                                    main.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                }
+
                             }
-                            // TOC
-                            if (objDataValue.TOC_status == CommonInfo.INT_STATUS_NORMAL &&
-                                objLatest.TOC_status == CommonInfo.INT_STATUS_NORMAL)
+                            else
                             {
-                                //objLatest.TOC = (objDataValue.TOC + objLatest.TOC) / 2;
+                                main.txtTPValue.Text = "-";
+                            }
+                            Console.WriteLine("beforeTp :" + beforeTp);
+                            Console.WriteLine("objLatest.TP :" + objLatest.TP);
+                            /// TOC
+                            if (objDataValue.TOC_status == CommonInfo.INT_STATUS_NORMAL)
+                            {
+                                //objLatest.TN = (objDataValue.TN + objLatest.TN) / 2;
                                 objLatest.TOC = objDataValue.TOC;
+                                objLatest.TOC_status = CommonInfo.INT_STATUS_NORMAL;
+
                             }
                             else
                             {
                                 objLatest.TOC = -1;
-                                if (objDataValue.TOC_status != CommonInfo.INT_STATUS_NORMAL)
-                                {
-                                    objLatest.TOC_status = objDataValue.TOC_status;
-                                }
+                                objLatest.TOC_status = objDataValue.TOC_status;
                             }
 
                             string Toc = WinformProtocol.Control.compareAnalyzer("toc", 1, objLatest.created.ToString());
-                            double beforeToc = Convert.ToDouble(Toc); ;
+                            double beforeToc = Convert.ToDouble(Toc);
 
                             if (Toc != null)
                             {
                                 if (beforeToc == objLatest.TOC)
                                 {
+
+                                    main.txtTOCValue.Text = "---";
+                                    main.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                    //this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
                                     objLatest.TOC = -1;
                                     objLatest.TOC_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
+
                                 }
-                                else
+                                else if (objLatest.TOC_status == CommonInfo.INT_STATUS_COMMUNICATION_ERROR)
                                 {
+                                    main.txtTOCValue.Text = "---";
+                                    main.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
                                 }
+                                else if (objLatest.TOC_status == CommonInfo.INT_STATUS_NORMAL)
+                                {
+                                    main.txtTOCValue.Text = objLatest.TOC.ToString();
+                                    main.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                }
+
                             }
+                            else {
+                                main.txtTOCValue.Text = "-";
+                            }
+                            Console.WriteLine("beforeToc :" + beforeToc);
+                            Console.WriteLine("objLatest.TOC :" + objLatest.TOC);
+                            ///
                             // Station status
                             if (objLatest.module_Temperature > 0 && objDataValue.module_Temperature > 0)
                             {
@@ -7526,7 +7717,7 @@ namespace DataLogger
                                         }
                                     }
                                 }
-                                else if (GlobalVar.stationSettings.ftpflag == 0)
+                                else if (push_server.ftp_flag == 0)
                                 {
                                     objLatest.push = 0;
                                     objLatest.push_time = new DateTime();
@@ -7546,6 +7737,7 @@ namespace DataLogger
                         }
                         else
                         {
+                            //Console.WriteLine("true tp :" + objDataValue.TP);
 
                             if (GlobalVar.isMaintenanceStatus && GlobalVar.maintenanceLog.pumping_system == 1)
                             {
@@ -7559,50 +7751,106 @@ namespace DataLogger
                             /// 
                             string Tn = WinformProtocol.Control.compareAnalyzer("tn", 1, objDataValue.created.ToString());
                             double beforeTn = Convert.ToDouble(Tn);
-                            Console.WriteLine("tn :" + Tn);
-                            Console.WriteLine("beforeTn :" + beforeTn);
-                            Console.WriteLine("objLatest.TN :" + objDataValue.TN);
+                            Console.WriteLine("beforeTn2 :" + beforeTn);
+                            Console.WriteLine("objLatest2.TN2 :" + objDataValue.TN);
                             if (Tn != null)
                             {
                                 if (beforeTn == objDataValue.TN)
                                 {
+                                    Console.WriteLine(" Vao if 1");
+                                    main.txtTNValue.Text = "---";
+                                    main.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                    //this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
                                     objDataValue.TN = -1;
                                     objDataValue.TN_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
+
                                 }
-                                else
+                                else if (objDataValue.TN_status == CommonInfo.INT_STATUS_COMMUNICATION_ERROR)
                                 {
+                                    Console.WriteLine(" Vao if 2");
+                                    main.txtTNValue.Text = "---";
+                                    main.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
                                 }
+                                else if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL)
+                                {
+                                    Console.WriteLine("Hien thi value TN");
+                                    main.txtTNValue.Text = objDataValue.TN.ToString();
+                                    main.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                }
+
+                            }
+                            else
+                            {
+                                main.txtTPValue.Text = "-";
                             }
 
                             string Tp = WinformProtocol.Control.compareAnalyzerTP("tp", 1, objDataValue.created.ToString());
                             double beforeTp = Convert.ToDouble(Tp);
-                            
+                            Console.WriteLine("beforeTp2 :" + beforeTp);
+                            Console.WriteLine("objLatest.TP2 :" + objDataValue.TP);
                             if (Tp != null)
                             {
                                 if (beforeTp == objDataValue.TP)
                                 {
+
+                                    main.txtTPValue.Text = "---";
+                                    main.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                    //this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
                                     objDataValue.TP = -1;
                                     objDataValue.TP_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
+
                                 }
-                                else
+                                else if (objDataValue.TP_status == CommonInfo.INT_STATUS_COMMUNICATION_ERROR)
                                 {
+                                    main.txtTPValue.Text = "---";
+                                    main.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
                                 }
+                                else if (objDataValue.TP_status == CommonInfo.INT_STATUS_NORMAL)
+                                {
+                                    Console.WriteLine("Hien thi value TP");
+                                    main.txtTPValue.Text = objDataValue.TP.ToString();
+                                    main.picTPStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                }
+
+                            }
+                            else
+                            {
+                                main.txtTPValue.Text = "-";
                             }
 
                             string Toc = WinformProtocol.Control.compareAnalyzer("toc", 1, objDataValue.created.ToString());
                             double beforeToc = Convert.ToDouble(Toc); ;
-
+                            Console.WriteLine("beforeToc2 :" + beforeToc);
+                            Console.WriteLine("objLatest.TOC2 :" + objDataValue.TOC);
                             if (Toc != null)
                             {
                                 if (beforeToc == objDataValue.TOC)
                                 {
+
+                                    main.txtTOCValue.Text = "---";
+                                    main.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                    //this.picTNStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
                                     objDataValue.TOC = -1;
                                     objDataValue.TOC_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
+
                                 }
-                                else
+                                else if (objDataValue.TOC_status == CommonInfo.INT_STATUS_COMMUNICATION_ERROR)
                                 {
+                                    main.txtTOCValue.Text = "---";
+                                    main.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Fault;
                                 }
+                                else if (objDataValue.TOC_status == CommonInfo.INT_STATUS_NORMAL)
+                                {
+                                    Console.WriteLine("Hien thi value TOC");
+                                    main.txtTOCValue.Text = objLatest.TOC.ToString();
+                                    main.picTOCStatus.BackgroundImage = global::DataLogger.Properties.Resources.Run_56x56;
+                                }
+
                             }
+                            else
+                            {
+                                main.txtTOCValue.Text = "-";
+                            };
                             /// 
                             main.SaveLocalFile(objDataValue);
                             foreach (push_server push_server in listUser)
@@ -7651,7 +7899,7 @@ namespace DataLogger
                                         }
                                     }
                                 }
-                                else if (GlobalVar.stationSettings.ftpflag == 0)
+                                else if (push_server.ftp_flag == 0)
                                 {
                                     objDataValue.push = 0;
                                     objDataValue.push_time = new DateTime();
@@ -7785,12 +8033,12 @@ namespace DataLogger
                     objDataValue.MPS_Turbidity_status = listDataValue[0].MPS_status;
 
                     // TN, TOC, TP
-                    objDataValue.TN = listDataValue[0].TN;
-                    objDataValue.TN_status = listDataValue[0].TN_status;
-                    objDataValue.TOC = listDataValue[0].TOC;
-                    objDataValue.TOC_status = listDataValue[0].TOC_status;
-                    objDataValue.TP = listDataValue[0].TP;
-                    objDataValue.TP_status = listDataValue[0].TP_status;
+                    objDataValue.TN = 0;
+                    objDataValue.TN_status = 5;
+                    objDataValue.TOC = 0;
+                    objDataValue.TOC_status = 5;
+                    objDataValue.TP = 0;
+                    objDataValue.TP_status = 5;
 
                     // water sampler
                     objDataValue.bottle_position = listDataValue[0].bottle_position;
@@ -7812,9 +8060,9 @@ namespace DataLogger
                     bool updateWaterSampler = true;
                     int countingMPSCal = 1;
                     int countingStationStatusCal = 1;
-                    int countingTNCal = 1;
-                    int countingTPCal = 1;
-                    int countingTOCCal = 1;
+                    int countingTNCal = 0;
+                    int countingTPCal = 0;
+                    int countingTOCCal = 0;
                     int countingWaterSampler = 1;
 
                     for (int i = 1; i < count; i++)
@@ -7861,11 +8109,12 @@ namespace DataLogger
                         // TN
                         if (updateTNFlag)
                         {
-                            objDataValue.TN_status = listDataValue[i].TN_status;
-                            if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL)
+                            //objDataValue.TN_status = listDataValue[i].TN_status;
+                            if (listDataValue[i].TN_status == CommonInfo.INT_STATUS_NORMAL)
                             {
                                 objDataValue.TN = objDataValue.TN + listDataValue[i].TN;
                                 countingTNCal++;
+                                objDataValue.TN_status = listDataValue[i].TN_status;
                             }
                             else
                             {
@@ -7877,11 +8126,12 @@ namespace DataLogger
                         // TP
                         if (updateTPFlag)
                         {
-                            objDataValue.TP_status = listDataValue[i].TP_status;
-                            if (objDataValue.TP_status == CommonInfo.INT_STATUS_NORMAL)
+                            //objDataValue.TP_status = listDataValue[i].TP_status;
+                            if (listDataValue[i].TP_status == CommonInfo.INT_STATUS_NORMAL)
                             {
                                 objDataValue.TP = objDataValue.TP + listDataValue[i].TP;
                                 countingTPCal++;
+                                objDataValue.TP_status = listDataValue[i].TP_status;
                             }
                             else
                             {
@@ -7892,11 +8142,12 @@ namespace DataLogger
                         // TOC
                         if (updateTOCFlag)
                         {
-                            objDataValue.TOC_status = listDataValue[i].TOC_status;
-                            if (objDataValue.TOC_status == CommonInfo.INT_STATUS_NORMAL)
+                            //objDataValue.TOC_status = listDataValue[i].TOC_status;
+                            if (listDataValue[i].TOC_status == CommonInfo.INT_STATUS_NORMAL)
                             {
                                 objDataValue.TOC = objDataValue.TOC + listDataValue[i].TOC;
                                 countingTOCCal++;
+                                objDataValue.TOC_status = listDataValue[i].TOC_status;
                             }
                             else
                             {
@@ -7943,18 +8194,41 @@ namespace DataLogger
                         objDataValue.MPS_Temp = (double)objDataValue.MPS_Temp / (double)countingMPSCal;
                         objDataValue.MPS_Turbidity = (double)objDataValue.MPS_Turbidity / (double)countingMPSCal;
                     }
+
                     if (updateTNFlag)
                     {
-                        objDataValue.TN = (double)objDataValue.TN / (double)countingTNCal;
+                        if (countingTNCal != 0)
+                        {
+                            objDataValue.TN = (double)objDataValue.TN / (double)countingTNCal;
+                        }
+                        else
+                        {
+                            objDataValue.TN = -1;
+                        }
                     }
                     if (updateTPFlag)
                     {
-                        objDataValue.TP = (double)objDataValue.TP / (double)countingTPCal;
+                        if (countingTPCal != 0)
+                        {
+                            objDataValue.TP = (double)objDataValue.TP / (double)countingTPCal;
+                        }
+                        else
+                        {
+                            objDataValue.TP = -1;
+                        }
                     }
                     if (updateTOCFlag)
                     {
-                        objDataValue.TOC = (double)objDataValue.TOC / (double)countingTOCCal;
-                    }// Station status
+                        if (countingTOCCal != 0)
+                        {
+                            objDataValue.TOC = (double)objDataValue.TOC / (double)countingTOCCal;
+                        }
+                        else
+                        {
+                            objDataValue.TOC = -1;
+                        }
+                    }
+                    // Station status
                     if (objDataValue.module_Temperature > 0)
                     {
                         objDataValue.module_Temperature = (double)objDataValue.module_Temperature / (double)countingStationStatusCal;
@@ -7967,7 +8241,6 @@ namespace DataLogger
                         objDataValue.bottle_position = objDataValue.bottle_position
                            / countingWaterSampler;
                     }
-
                     // get latest to check before add
                     objLatest = new data_60minute_value_repository().get_latest_info();
                     if (objLatest != null &&
@@ -7979,7 +8252,6 @@ namespace DataLogger
                     {
                         // update to
                         // MPS
-
                         if (objLatest.MPS_status == CommonInfo.INT_STATUS_NORMAL &&
                             objDataValue.MPS_status == CommonInfo.INT_STATUS_NORMAL)
                         {
@@ -8025,50 +8297,80 @@ namespace DataLogger
 
                         }
                         // TN
-                        if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL &&
-                            objLatest.TN_status == CommonInfo.INT_STATUS_NORMAL)
+                        //if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL &&
+                        //    objLatest.TN_status == CommonInfo.INT_STATUS_NORMAL)
+                        //{
+                        //    objLatest.TN = (objDataValue.TN + objLatest.TN) / 2;
+                        //}
+                        //else
+                        //{
+                        //    objLatest.TN = -1;
+                        //    if (objDataValue.TN_status != CommonInfo.INT_STATUS_NORMAL)
+                        //    {
+                        //        objLatest.TN_status = objDataValue.TN_status;
+                        //    }
+                        //}
+                        if (objDataValue.TN_status == CommonInfo.INT_STATUS_NORMAL)
                         {
-                            objLatest.TN = (objDataValue.TN + objLatest.TN) / 2;
+                            objLatest.TN_status = objDataValue.TN_status;
+                            objLatest.TN = objDataValue.TN;
                         }
                         else
                         {
+                            objLatest.TN_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
                             objLatest.TN = -1;
-                            if (objDataValue.TN_status != CommonInfo.INT_STATUS_NORMAL)
-                            {
-                                objLatest.TN_status = objDataValue.TN_status;
-                            }
                         }
-
 
                         // TP
-                        if (objDataValue.TP_status == CommonInfo.INT_STATUS_NORMAL &&
-                            objLatest.TP_status == CommonInfo.INT_STATUS_NORMAL)
+                        //if (objDataValue.TP_status == CommonInfo.INT_STATUS_NORMAL &&
+                        //    objLatest.TP_status == CommonInfo.INT_STATUS_NORMAL)
+                        //{
+                        //    objLatest.TP = (objDataValue.TP + objLatest.TP) / 2;
+                        //}
+                        //else
+                        //{
+                        //    objLatest.TP = -1;
+                        //    if (objDataValue.TP_status != CommonInfo.INT_STATUS_NORMAL)
+                        //    {
+                        //        objLatest.TP_status = objDataValue.TP_status;
+                        //    }
+                        //}
+
+                        if (objDataValue.TP_status == CommonInfo.INT_STATUS_NORMAL)
                         {
-                            objLatest.TP = (objDataValue.TP + objLatest.TP) / 2;
+                            objLatest.TP_status = objDataValue.TP_status;
+                            objLatest.TP = objDataValue.TP;
                         }
                         else
                         {
+                            objLatest.TP_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
                             objLatest.TP = -1;
-                            if (objDataValue.TP_status != CommonInfo.INT_STATUS_NORMAL)
-                            {
-                                objLatest.TP_status = objDataValue.TP_status;
-                            }
                         }
                         // TOC
-                        if (objDataValue.TOC_status == CommonInfo.INT_STATUS_NORMAL &&
-                            objLatest.TOC_status == CommonInfo.INT_STATUS_NORMAL)
+                        //if (objDataValue.TOC_status == CommonInfo.INT_STATUS_NORMAL &&
+                        //    objLatest.TOC_status == CommonInfo.INT_STATUS_NORMAL)
+                        //{
+                        //    objLatest.TOC = (objDataValue.TOC + objLatest.TOC) / 2;
+                        //}
+                        //else
+                        //{
+                        //    objLatest.TOC = -1;
+                        //    if (objDataValue.TOC_status != CommonInfo.INT_STATUS_NORMAL)
+                        //    {
+                        //        objLatest.TOC_status = objDataValue.TOC_status;
+                        //    }
+                        //}
+
+                        if (objDataValue.TOC_status == CommonInfo.INT_STATUS_NORMAL)
                         {
-                            objLatest.TOC = (objDataValue.TOC + objLatest.TOC) / 2;
+                            objLatest.TOC_status = objDataValue.TOC_status;
+                            objLatest.TOC = objDataValue.TOC;
                         }
                         else
                         {
+                            objLatest.TOC_status = CommonInfo.INT_STATUS_COMMUNICATION_ERROR;
                             objLatest.TOC = -1;
-                            if (objDataValue.TOC_status != CommonInfo.INT_STATUS_NORMAL)
-                            {
-                                objLatest.TOC_status = objDataValue.TOC_status;
-                            }
                         }
-
                         // Station status
                         if (objLatest.module_Temperature > 0 && objDataValue.module_Temperature > 0)
                         {

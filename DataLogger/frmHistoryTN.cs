@@ -221,9 +221,13 @@ namespace DataLogger
                     //viewrow["Date"] = row["stored_date"].ToString().Substring(0, 10);
                     //viewrow["Date"] = (Convert.ToDateTime(row["stored_date"].ToString().Substring(0, 10))).ToString("dd/MM/yyyy");
                     //viewrow["Date"] = (Convert.ToDateTime(row["stored_date"].ToString().Substring(0, 10))).ToString("dd/MM/yyyy");
-                    viewrow["Date"] = (Convert.ToDateTime(row["stored_date"].ToString())).ToString("dd/MM/yyyy");
+                    //viewrow["Date"] = (Convert.ToDateTime(row["stored_date"].ToString())).ToString("dd/MM/yyyy");
                     //viewrow["Date"] = (Convert.ToDateTime((row["stored_date"].ToString().Split(' '))[0])).ToString("dd/MM/yyyy");
-                    viewrow["Time"] = ((int)row["stored_hour"]).ToString("00") + ":" + ((int)row["stored_minute"]).ToString("00") + ":00";
+                    //viewrow["Time"] = ((int)row["stored_hour"]).ToString("00") + ":" + ((int)row["stored_minute"]).ToString("00") + ":00";
+                    string created = (Convert.ToDateTime(row["created"].ToString())).ToString("yyyyMMddHHmmss");
+                    string time = created.Substring(8, 2) + ":" + created.Substring(10, 2) + ":" + created.Substring(12, 2);
+                    viewrow["Date"] = (Convert.ToDateTime(row["created"].ToString())).ToString("dd/MM/yyyy");
+                    viewrow["Time"] = time;
 
                     viewrow["TN"] = row["TN"];
 
@@ -286,7 +290,7 @@ namespace DataLogger
                 }
 
                 DataTable dt_view = new DataTable();
-                dt_view.Columns.Add("StoredDate");
+                dt_view.Columns.Add("CreatedDate");
                 dt_view.Columns.Add("TN");
 
                 // chuyển dữ liệu dt_source sang dt_view để hiển thị
@@ -302,12 +306,14 @@ namespace DataLogger
                     if (_status == 0)
                     {
                         viewrow = dt_view.NewRow();
-                        DateTime _date = (DateTime)row["stored_date"];
-                        int _hour = (int)row["stored_hour"];
-                        int _minute = (int)row["stored_minute"];
-                        DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
+                        //DateTime _date = (DateTime)row["stored_date"];
+                        //int _hour = (int)row["stored_hour"];
+                        //int _minute = (int)row["stored_minute"];
+                        //DateTime _rdate = new DateTime(_date.Year, _date.Month, _date.Day, _hour, _minute, 0);
+                        string created = (Convert.ToDateTime(row["created"].ToString())).ToString("yyyyMMddHHmmss");
+                        DateTime _rdate = new DateTime(Int32.Parse(created.Substring(0, 4)), Int32.Parse(created.Substring(4, 2)), Int32.Parse(created.Substring(6, 2)), Int32.Parse(created.Substring(8, 2)), Int32.Parse(created.Substring(10, 2)), Int32.Parse(created.Substring(12, 2)));
 
-                        viewrow["StoredDate"] = _rdate;
+                        viewrow["CreatedDate"] = _rdate;
                         viewrow["TN"] = row["TN"];
 
                         dt_view.Rows.Add(viewrow);
@@ -316,7 +322,7 @@ namespace DataLogger
 
                 // tạo biểu đồ mới
                 chtData.Series.Add("TN");
-                chtData.Series["TN"].XValueMember = "StoredDate";
+                chtData.Series["TN"].XValueMember = "CreatedDate";
                 chtData.Series["TN"].YValueMembers = "TN";
                 chtData.Series["TN"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
                 chtData.Series["TN"].Color = Color.Blue;
